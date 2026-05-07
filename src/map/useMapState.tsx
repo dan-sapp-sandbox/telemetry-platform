@@ -1,9 +1,11 @@
-import { useState, useEffect, useRef } from "react";
-import type { Dispatch, SetStateAction, RefObject } from "react";
+import { useEffect, useRef } from "react";
+import type { RefObject } from "react";
 import type { DragStartEvent, DragEndEvent } from "@dnd-kit/core";
 import { Cartesian3, Cartographic, Math, Viewer } from "cesium";
-import type { ILayer, IWidgetState } from "./types";
+import type { IWidgetState } from "./types";
+import type { ILayer, mapState } from "@/store/slices/mapSlice";
 import useLocalStorage from "use-local-storage";
+import { useSelector } from "react-redux";
 
 export const defaultMainView = {
   heading: 6.283185307179581,
@@ -39,19 +41,17 @@ export interface IMapState {
   handleDragStart: (event: DragStartEvent) => void;
   handleDragEnd: (event: DragEndEvent) => void;
   layer: ILayer;
-  setLayer: Dispatch<SetStateAction<ILayer>>;
   showOverviewMap: boolean;
-  setShowOverviewMap: Dispatch<SetStateAction<boolean>>;
   showPipMap: boolean;
-  setShowPipMap: Dispatch<SetStateAction<boolean>>;
   showPipMap2: boolean;
-  setShowPipMap2: Dispatch<SetStateAction<boolean>>;
   widgetState: IWidgetState;
   takeScreenshot: () => void;
   sendPrompt: () => void;
 }
 
 const useMapState = (): IMapState => {
+  const { showOverviewMap, showPipMap, showPipMap2, layer } = useSelector((state: { map: mapState }) => state.map);
+
   const tools = [
     {
       name: "createUser",
@@ -84,10 +84,6 @@ const useMapState = (): IMapState => {
   const pipViewerRef = useRef<Viewer | null>(null);
   const pipViewer2Ref = useRef<Viewer | null>(null);
   const startPositionRef = useRef<Position>({ x: 0, y: 0 });
-  const [layer, setLayer] = useState<ILayer>("esriSat");
-  const [showOverviewMap, setShowOverviewMap] = useState(true);
-  const [showPipMap, setShowPipMap] = useState(true);
-  const [showPipMap2, setShowPipMap2] = useState(true);
   const [_init, setInitCameraView] = useLocalStorage("main-cam-init", defaultMainView);
   const initWidgetState: IWidgetState = {
     overview: {
@@ -309,13 +305,9 @@ const useMapState = (): IMapState => {
     handleDragStart,
     handleDragEnd,
     layer,
-    setLayer,
     showOverviewMap,
-    setShowOverviewMap,
     showPipMap,
-    setShowPipMap,
     showPipMap2,
-    setShowPipMap2,
     widgetState,
     containerRef,
     takeScreenshot,

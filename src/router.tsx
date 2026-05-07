@@ -1,7 +1,7 @@
 import { createRouter, createRootRoute, createRoute, Outlet } from "@tanstack/react-router";
 import { useTheme } from "./components/themeToggle/useTheme.ts";
 import App from "./App.tsx";
-import MapApp from "./sections/map/MapApp.tsx";
+import MapApp from "./map/MapApp.tsx";
 import DataGrid from "./sections/userMgmt/dataGrid/DataGrid.tsx";
 import ReportBuilder from "./sections/reportBuilder/ReportBuilder.tsx";
 import DataVisualizations from "./sections/charts/DataVisualizations.tsx";

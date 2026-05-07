@@ -17,7 +17,7 @@ const SelectTrigger = React.forwardRef<
   <SelectPrimitive.Trigger
     ref={ref}
     className={cn(
-      `flex h-9 w-full items-center justify-between whitespace-nowrap rounded-md border border-(--select-text) px-3 py-2 text-sm shadow-sm ring-offset-background text-(--select-text)
+      `flex h-9 w-full items-center justify-between whitespace-nowrap rounded-md border border-(--select-text) px-3 py-2 shadow-sm ring-offset-background text-(--select-text)
        data-placeholder:text-(--text-disabled) disabled:cursor-not-allowed disabled:opacity-50 [&>span]:line-clamp-1`,
       className,
     )}
@@ -67,7 +67,7 @@ const SelectContent = React.forwardRef<
     <SelectPrimitive.Content
       ref={ref}
       className={cn(
-        `relative z-50 max-h-[--radix-select-content-available-height] min-w-32 overflow-y-auto overflow-x-hidden 
+        `relative z-2002 max-h-[--radix-select-content-available-height] min-w-32 overflow-y-auto overflow-x-hidden 
         rounded border border-(--select-text) bg-(--select-bg) text-(--select-text) shadow-md data-[state=open]:animate-in 
         data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 
         data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 
@@ -99,11 +99,7 @@ const SelectLabel = React.forwardRef<
   React.ComponentRef<typeof SelectPrimitive.Label>,
   React.ComponentPropsWithoutRef<typeof SelectPrimitive.Label>
 >(({ className, ...props }, ref) => (
-  <SelectPrimitive.Label
-    ref={ref}
-    className={cn("text-(--text) px-2 py-1.5 text-sm font-semibold", className)}
-    {...props}
-  />
+  <SelectPrimitive.Label ref={ref} className={cn("text-(--text) px-1 py-1.5 font-semibold", className)} {...props} />
 ));
 SelectLabel.displayName = SelectPrimitive.Label.displayName;
 
@@ -115,7 +111,7 @@ const SelectItem = React.forwardRef<
     ref={ref}
     className={cn(
       `relative flex w-full cursor-pointer select-none items-center rounded-sm py-1.5 pl-2 pr-8 
-      text-sm outline-none hover:bg-(--select-bg-hover) focus:text-accent-foreground data-disabled:pointer-events-none 
+     outline-none hover:bg-(--select-bg-hover) focus:text-accent-foreground data-disabled:pointer-events-none 
       data-disabled:opacity-50`,
       className,
     )}

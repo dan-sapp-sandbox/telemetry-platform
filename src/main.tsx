@@ -7,6 +7,8 @@ import "cesium/Build/Cesium/Widgets/widgets.css";
 import { registerSW } from "virtual:pwa-register";
 import "./polyfills";
 import { Toaster } from "react-hot-toast";
+import { Provider } from "react-redux";
+import { store } from "./store/store";
 
 const updateSW = registerSW({
   onNeedRefresh() {
@@ -22,7 +24,9 @@ updateSW();
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
-    <Toaster />
-    <RouterProvider router={router} />
+    <Provider store={store}>
+      <Toaster />
+      <RouterProvider router={router} />
+    </Provider>
   </React.StrictMode>,
 );

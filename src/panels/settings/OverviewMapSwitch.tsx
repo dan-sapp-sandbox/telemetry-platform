@@ -6,9 +6,9 @@ interface Props {
 }
 const OverviewMapSwitch = ({ showOverviewMap, setShowOverviewMap }: Props) => {
   return (
-    <div className="flex flex-col gap-2">
-      <span className="text-xs text-(--text) font-bold">Show Overview Map</span>
+    <div className="flex items-center gap-4">
       <Switch checked={showOverviewMap} onCheckedChange={(checked: boolean) => setShowOverviewMap(checked)} />
+      <span className="text-(--text) font-bold">Show Overview Map</span>
     </div>
   );
 };

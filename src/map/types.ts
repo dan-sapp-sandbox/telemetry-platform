@@ -1,8 +1,6 @@
 import { createContext, type RefObject } from "react";
 import { Viewer } from "cesium";
 
-export type ILayer = "esriSat" | "osm" | "satellite" | "carto-light" | "carto-dark" | "carto-voyager";
-
 type CameraContextType = {
   mainViewerRef: RefObject<Viewer | null>;
   overviewViewerRef: RefObject<Viewer | null>;

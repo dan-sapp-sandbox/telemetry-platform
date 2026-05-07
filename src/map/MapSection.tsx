@@ -1,4 +1,4 @@
-import Section from "../Section";
+import Section from "../sections/Section";
 import MapApp from "./MapApp";
 
 const MapSection = () => {

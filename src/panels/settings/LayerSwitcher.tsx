@@ -7,7 +7,7 @@ import {
   SelectLabel,
   SelectGroup,
 } from "@/components/ui/select";
-import type { ILayer } from "./types";
+import type { ILayer } from "@/store/slices/mapSlice";
 
 interface Props {
   layer: ILayer;

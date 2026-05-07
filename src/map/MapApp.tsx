@@ -3,11 +3,7 @@ import { restrictToParentElement } from "@dnd-kit/modifiers";
 import { Entity, LabelGraphics } from "resium";
 import { Cartesian2, Cartesian3, Color, VerticalOrigin, HeightReference } from "cesium";
 import MainMap from "./MainMap";
-import LayerSwitcher from "./LayerSwitcher";
-import OverviewMapSwitch from "./OverviewMapSwitch";
-import PipMapSwitch from "./PipMapSwitch";
 import CameraControls from "./CameraControls";
-import SettingsContainer from "./SettingsContainer";
 import OverviewMap from "./OverviewMap";
 import PipViewRectangle from "./PipViewRectangle";
 import PipMap from "./PipMap";
@@ -34,13 +30,9 @@ const MapApp = () => {
     handleDragStart,
     handleDragEnd,
     layer,
-    setLayer,
     showOverviewMap,
-    setShowOverviewMap,
     showPipMap,
-    setShowPipMap,
     showPipMap2,
-    setShowPipMap2,
     widgetState,
     containerRef,
     takeScreenshot,
@@ -132,12 +124,6 @@ const MapApp = () => {
               <Layers layer={layer} />
             </PipMap>
           )}
-          <SettingsContainer>
-            <LayerSwitcher layer={layer} setLayer={setLayer} />
-            <OverviewMapSwitch showOverviewMap={showOverviewMap} setShowOverviewMap={setShowOverviewMap} />
-            <PipMapSwitch showPipMap={showPipMap} setShowPipMap={setShowPipMap} isPip2={false} />
-            <PipMapSwitch showPipMap={showPipMap2} setShowPipMap={setShowPipMap2} isPip2={true} />
-          </SettingsContainer>
         </CameraContext.Provider>
       </DndContext>
     </div>

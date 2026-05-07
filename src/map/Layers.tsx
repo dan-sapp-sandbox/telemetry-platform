@@ -1,4 +1,4 @@
-import type { ILayer } from "./types";
+import type { ILayer } from "@/store/slices/mapSlice";
 import { useMemo } from "react";
 import { ImageryLayer } from "resium";
 import { OpenStreetMapImageryProvider, IonImageryProvider, UrlTemplateImageryProvider } from "cesium";
