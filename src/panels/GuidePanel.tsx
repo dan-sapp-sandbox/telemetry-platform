@@ -1,9 +1,11 @@
 const GuidePanel = () => {
   return (
-    <div className="w-full flex flex-row gap-4 md:gap-12 p-8">
-      <div>App Guide</div>
+    <div className="w-full flex flex-col gap-4 md:gap-12 p-8">
+      <div className="text-2xl font-bold">App Guide</div>
       <div>Accordion</div>
-      <div>App Guide</div>
+      <div>Drawing</div>
+      <div>Snapshots</div>
+      <div>Report</div>
     </div>
   );
 };

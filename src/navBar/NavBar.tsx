@@ -1,31 +1,82 @@
 import type { Dispatch, SetStateAction } from "react";
 import ThemeToggle from "@/components/themeToggle";
 import type { Theme } from "@/components/themeToggle/useTheme";
-import { Sprout, Info, Settings, X } from "lucide-react";
+import { BriefcaseBusiness, Sprout, Settings, X, Camera, Edit, FileText } from "lucide-react";
 import useNavBar from "./useNavBar";
+import { ButtonTooltip } from "@/components/ui/tooltip";
+import { cn } from "@/lib/utils";
 
 const NavBar = ({ theme, setTheme }: { theme: string; setTheme: Dispatch<SetStateAction<Theme>> }) => {
   const navBarState = useNavBar();
   //TODO: selected state for buttons
-  //TODO: add tooltips for buttons (make buttons a component)
 
   return (
     <div className="relative h-full">
-      <div className="relative z-2000 py-8 h-full w-16 flex flex-col justify-between items-center bg-(--header-bg)">
+      <div className="relative z-2000 py-8 h-full w-18 flex flex-col justify-between items-center bg-(--header-bg)">
         <div className="flex flex-col items-center gap-1">
-          <div onClick={() => navBarState.handleTogglePanel("guide")} className={navBarState.buttonStyles}>
-            <Sprout className="size-8" />
-          </div>
-
-          <div onClick={() => navBarState.handleTogglePanel("settings")} className={navBarState.buttonStyles}>
-            <Settings className="size-8" />
-          </div>
-
-          <div onClick={() => navBarState.handleTogglePanel("intro")} className={navBarState.buttonStyles}>
-            <Info className="size-8" />
-          </div>
+          <ButtonTooltip content="Intro">
+            <div
+              onClick={() => navBarState.handleTogglePanel("intro")}
+              className={cn([
+                navBarState.buttonStyles,
+                navBarState.showPanel && navBarState.panel === "intro" ? "text-(--link-hover) bg-white/20" : "",
+              ])}
+            >
+              <BriefcaseBusiness className="size-10" />
+            </div>
+          </ButtonTooltip>
+          <ButtonTooltip content="App Guide">
+            <div
+              onClick={() => navBarState.handleTogglePanel("guide")}
+              className={cn([
+                navBarState.buttonStyles,
+                navBarState.showPanel && navBarState.panel === "guide" ? "text-(--link-hover) bg-white/20" : "",
+              ])}
+            >
+              <Sprout className="size-10" />
+            </div>
+          </ButtonTooltip>
+          <ButtonTooltip content="Draw">
+            <div
+              onClick={() => navBarState.handleTogglePanel("draw")}
+              className={cn([
+                navBarState.buttonStyles,
+                navBarState.showPanel && navBarState.panel === "draw" ? "text-(--link-hover) bg-white/20" : "",
+              ])}
+            >
+              <Edit className="size-10" />
+            </div>
+          </ButtonTooltip>
+          <ButtonTooltip content="Report Builder">
+            <div
+              onClick={() => navBarState.handleTogglePanel("report-builder")}
+              className={cn([
+                navBarState.buttonStyles,
+                navBarState.showPanel && navBarState.panel === "report-builder"
+                  ? "text-(--link-hover) bg-white/20"
+                  : "",
+              ])}
+            >
+              <FileText className="size-10" />
+            </div>
+          </ButtonTooltip>
+          <ButtonTooltip content="Settings">
+            <div
+              onClick={() => navBarState.handleTogglePanel("settings")}
+              className={cn([
+                navBarState.buttonStyles,
+                navBarState.showPanel && navBarState.panel === "settings" ? "text-(--link-hover) bg-white/20" : "",
+              ])}
+            >
+              <Settings className="size-10" />
+            </div>
+          </ButtonTooltip>
         </div>
-
+        <ButtonTooltip content="Take Snapshot">
+          <div onClick={() => navBarState.handleTogglePanel("intro")} className={cn([navBarState.buttonStyles])}>
+            <Camera className="size-10" />
+          </div>
+        </ButtonTooltip>
         <ThemeToggle theme={theme} setTheme={setTheme} />
       </div>
       <div className={navBarState.panelStyles}>

@@ -8,14 +8,14 @@ interface ButtonTooltipProps {
 
 export function ButtonTooltip({ content, children }: ButtonTooltipProps) {
   return (
-    <Tooltip.Provider delayDuration={200}>
+    <Tooltip.Provider delayDuration={0}>
       <Tooltip.Root>
         <Tooltip.Trigger asChild>{children}</Tooltip.Trigger>
         <Tooltip.Portal>
           <Tooltip.Content
-            side="top"
+            side="right"
             align="center"
-            className="z-50 rounded-md bg-gray-900 px-3 py-1 text-sm text-white shadow-lg animate-fade-in"
+            className="z-9999 rounded-md bg-gray-900 px-3 py-1 text-sm text-white shadow-lg animate-fade-in"
           >
             {content}
             <Tooltip.Arrow className="fill-gray-900" />

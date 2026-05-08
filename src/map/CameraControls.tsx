@@ -1,14 +1,13 @@
 import { useCesium } from "resium";
 import { Cartesian3 } from "cesium";
 import { Button } from "@/components/ui/button";
-import { ButtonTooltip } from "@/components/ui/tooltip";
-import { Plus, Minus, Camera, ListPlus } from "lucide-react";
+import { Plus, Minus } from "lucide-react";
 import useLocalStorage from "use-local-storage";
 import { useContext } from "react";
 import { CameraContext } from "./types";
 import { defaultMainView, defaultPipView, defaultPipView2 } from "./useMapState";
 
-const CameraControls = ({ takeScreenshot, sendPrompt }: { takeScreenshot: () => void; sendPrompt: () => void }) => {
+const CameraControls = () => {
   const [_initMainView, setInitMainView] = useLocalStorage("main-cam-init", defaultMainView);
   const [_initPipView, setInitPipView] = useLocalStorage("pip-cam-init", defaultPipView);
   const [_initPipView2, setInitPipView2] = useLocalStorage("pip-2-cam-init", defaultPipView2);
@@ -59,16 +58,6 @@ const CameraControls = ({ takeScreenshot, sendPrompt }: { takeScreenshot: () => 
       <Button size="default" onClick={reset}>
         Reset
       </Button>
-      <ButtonTooltip content="Download Image">
-        <Button size="default" onClick={takeScreenshot}>
-          <Camera />
-        </Button>
-      </ButtonTooltip>
-      <ButtonTooltip content="Send to Report">
-        <Button size="default" onClick={sendPrompt}>
-          <ListPlus />
-        </Button>
-      </ButtonTooltip>
     </div>
   );
 };
