@@ -61,6 +61,7 @@ const MainMap = ({ children }: { children?: ReactNode | ReactNode[] }) => {
       // terrainProvider={terrainProvider}
       contextOptions={contextOptions}
       baseLayerPicker={false}
+      baseLayer={false}
       timeline={false}
       geocoder={false}
       homeButton={false}

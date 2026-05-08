@@ -60,8 +60,8 @@ const MapApp = () => {
             <PipViewRectangle show={showPipMap} isPip2={false} />
             <PipViewRectangle show={showPipMap2} isPip2={true} />
             <Layers layer={layer} />
-            <CameraControls />
-            {Labels}
+            {/* <CameraControls /> */}
+            {/* {Labels} */}
           </MainMap>
           {showOverviewMap && (
             <OverviewMap overviewState={widgetState.overview}>
