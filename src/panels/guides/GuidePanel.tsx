@@ -16,6 +16,7 @@ const GuidePanel = () => {
                 className="flex gap-2 items-center cursor-pointer text-xl px-2 py-6"
                 onClick={() => handleToggleExpand(topic.id)}
               >
+                {topic.icon}
                 {topic.title}
                 {expanded[topic.id] ? <ChevronUp /> : <ChevronDown />}
               </div>

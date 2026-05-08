@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useState, type JSX } from "react";
+import { Edit, FileText, Ship, Plane } from "lucide-react";
 
 interface IGuides {
   drawing: boolean;
@@ -16,6 +17,7 @@ const initGuideState = {
 interface ITopicGuide {
   id: keyof IGuides;
   title: string;
+  icon: JSX.Element;
   content: string;
 }
 
@@ -37,21 +39,25 @@ const useGuides = (): IGuideState => {
     {
       id: "drawing",
       title: "Drawing",
-      content: "How to make dots, how to make lines, how to labels, how to upload/download features as geojson",
+      icon: <Edit />,
+      content: "How to make dots, how to make lines, how to make labels, how to upload/download features as geojson",
     },
     {
       id: "vessels",
       title: "Vessels",
+      icon: <Ship />,
       content: "How to view vessel detail, how to search for vessel, how to flyTo vessel",
     },
     {
       id: "aircraft",
       title: "Aircraft",
+      icon: <Plane />,
       content: "How to view aircraft detail, how to search for aircraft, how to flyTo aircraft",
     },
     {
       id: "report-builder",
       title: "Report Builder",
+      icon: <FileText />,
       content: "How to view report, how to add text section, how to add map image",
     },
   ];
