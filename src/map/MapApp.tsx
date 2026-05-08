@@ -10,6 +10,8 @@ import PipMap from "./PipMap";
 import Layers from "./Layers";
 import useMapState from "./useMapState";
 import { CameraContext } from "./types";
+import NavBar from "@/navBar/NavBar";
+import { useTheme } from "@/components/themeToggle/useTheme";
 
 // TODO: draw mode
 // TODO: icons
@@ -21,6 +23,7 @@ import { CameraContext } from "./types";
 // TODO: finish ai command layer
 
 const MapApp = () => {
+  const { theme, setTheme } = useTheme();
   const mapState = useMapState();
   const {
     mainViewerRef,
@@ -46,14 +49,15 @@ const MapApp = () => {
     }),
   );
   return (
-    <div ref={containerRef} className="relative h-full w-full overflow-hidden cursor-pointer">
-      <DndContext
-        sensors={sensors}
-        modifiers={[restrictToParentElement]}
-        onDragStart={handleDragStart}
-        onDragEnd={handleDragEnd}
-      >
-        <CameraContext.Provider value={{ mainViewerRef, overviewViewerRef, pipViewerRef, pipViewer2Ref }}>
+    <CameraContext.Provider value={{ mainViewerRef, overviewViewerRef, pipViewerRef, pipViewer2Ref }}>
+      <NavBar theme={theme} setTheme={setTheme} />
+      <div ref={containerRef} className="relative h-full w-full overflow-hidden cursor-pointer">
+        <DndContext
+          sensors={sensors}
+          modifiers={[restrictToParentElement]}
+          onDragStart={handleDragStart}
+          onDragEnd={handleDragEnd}
+        >
           <MainMap>
             <PipViewRectangle show={showPipMap} isPip2={false} />
             <PipViewRectangle show={showPipMap2} isPip2={true} />
@@ -122,9 +126,9 @@ const MapApp = () => {
               <Layers layer={layer} />
             </PipMap>
           )}
-        </CameraContext.Provider>
-      </DndContext>
-    </div>
+        </DndContext>
+      </div>
+    </CameraContext.Provider>
   );
 };
 
