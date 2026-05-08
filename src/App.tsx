@@ -3,7 +3,7 @@ import MapApp from "./map/MapApp";
 
 const App = () => {
   return (
-    <div className="h-screen w-full flex">
+    <div className="fixed inset-0 h-dvh overflow-hidden flex">
       <MapApp />
     </div>
   );
