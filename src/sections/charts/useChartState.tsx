@@ -29,15 +29,9 @@ const convertChartData = (normalize: boolean, chartConfig: IChartConfig): ChartD
   }).data;
   const labels = jsonData.map((row) => formatDate(row.date));
   const firstValue = jsonData[0].value;
-  // const minValue = jsonData.reduce((acc, row) => Math.min(acc, row.value), jsonData[0].value);
-  // const maxValue = jsonData.reduce((acc, row) => Math.max(acc, row.value), jsonData[0].value);
   const normalizeValue = (val: number) => {
     return (100 * (val - firstValue)) / firstValue;
   };
-  // TODO: add toggle for normalized or relative rate of change
-  // const normalizeValue = (val: number) => {
-  //   return (100 * (val - minValue)) / (maxValue - minValue);
-  // };
   return {
     labels,
     datasets: [

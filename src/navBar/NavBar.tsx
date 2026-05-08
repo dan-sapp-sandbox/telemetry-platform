@@ -8,7 +8,6 @@ import { cn } from "@/lib/utils";
 
 const NavBar = ({ theme, setTheme }: { theme: string; setTheme: Dispatch<SetStateAction<Theme>> }) => {
   const navBarState = useNavBar();
-  //TODO: selected state for buttons
 
   return (
     <div className="relative h-full">

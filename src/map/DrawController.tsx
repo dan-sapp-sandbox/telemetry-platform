@@ -1,6 +1,18 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 
-import { Cartesian2, Cartesian3, Color, ScreenSpaceEventHandler, ScreenSpaceEventType, CallbackProperty } from "cesium";
+import {
+  Cartesian2,
+  Cartesian3,
+  Color,
+  ScreenSpaceEventHandler,
+  ScreenSpaceEventType,
+  CallbackProperty,
+  LabelStyle,
+  NearFarScalar,
+  VerticalOrigin,
+  HorizontalOrigin,
+  DistanceDisplayCondition,
+} from "cesium";
 
 import { Entity, useCesium } from "resium";
 
@@ -173,6 +185,20 @@ const DrawController = () => {
               point={{
                 pixelSize: 10,
                 color: Color.YELLOW,
+              }}
+              label={{
+                text: entity.name,
+                font: "14px sans-serif",
+                style: LabelStyle.FILL_AND_OUTLINE,
+                fillColor: Color.WHITE,
+                outlineColor: Color.BLACK,
+                outlineWidth: 2,
+                verticalOrigin: VerticalOrigin.BOTTOM,
+                horizontalOrigin: HorizontalOrigin.CENTER,
+                pixelOffset: new Cartesian2(0, -12),
+                disableDepthTestDistance: Number.POSITIVE_INFINITY,
+                scaleByDistance: new NearFarScalar(1000, 4, 5000000, 2),
+                distanceDisplayCondition: new DistanceDisplayCondition(0, 5000000),
               }}
             />
           );

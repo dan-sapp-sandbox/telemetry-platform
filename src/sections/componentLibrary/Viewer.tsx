@@ -2,7 +2,6 @@ import ComponentRow from "./ComponentRow";
 import useComponentLibraryState from "./useComponentLibraryState";
 import { cn } from "@/lib/utils";
 
-// TODO: dnd column preview
 const Viewer = () => {
   const { componentList, displayComponent, selected, setSelected } = useComponentLibraryState();
   return (

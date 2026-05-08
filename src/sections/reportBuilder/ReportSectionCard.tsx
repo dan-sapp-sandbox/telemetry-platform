@@ -18,9 +18,6 @@ const ReportSectionCard = ({
   const [isExpanded, setIsExpanded] = useState<boolean>(false);
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({ id: section.id });
 
-  // TODO: ability to delete section
-  // TODO: ability to hide section
-
   const style = {
     transform: CSS.Transform.toString(transform),
     transition,
