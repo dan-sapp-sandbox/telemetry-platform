@@ -11,7 +11,7 @@ const NavBar = ({ theme, setTheme }: { theme: string; setTheme: Dispatch<SetStat
 
   return (
     <div className="relative h-full">
-      <div className="relative z-2000 py-8 h-full w-full md:w-18 flex flex-col justify-between items-center bg-(--header-bg)">
+      <div className="relative z-2000 py-8 h-full w-12 md:w-18 flex flex-col justify-between items-center bg-(--header-bg)">
         <div className="flex flex-col items-center gap-1">
           <ButtonTooltip content="Intro">
             <div
@@ -21,7 +21,7 @@ const NavBar = ({ theme, setTheme }: { theme: string; setTheme: Dispatch<SetStat
                 navBarState.showPanel && navBarState.panel === "intro" ? "text-(--link-hover) bg-white/20" : "",
               ])}
             >
-              <BriefcaseBusiness className="size-10" />
+              <BriefcaseBusiness className={navBarState.iconStyles} />
             </div>
           </ButtonTooltip>
           <ButtonTooltip content="App Guide">
@@ -32,7 +32,7 @@ const NavBar = ({ theme, setTheme }: { theme: string; setTheme: Dispatch<SetStat
                 navBarState.showPanel && navBarState.panel === "guide" ? "text-(--link-hover) bg-white/20" : "",
               ])}
             >
-              <Sprout className="size-10" />
+              <Sprout className={navBarState.iconStyles} />
             </div>
           </ButtonTooltip>
           <ButtonTooltip content="Draw">
@@ -43,7 +43,7 @@ const NavBar = ({ theme, setTheme }: { theme: string; setTheme: Dispatch<SetStat
                 navBarState.showPanel && navBarState.panel === "draw" ? "text-(--link-hover) bg-white/20" : "",
               ])}
             >
-              <Edit className="size-10" />
+              <Edit className={navBarState.iconStyles} />
             </div>
           </ButtonTooltip>
           <ButtonTooltip content="Vessels">
@@ -54,7 +54,7 @@ const NavBar = ({ theme, setTheme }: { theme: string; setTheme: Dispatch<SetStat
                 navBarState.showPanel && navBarState.panel === "vessels" ? "text-(--link-hover) bg-white/20" : "",
               ])}
             >
-              <Ship className="size-10" />
+              <Ship className={navBarState.iconStyles} />
             </div>
           </ButtonTooltip>
           <ButtonTooltip content="Aircraft">
@@ -65,7 +65,7 @@ const NavBar = ({ theme, setTheme }: { theme: string; setTheme: Dispatch<SetStat
                 navBarState.showPanel && navBarState.panel === "aircraft" ? "text-(--link-hover) bg-white/20" : "",
               ])}
             >
-              <Plane className="size-10" />
+              <Plane className={navBarState.iconStyles} />
             </div>
           </ButtonTooltip>
           <ButtonTooltip content="Report Builder">
@@ -78,7 +78,7 @@ const NavBar = ({ theme, setTheme }: { theme: string; setTheme: Dispatch<SetStat
                   : "",
               ])}
             >
-              <FileText className="size-10" />
+              <FileText className={navBarState.iconStyles} />
             </div>
           </ButtonTooltip>
           <ButtonTooltip content="Settings">
@@ -89,13 +89,13 @@ const NavBar = ({ theme, setTheme }: { theme: string; setTheme: Dispatch<SetStat
                 navBarState.showPanel && navBarState.panel === "settings" ? "text-(--link-hover) bg-white/20" : "",
               ])}
             >
-              <Settings className="size-10" />
+              <Settings className={navBarState.iconStyles} />
             </div>
           </ButtonTooltip>
         </div>
         <ButtonTooltip content="Take Snapshot">
           <div onClick={() => navBarState.handleTogglePanel("intro")} className={cn([navBarState.buttonStyles])}>
-            <Camera className="size-10" />
+            <Camera className={navBarState.iconStyles} />
           </div>
         </ButtonTooltip>
         <ThemeToggle theme={theme} setTheme={setTheme} />

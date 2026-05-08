@@ -18,9 +18,9 @@ const IntroPanel = ({ openGuide }: { openGuide: () => void }) => {
     document.body.removeChild(link);
   };
   return (
-    <div className="w-full flex flex-row gap-4 md:gap-12 p-8">
+    <div className="w-full flex flex-row gap-4 md:gap-12 p-2 md:p-8">
       <div className="h-full flex-1 flex flex-col justify-between overflow-hidden gap-4">
-        <div className="flex flex-col gap-3 md:gap-8">
+        <div className="flex flex-col gap-6 md:gap-8">
           <div>
             <img src="/me2.png" className="h-22 md:h-32 rounded-2xl" alt="profile pic" />
           </div>

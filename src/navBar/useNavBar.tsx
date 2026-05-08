@@ -16,6 +16,7 @@ interface INavBarState {
   panel: panelType;
   handleTogglePanel: (newPanelType: panelType) => void;
   buttonStyles: string;
+  iconStyles: string;
   panelStyles: string;
   getActivePanel: () => JSX.Element | null;
 }
@@ -40,11 +41,12 @@ const useNavBar = (): INavBarState => {
   };
 
   const buttonStyles = cn([
-    "flex flex-row items-center gap-1 p-3 cursor-pointer",
+    "flex flex-row items-center gap-1 p-1 md:p-3 cursor-pointer",
     "text-(--link) hover:text-(--link-hover) bg-white/10 hover:bg-white/15",
   ]);
+  const iconStyles = cn(["size-8 md:size-10"]);
   const panelStyles = cn([
-    "absolute left-18 top-0 h-full w-120 z-1000 bg-(--background)/95 border-l border-white/10",
+    "absolute left-12 md:left-18 top-0 h-full w-[calc(100vw-3rem)] md:w-120 z-1000 bg-(--background)/95 border-l border-white/10",
     "transform-gpu will-change-transform transition-all duration-300 ease-[cubic-bezier(0.22,1,0.36,1)]",
     showPanel ? "translate-x-0 opacity-100" : "-translate-x-full opacity-0 pointer-events-none",
   ]);
@@ -75,6 +77,7 @@ const useNavBar = (): INavBarState => {
     panel,
     handleTogglePanel,
     buttonStyles,
+    iconStyles,
     panelStyles,
     getActivePanel,
   };
