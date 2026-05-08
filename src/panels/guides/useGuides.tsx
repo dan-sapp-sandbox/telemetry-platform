@@ -18,7 +18,7 @@ interface ITopicGuide {
   id: keyof IGuides;
   title: string;
   icon: JSX.Element;
-  content: string;
+  content: JSX.Element;
 }
 
 interface IGuideState {
@@ -40,25 +40,87 @@ const useGuides = (): IGuideState => {
       id: "drawing",
       title: "Drawing",
       icon: <Edit />,
-      content: "How to make dots, how to make lines, how to make labels, how to upload/download features as geojson",
+      content: (
+        <div className="flex flex-col gap-2">
+          <div className="flex flex-col">
+            <span className="font-bold">Adding Features</span>
+            <span className="ml-4 text-base">Click Point/Line/Polygon, then click on the map</span>
+          </div>
+          <div className="flex flex-col">
+            <span className="font-bold">Adding Labels</span>
+            <span className="ml-4 text-base flex flex-row items-center">
+              Find feature in list and click <Edit className="size-8 px-2" /> to rename
+            </span>
+          </div>
+          <div className="flex flex-col">
+            <span className="font-bold">Import/Export Features as GeoJSON</span>
+            <span className="ml-4 text-base">Click Point/Line/Polygon, then click on the map</span>
+          </div>
+        </div>
+      ),
     },
     {
       id: "vessels",
       title: "Vessels",
       icon: <Ship />,
-      content: "How to view vessel detail, how to search for vessel, how to flyTo vessel",
+      content: (
+        <div className="flex flex-col gap-2">
+          <div className="flex flex-col">
+            <span className="font-bold">Show/Hide Vessels</span>
+            <span className="ml-4 text-base">...</span>
+          </div>
+          <div className="flex flex-col">
+            <span className="font-bold">Search for Vessel</span>
+            <span className="ml-4 text-base">...</span>
+          </div>
+          <div className="flex flex-col">
+            <span className="font-bold">Center on Vessel</span>
+            <span className="ml-4 text-base">...</span>
+          </div>
+        </div>
+      ),
     },
     {
       id: "aircraft",
       title: "Aircraft",
       icon: <Plane />,
-      content: "How to view aircraft detail, how to search for aircraft, how to flyTo aircraft",
+      content: (
+        <div className="flex flex-col gap-2">
+          <div className="flex flex-col">
+            <span className="font-bold">Show/Hide Aircraft</span>
+            <span className="ml-4 text-base">...</span>
+          </div>
+          <div className="flex flex-col">
+            <span className="font-bold">Search for Aircraft</span>
+            <span className="ml-4 text-base">...</span>
+          </div>
+          <div className="flex flex-col">
+            <span className="font-bold">Center on Aircraft</span>
+            <span className="ml-4 text-base">...</span>
+          </div>
+        </div>
+      ),
     },
     {
       id: "report-builder",
       title: "Report Builder",
       icon: <FileText />,
-      content: "How to view report, how to add text section, how to add map image",
+      content: (
+        <div className="flex flex-col gap-2">
+          <div className="flex flex-col">
+            <span className="font-bold">View Report</span>
+            <span className="ml-4 text-base">...</span>
+          </div>
+          <div className="flex flex-col">
+            <span className="font-bold">Add Text Section</span>
+            <span className="ml-4 text-base">...</span>
+          </div>
+          <div className="flex flex-col">
+            <span className="font-bold">Add Map Image</span>
+            <span className="ml-4 text-base">...</span>
+          </div>
+        </div>
+      ),
     },
   ];
 
