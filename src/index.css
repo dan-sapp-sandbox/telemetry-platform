@@ -4,6 +4,7 @@
   /* Light mode */
   :root {
     --background: #ffffff;
+    --alt-background: #565656;
     --foreground: #acacac;
 
     --card: #f9fafb;
@@ -35,6 +36,7 @@
 
     --link: #1441a3;
     --link-hover: #5973ca;
+    --link-selected: #5795e7;
 
     --card-bg: #aeaeae;
     --card-border: #303030;
@@ -98,6 +100,7 @@
 
   .dark {
     --background: #000000;
+    --alt-background: #ffffff;
     --foreground: #4b4b4b;
 
     --card: #000000;
@@ -129,6 +132,7 @@
 
     --link: #84b2fd;
     --link-hover: #a5ceff;
+    --link-selected: #66a6fb;
 
     --card-bg: #0b0b0b;
     --card-border: #1f2937;

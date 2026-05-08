@@ -18,7 +18,9 @@ const NavBar = ({ theme, setTheme }: { theme: string; setTheme: Dispatch<SetStat
               onClick={() => navBarState.handleTogglePanel("intro")}
               className={cn([
                 navBarState.buttonStyles,
-                navBarState.showPanel && navBarState.panel === "intro" ? "text-(--link-hover) bg-white/20" : "",
+                navBarState.showPanel && navBarState.panel === "intro"
+                  ? "text-(--link-selected) bg-(--alt-background)/25"
+                  : "",
               ])}
             >
               <BriefcaseBusiness className={navBarState.iconStyles} />
@@ -29,7 +31,9 @@ const NavBar = ({ theme, setTheme }: { theme: string; setTheme: Dispatch<SetStat
               onClick={() => navBarState.handleTogglePanel("guide")}
               className={cn([
                 navBarState.buttonStyles,
-                navBarState.showPanel && navBarState.panel === "guide" ? "text-(--link-hover) bg-white/20" : "",
+                navBarState.showPanel && navBarState.panel === "guide"
+                  ? "text-(--link-selected) bg-(--alt-background)/25"
+                  : "",
               ])}
             >
               <Sprout className={navBarState.iconStyles} />
@@ -40,7 +44,9 @@ const NavBar = ({ theme, setTheme }: { theme: string; setTheme: Dispatch<SetStat
               onClick={() => navBarState.handleTogglePanel("draw")}
               className={cn([
                 navBarState.buttonStyles,
-                navBarState.showPanel && navBarState.panel === "draw" ? "text-(--link-hover) bg-white/20" : "",
+                navBarState.showPanel && navBarState.panel === "draw"
+                  ? "text-(--link-selected) bg-(--alt-background)/25"
+                  : "",
               ])}
             >
               <Edit className={navBarState.iconStyles} />
@@ -51,7 +57,9 @@ const NavBar = ({ theme, setTheme }: { theme: string; setTheme: Dispatch<SetStat
               onClick={() => navBarState.handleTogglePanel("vessels")}
               className={cn([
                 navBarState.buttonStyles,
-                navBarState.showPanel && navBarState.panel === "vessels" ? "text-(--link-hover) bg-white/20" : "",
+                navBarState.showPanel && navBarState.panel === "vessels"
+                  ? "text-(--link-selected) bg-(--alt-background)/25"
+                  : "",
               ])}
             >
               <Ship className={navBarState.iconStyles} />
@@ -62,7 +70,9 @@ const NavBar = ({ theme, setTheme }: { theme: string; setTheme: Dispatch<SetStat
               onClick={() => navBarState.handleTogglePanel("aircraft")}
               className={cn([
                 navBarState.buttonStyles,
-                navBarState.showPanel && navBarState.panel === "aircraft" ? "text-(--link-hover) bg-white/20" : "",
+                navBarState.showPanel && navBarState.panel === "aircraft"
+                  ? "text-(--link-selected) bg-(--alt-background)/25"
+                  : "",
               ])}
             >
               <Plane className={navBarState.iconStyles} />
@@ -74,7 +84,7 @@ const NavBar = ({ theme, setTheme }: { theme: string; setTheme: Dispatch<SetStat
               className={cn([
                 navBarState.buttonStyles,
                 navBarState.showPanel && navBarState.panel === "report-builder"
-                  ? "text-(--link-hover) bg-white/20"
+                  ? "text-(--link-selected) bg-(--alt-background)/25"
                   : "",
               ])}
             >
@@ -86,7 +96,7 @@ const NavBar = ({ theme, setTheme }: { theme: string; setTheme: Dispatch<SetStat
               onClick={() => navBarState.handleTogglePanel("settings")}
               className={cn([
                 navBarState.buttonStyles,
-                navBarState.showPanel && navBarState.panel === "settings" ? "text-(--link-hover) bg-white/20" : "",
+                navBarState.showPanel && navBarState.panel === "settings" ? "text-(--link-selected) bg-white/25" : "",
               ])}
             >
               <Settings className={navBarState.iconStyles} />
