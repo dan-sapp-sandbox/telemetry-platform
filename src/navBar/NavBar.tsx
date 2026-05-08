@@ -11,7 +11,7 @@ const NavBar = ({ theme, setTheme }: { theme: string; setTheme: Dispatch<SetStat
 
   return (
     <div className="relative h-full">
-      <div className="relative z-2000 py-8 h-full w-18 flex flex-col justify-between items-center bg-(--header-bg)">
+      <div className="relative z-2000 py-8 h-full w-full md:w-18 flex flex-col justify-between items-center bg-(--header-bg)">
         <div className="flex flex-col items-center gap-1">
           <ButtonTooltip content="Intro">
             <div

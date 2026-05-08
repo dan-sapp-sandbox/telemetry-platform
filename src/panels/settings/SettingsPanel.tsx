@@ -1,7 +1,5 @@
 import { Button } from "@/components/ui/button";
 import LayerSwitcher from "./LayerSwitcher";
-import OverviewMapSwitch from "./OverviewMapSwitch";
-import PipMapSwitch from "./PipMapSwitch";
 import useSettings from "./useSettings";
 import { Switch } from "@/components/ui/switch";
 
