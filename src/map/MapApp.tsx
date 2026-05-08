@@ -1,7 +1,7 @@
 import { DndContext, TouchSensor, PointerSensor, useSensor, useSensors } from "@dnd-kit/core";
 import { restrictToParentElement } from "@dnd-kit/modifiers";
 import MainMap from "./MainMap";
-import CameraControls from "./CameraControls";
+// import CameraControls from "./CameraControls";
 import OverviewMap from "./OverviewMap";
 import PipViewRectangle from "./PipViewRectangle";
 import PipMap from "./PipMap";
@@ -35,7 +35,7 @@ const MapApp = () => {
     showPipMap2,
     widgetState,
     containerRef,
-    Labels,
+    // Labels,
   } = mapState;
   const sensors = useSensors(
     useSensor(PointerSensor),
