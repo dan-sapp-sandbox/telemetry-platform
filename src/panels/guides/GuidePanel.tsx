@@ -11,7 +11,7 @@ const GuidePanel = () => {
       <div className="w-full flex flex-col bg-(--foreground)/50 py-2">
         {guides.map((topic, i) => (
           <>
-            <div className={cn([expanded[topic.id] ? "" : "", ""])}>
+            <div key={topic.id} className={cn([expanded[topic.id] ? "" : "", ""])}>
               <div
                 className="flex gap-2 items-center cursor-pointer text-xl px-2 py-6"
                 onClick={() => handleToggleExpand(topic.id)}
