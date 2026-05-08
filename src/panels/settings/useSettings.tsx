@@ -11,10 +11,10 @@ export interface ISettingsState {
   showPipMap2: boolean;
   handleChangeLayer: (newLayer: ILayer) => void;
   layer: ILayer;
-  resetToDefault: () => void;
+  handleResetToDefault: () => void;
 }
 
-const useSettings = () => {
+const useSettings = (): ISettingsState => {
   const dispatch = useDispatch();
 
   const { showOverviewMap, showPipMap, showPipMap2, layer } = useSelector((state: { map: mapState }) => state.map);

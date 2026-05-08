@@ -4,6 +4,7 @@ import { CameraContext } from "./types";
 // import { Viewer as CesiumViewer, Cartesian3, createWorldTerrainAsync } from "cesium";
 import { Viewer as CesiumViewer, Cartesian3 } from "cesium";
 import useLocalStorage from "use-local-storage";
+import DrawController from "./DrawController";
 
 const RegisterMainViewer = () => {
   const { viewer } = useCesium();
@@ -70,6 +71,7 @@ const MainMap = ({ children }: { children?: ReactNode | ReactNode[] }) => {
     >
       <InitialCamera />
       <RegisterMainViewer />
+      <DrawController />
       {children}
     </Viewer>
   );
