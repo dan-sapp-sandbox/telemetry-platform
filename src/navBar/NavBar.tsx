@@ -13,101 +13,101 @@ const NavBar = ({ theme, setTheme }: { theme: string; setTheme: Dispatch<SetStat
     <div className="relative h-full">
       <div className="relative z-2000 py-8 h-full w-12 md:w-18 flex flex-col justify-between items-center bg-(--header-bg)">
         <div className="flex flex-col items-center gap-1">
-          <ButtonTooltip content="Intro">
-            <div
-              onClick={() => navBarState.handleTogglePanel("intro")}
-              className={cn([
-                navBarState.buttonStyles,
-                navBarState.showPanel && navBarState.panel === "intro"
-                  ? "text-(--link-selected) bg-(--alt-background)/25"
-                  : "",
-              ])}
-            >
-              <BriefcaseBusiness className={navBarState.iconStyles} />
-            </div>
-          </ButtonTooltip>
-          <ButtonTooltip content="App Guide">
-            <div
-              onClick={() => navBarState.handleTogglePanel("guide")}
-              className={cn([
-                navBarState.buttonStyles,
-                navBarState.showPanel && navBarState.panel === "guide"
-                  ? "text-(--link-selected) bg-(--alt-background)/25"
-                  : "",
-              ])}
-            >
-              <Sprout className={navBarState.iconStyles} />
-            </div>
-          </ButtonTooltip>
-          <ButtonTooltip content="Draw">
-            <div
-              onClick={() => navBarState.handleTogglePanel("draw")}
-              className={cn([
-                navBarState.buttonStyles,
-                navBarState.showPanel && navBarState.panel === "draw"
-                  ? "text-(--link-selected) bg-(--alt-background)/25"
-                  : "",
-              ])}
-            >
-              <Edit className={navBarState.iconStyles} />
-            </div>
-          </ButtonTooltip>
-          <ButtonTooltip content="Vessels">
-            <div
-              onClick={() => navBarState.handleTogglePanel("vessels")}
-              className={cn([
-                navBarState.buttonStyles,
-                navBarState.showPanel && navBarState.panel === "vessels"
-                  ? "text-(--link-selected) bg-(--alt-background)/25"
-                  : "",
-              ])}
-            >
-              <Ship className={navBarState.iconStyles} />
-            </div>
-          </ButtonTooltip>
-          <ButtonTooltip content="Aircraft">
-            <div
-              onClick={() => navBarState.handleTogglePanel("aircraft")}
-              className={cn([
-                navBarState.buttonStyles,
-                navBarState.showPanel && navBarState.panel === "aircraft"
-                  ? "text-(--link-selected) bg-(--alt-background)/25"
-                  : "",
-              ])}
-            >
-              <Plane className={navBarState.iconStyles} />
-            </div>
-          </ButtonTooltip>
-          <ButtonTooltip content="Report Builder">
-            <div
-              onClick={() => navBarState.handleTogglePanel("report-builder")}
-              className={cn([
-                navBarState.buttonStyles,
-                navBarState.showPanel && navBarState.panel === "report-builder"
-                  ? "text-(--link-selected) bg-(--alt-background)/25"
-                  : "",
-              ])}
-            >
-              <FileText className={navBarState.iconStyles} />
-            </div>
-          </ButtonTooltip>
-          <ButtonTooltip content="Settings">
-            <div
-              onClick={() => navBarState.handleTogglePanel("settings")}
-              className={cn([
-                navBarState.buttonStyles,
-                navBarState.showPanel && navBarState.panel === "settings" ? "text-(--link-selected) bg-white/25" : "",
-              ])}
-            >
-              <Settings className={navBarState.iconStyles} />
-            </div>
-          </ButtonTooltip>
+          {/* <ButtonTooltip content="Intro"> */}
+          <div
+            onClick={() => navBarState.handleTogglePanel("intro")}
+            className={cn([
+              navBarState.buttonStyles,
+              navBarState.showPanel && navBarState.panel === "intro"
+                ? "text-(--link-selected) bg-(--alt-background)/25"
+                : "",
+            ])}
+          >
+            <BriefcaseBusiness className={navBarState.iconStyles} />
+          </div>
+          {/* </ButtonTooltip> */}
+          {/* <ButtonTooltip content="App Guide"> */}
+          <div
+            onClick={() => navBarState.handleTogglePanel("guide")}
+            className={cn([
+              navBarState.buttonStyles,
+              navBarState.showPanel && navBarState.panel === "guide"
+                ? "text-(--link-selected) bg-(--alt-background)/25"
+                : "",
+            ])}
+          >
+            <Sprout className={navBarState.iconStyles} />
+          </div>
+          {/* </ButtonTooltip> */}
+          {/* <ButtonTooltip content="Draw"> */}
+          <div
+            onClick={() => navBarState.handleTogglePanel("draw")}
+            className={cn([
+              navBarState.buttonStyles,
+              navBarState.showPanel && navBarState.panel === "draw"
+                ? "text-(--link-selected) bg-(--alt-background)/25"
+                : "",
+            ])}
+          >
+            <Edit className={navBarState.iconStyles} />
+          </div>
+          {/* </ButtonTooltip> */}
+          {/* <ButtonTooltip content="Vessels"> */}
+          <div
+            onClick={() => navBarState.handleTogglePanel("vessels")}
+            className={cn([
+              navBarState.buttonStyles,
+              navBarState.showPanel && navBarState.panel === "vessels"
+                ? "text-(--link-selected) bg-(--alt-background)/25"
+                : "",
+            ])}
+          >
+            <Ship className={navBarState.iconStyles} />
+          </div>
+          {/* </ButtonTooltip> */}
+          {/* <ButtonTooltip content="Aircraft"> */}
+          <div
+            onClick={() => navBarState.handleTogglePanel("aircraft")}
+            className={cn([
+              navBarState.buttonStyles,
+              navBarState.showPanel && navBarState.panel === "aircraft"
+                ? "text-(--link-selected) bg-(--alt-background)/25"
+                : "",
+            ])}
+          >
+            <Plane className={navBarState.iconStyles} />
+          </div>
+          {/* </ButtonTooltip> */}
+          {/* <ButtonTooltip content="Report Builder"> */}
+          <div
+            onClick={() => navBarState.handleTogglePanel("report-builder")}
+            className={cn([
+              navBarState.buttonStyles,
+              navBarState.showPanel && navBarState.panel === "report-builder"
+                ? "text-(--link-selected) bg-(--alt-background)/25"
+                : "",
+            ])}
+          >
+            <FileText className={navBarState.iconStyles} />
+          </div>
+          {/* </ButtonTooltip> */}
+          {/* <ButtonTooltip content="Settings"> */}
+          <div
+            onClick={() => navBarState.handleTogglePanel("settings")}
+            className={cn([
+              navBarState.buttonStyles,
+              navBarState.showPanel && navBarState.panel === "settings" ? "text-(--link-selected) bg-white/25" : "",
+            ])}
+          >
+            <Settings className={navBarState.iconStyles} />
+          </div>
+          {/* </ButtonTooltip> */}
         </div>
-        <ButtonTooltip content="Take Snapshot">
+        {/* <ButtonTooltip content="Take Snapshot">
           <div onClick={() => navBarState.handleTogglePanel("intro")} className={cn([navBarState.buttonStyles])}>
             <Camera className={navBarState.iconStyles} />
           </div>
-        </ButtonTooltip>
+        </ButtonTooltip> */}
         <ThemeToggle theme={theme} setTheme={setTheme} />
       </div>
       <div className={navBarState.panelStyles}>

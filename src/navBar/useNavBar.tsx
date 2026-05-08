@@ -45,11 +45,13 @@ const useNavBar = (): INavBarState => {
     "text-(--link) hover:text-(--link-hover) bg-white/10 hover:bg-white/15",
   ]);
   const iconStyles = cn(["size-8 md:size-10"]);
-  const panelStyles = cn([
-    "absolute left-12 md:left-18 top-0 h-full w-[calc(100vw-3rem)] md:w-120 z-1000 bg-(--background)/80 border-l border-white/10",
-    "transform-gpu will-change-transform transition-all duration-300 ease-[cubic-bezier(0.22,1,0.36,1)]",
-    showPanel ? "translate-x-0 opacity-100" : "-translate-x-full opacity-0 pointer-events-none",
-  ]);
+  const panelStyles = cn(
+    "absolute top-0 left-12 md:left-18 h-full md:w-120",
+    "w-[calc(100%-3rem)]",
+    "z-1000 bg-(--background)/80 border-l border-white/10",
+    "transform-gpu transition-transform duration-500 ease-out",
+    showPanel ? "translate-x-0" : "-translate-x-full",
+  );
 
   const getActivePanel = () => {
     switch (panel) {

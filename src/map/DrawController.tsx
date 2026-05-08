@@ -83,7 +83,6 @@ const DrawController = () => {
 
       if (!position) return;
 
-      // POINT
       if (mode === "point") {
         handleAddEntitity({
           id: crypto.randomUUID(),
@@ -95,8 +94,9 @@ const DrawController = () => {
         return;
       }
 
-      // LINE / POLYGON
-      setActivePositions((prev) => [...prev, position]);
+      if (mode === "polyline" || mode === "polygon") {
+        setActivePositions((prev) => [...prev, position]);
+      }
     }, ScreenSpaceEventType.LEFT_CLICK);
 
     // MOUSE MOVE
