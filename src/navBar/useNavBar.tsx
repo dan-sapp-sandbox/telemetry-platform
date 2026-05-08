@@ -4,8 +4,10 @@ import SettingsPanel from "@/panels/settings/SettingsPanel";
 import GuidePanel from "@/panels/GuidePanel";
 import DrawPanel from "@/panels/DrawPanel";
 import ReportBuilderPanel from "@/panels/ReportBuilderPanel";
+import VesselPanel from "@/panels/VesselPanel";
+import AircraftPanel from "@/panels/AircraftPanel";
 
-type panelType = "intro" | "settings" | "guide" | "draw" | "report-builder";
+type panelType = "intro" | "settings" | "guide" | "draw" | "report-builder" | "vessels" | "aircraft";
 
 const useNavBar = () => {
   const [showPanel, setShowPanel] = useState<boolean>(true);
@@ -60,6 +62,10 @@ const useNavBar = () => {
         return <DrawPanel />;
       case "report-builder":
         return <ReportBuilderPanel />;
+      case "vessels":
+        return <VesselPanel />;
+      case "aircraft":
+        return <AircraftPanel />;
       default:
         return null;
     }

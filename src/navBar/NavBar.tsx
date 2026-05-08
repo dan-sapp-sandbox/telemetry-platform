@@ -1,7 +1,7 @@
 import type { Dispatch, SetStateAction } from "react";
 import ThemeToggle from "@/components/themeToggle";
 import type { Theme } from "@/components/themeToggle/useTheme";
-import { BriefcaseBusiness, Sprout, Settings, X, Camera, Edit, FileText } from "lucide-react";
+import { BriefcaseBusiness, Sprout, Settings, X, Camera, Edit, FileText, Ship, Plane } from "lucide-react";
 import useNavBar from "./useNavBar";
 import { ButtonTooltip } from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
@@ -45,6 +45,28 @@ const NavBar = ({ theme, setTheme }: { theme: string; setTheme: Dispatch<SetStat
               ])}
             >
               <Edit className="size-10" />
+            </div>
+          </ButtonTooltip>
+          <ButtonTooltip content="Vessels">
+            <div
+              onClick={() => navBarState.handleTogglePanel("vessels")}
+              className={cn([
+                navBarState.buttonStyles,
+                navBarState.showPanel && navBarState.panel === "vessels" ? "text-(--link-hover) bg-white/20" : "",
+              ])}
+            >
+              <Ship className="size-10" />
+            </div>
+          </ButtonTooltip>
+          <ButtonTooltip content="Aircraft">
+            <div
+              onClick={() => navBarState.handleTogglePanel("aircraft")}
+              className={cn([
+                navBarState.buttonStyles,
+                navBarState.showPanel && navBarState.panel === "aircraft" ? "text-(--link-hover) bg-white/20" : "",
+              ])}
+            >
+              <Plane className="size-10" />
             </div>
           </ButtonTooltip>
           <ButtonTooltip content="Report Builder">

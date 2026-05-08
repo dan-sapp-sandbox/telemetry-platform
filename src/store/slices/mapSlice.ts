@@ -10,9 +10,9 @@ export interface mapState {
 }
 
 const initialState: mapState = {
-  showOverviewMap: true,
-  showPipMap: true,
-  showPipMap2: true,
+  showOverviewMap: false,
+  showPipMap: false,
+  showPipMap2: false,
   layer: "esriSat",
 };
 
