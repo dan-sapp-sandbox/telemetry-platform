@@ -1,9 +1,9 @@
 import type { Dispatch, SetStateAction } from "react";
 import ThemeToggle from "@/components/themeToggle";
 import type { Theme } from "@/components/themeToggle/useTheme";
-import { BriefcaseBusiness, Sprout, Settings, X, Camera, Edit, FileText, Ship, Plane } from "lucide-react";
+import { BriefcaseBusiness, Sprout, Settings, X, Edit, FileText, Ship, Plane } from "lucide-react";
 import useNavBar from "./useNavBar";
-import { ButtonTooltip } from "@/components/ui/tooltip";
+// import { ButtonTooltip } from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
 
 const NavBar = ({ theme, setTheme }: { theme: string; setTheme: Dispatch<SetStateAction<Theme>> }) => {
