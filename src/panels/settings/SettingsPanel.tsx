@@ -18,16 +18,8 @@ const SettingsPanel = () => {
         <span className="text-(--text) font-bold">Show PIP Map</span>
       </div>
       <div className="flex items-center gap-4">
-        <Switch checked={settingsState.showPipMap2} onCheckedChange={settingsState.handleTogglePipMap} />
+        <Switch checked={settingsState.showPipMap2} onCheckedChange={settingsState.handleTogglePipMap2} />
         <span className="text-(--text) font-bold">Show PIP Map 2</span>
-      </div>
-      <div className="flex items-center gap-4">
-        <Switch checked={settingsState.showPipMap2} onCheckedChange={settingsState.handleTogglePipMap} />
-        <span className="text-(--text) font-bold">Show Labels</span>
-      </div>
-      <div className="flex items-center gap-4">
-        <Switch checked={settingsState.showPipMap2} onCheckedChange={settingsState.handleTogglePipMap} />
-        <span className="text-(--text) font-bold">Show Vessels</span>
       </div>
       <Button onClick={settingsState.handleResetToDefault}>Reset to Default</Button>
     </div>
