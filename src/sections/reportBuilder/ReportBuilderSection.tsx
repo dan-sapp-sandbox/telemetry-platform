@@ -1,4 +1,4 @@
-import ReportBuilder from "./ReportBuilder";
+import ReportBuilder from "../../panels/reportBuilder/ReportBuilder";
 import Section from "../Section";
 
 const ReportBuilderSection = () => {

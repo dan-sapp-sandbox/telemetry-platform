@@ -1,24 +1,10 @@
 import { ExternalLink, Download } from "lucide-react";
+import useIntroState from "./useIntroState";
 
 const IntroPanel = ({ openGuide }: { openGuide: () => void }) => {
-  const githubURL = "https://github.com/dan-sapp-sandbox";
-  const linkedInURL = "https://www.linkedin.com/in/dan-sapp-744145b6/";
-  const handleOpenGithubLink = () => {
-    window.open(githubURL, "_blank", "noopener,noreferrer");
-  };
-  const handleOpenLinkedInLink = () => {
-    window.open(linkedInURL, "_blank", "noopener,noreferrer");
-  };
-  const handleDownloadResume = () => {
-    const link = document.createElement("a");
-    link.href = `/Dan Sapp Resume.pdf`;
-    link.download = "Dan Sapp Resume.pdf";
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-  };
+  const introState = useIntroState();
   return (
-    <div className="w-full flex flex-row gap-4 md:gap-12 p-2 md:p-8">
+    <div className="w-full flex flex-row gap-4 md:gap-12 p-2 md:p-4">
       <div className="h-full flex-1 flex flex-col justify-between overflow-hidden gap-4">
         <div className="flex flex-col gap-6 md:gap-8">
           <div>
@@ -41,21 +27,21 @@ const IntroPanel = ({ openGuide }: { openGuide: () => void }) => {
           </div>
           <div
             className="w-fit flex items-center md:gap-4 text-(--text) hover:text-(--text-hover) cursor-pointer"
-            onClick={() => handleDownloadResume()}
+            onClick={() => introState.handleDownloadResume()}
           >
             <span className="text-base md:text-xl">Download Resume</span>
             <Download />
           </div>
           <div
             className="w-fit flex items-center md:gap-4 text-(--text) hover:text-(--text-hover) cursor-pointer"
-            onClick={() => handleOpenLinkedInLink()}
+            onClick={() => introState.handleOpenLinkedInLink()}
           >
             <span className="text-base md:text-xl">LinkedIn</span>
             <ExternalLink />
           </div>
           <div
             className="w-fit flex items-center md:gap-4 text-(--text) hover:text-(--text-hover) cursor-pointer"
-            onClick={() => handleOpenGithubLink()}
+            onClick={() => introState.handleOpenGithubLink()}
           >
             <span className="text-base md:text-xl">GitHub</span>
             <ExternalLink />

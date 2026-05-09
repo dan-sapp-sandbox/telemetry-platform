@@ -1,6 +1,6 @@
 import { DndContext, closestCorners, TouchSensor, PointerSensor, useSensor, useSensors } from "@dnd-kit/core";
 import Column from "./Column";
-import useReportBuilderState from "./useReportBuilderState";
+import useReportBuilderState from "../../sections/reportBuilder/useReportBuilderState";
 import { PDFViewer } from "@react-pdf/renderer";
 import PdfPreview from "./PdfPreview";
 
@@ -22,7 +22,7 @@ const ReportBuilder = () => {
   );
 
   return (
-    <div className="relative p-4 h-full min-h-100 w-full flex flex-row justify-between gap-8">
+    <div className="relative h-full w-full flex flex-col justify-between gap-2">
       <DndContext
         sensors={sensors}
         collisionDetection={closestCorners}
@@ -30,7 +30,7 @@ const ReportBuilder = () => {
         onDragEnd={taskBoardState.handleDragEnd}
         onDragCancel={taskBoardState.handleDragCancel}
       >
-        <div className="max-w-1/3 min-w-80 h-full overflow-y-auto scrollbar-hide">
+        <div className="w-full h-1/2 overflow-y-auto scrollbar-hide">
           <Column reportState={taskBoardState.reportState} setReportState={taskBoardState.setReportState} />
         </div>
       </DndContext>

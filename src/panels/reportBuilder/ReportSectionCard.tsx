@@ -3,7 +3,7 @@ import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { cn } from "@/lib/utils";
 import { ChevronDown, ChevronUp, Grip } from "lucide-react";
-import { type ReportSection } from "./useReportBuilderState";
+import { type ReportSection } from "./useReportBuilder";
 import TextEditor, { type CustomElement } from "@/components/textEditor";
 import type { Descendant } from "slate";
 import { Text, View } from "@react-pdf/renderer";

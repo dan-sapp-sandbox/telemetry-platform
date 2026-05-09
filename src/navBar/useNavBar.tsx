@@ -1,9 +1,9 @@
 import { useState, type JSX, type Dispatch, type SetStateAction } from "react";
-import IntroPanel from "@/panels/IntroPanel";
+import IntroPanel from "@/panels/intro/IntroPanel";
 import SettingsPanel from "@/panels/settings/SettingsPanel";
 import GuidePanel from "@/panels/guides/GuidePanel";
 import DrawPanel from "@/panels/drawing/DrawPanel";
-import ReportBuilderPanel from "@/panels/ReportBuilderPanel";
+import ReportBuilderPanel from "@/panels/reportBuilder/ReportBuilderPanel";
 import VesselPanel from "@/panels/VesselPanel";
 import AircraftPanel from "@/panels/AircraftPanel";
 import { cn } from "@/lib/utils";
@@ -47,7 +47,7 @@ const useNavBar = (): INavBarState => {
   const iconStyles = cn(["size-8 md:size-10"]);
   const panelStyles = cn(
     "absolute top-0 left-12 md:left-18 h-full",
-    "w-[calc(100vw-3rem)] md:w-120",
+    "w-[calc(100vw-3rem)] md:w-155",
     "z-1000 bg-(--background)/80 border-l border-white/10",
     "transform-gpu transition-transform duration-500 ease-out",
     showPanel ? "translate-x-0" : "-translate-x-full",
