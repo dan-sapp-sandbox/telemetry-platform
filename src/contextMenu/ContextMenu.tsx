@@ -1,47 +1,27 @@
+import { Separator } from "@/components/ui/separator";
 import useContextMenu from "./useContextMenu";
+import { Button } from "@/components/ui/button";
 
 const ContextMenu = () => {
-  const { contextMenu, hideContextMenu, menuRef } = useContextMenu();
+  const { contextMenu, hideContextMenu, menuRef, addMarker } = useContextMenu();
 
   if (!contextMenu) return null;
   return (
     <div
       ref={menuRef}
+      className="bg-(--background) text-(--text) absolute z-10000 flex flex-col gap-1 p-2 rounded"
       style={{
-        position: "absolute",
         left: contextMenu.x,
         top: contextMenu.y,
-        zIndex: 10000,
-
-        background: "#1e1e1e",
-        border: "1px solid #444",
-        borderRadius: 6,
-
-        padding: 8,
-
-        display: "flex",
-        flexDirection: "column",
-        gap: 4,
-
-        minWidth: 180,
       }}
     >
-      <button
-      // onClick={() => {
-      //   handleAddEntitity({
-      //     id: crypto.randomUUID(),
-      //     name: "Marker",
-      //     type: "point",
-      //     positions: [serializePosition(contextMenu.worldPosition)],
-      //   });
-
-      //   setContextMenu(null);
-      // }}
-      >
+      <Button variant="ghost" onClick={addMarker}>
         Add Marker
-      </button>
-
-      <button onClick={hideContextMenu}>Cancel</button>
+      </Button>
+      <Separator />
+      <Button variant="ghost" onClick={hideContextMenu}>
+        Cancel
+      </Button>
     </div>
   );
 };

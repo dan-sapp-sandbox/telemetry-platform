@@ -13,6 +13,7 @@ export interface DrawEntity {
   name: string;
   type: IDrawMode;
   positions: Position[];
+  icon?: string;
 }
 
 export interface drawState {
