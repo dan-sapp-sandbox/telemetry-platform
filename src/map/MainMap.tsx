@@ -2,7 +2,7 @@ import { useContext, useEffect, useMemo, type ReactNode } from "react";
 import { Viewer, useCesium } from "resium";
 import { CameraContext } from "./types";
 // import { Viewer as CesiumViewer, Cartesian3, createWorldTerrainAsync } from "cesium";
-import { Viewer as CesiumViewer, Cartesian3 } from "cesium";
+import { Viewer as CesiumViewer, Cartesian3, ScreenSpaceEventType } from "cesium";
 import useLocalStorage from "use-local-storage";
 import DrawController from "./DrawController";
 
@@ -40,6 +40,7 @@ const InitialCamera = () => {
         roll: init.roll,
       },
     });
+    viewer.cesiumWidget.screenSpaceEventHandler.removeInputAction(ScreenSpaceEventType.LEFT_DOUBLE_CLICK);
   }, [viewer]);
 
   return null;

@@ -12,6 +12,7 @@ import NavBar from "@/navBar/NavBar";
 import { useTheme } from "@/components/themeToggle/useTheme";
 import useWidgetLayout from "./hooks/useWidgetLayout";
 // import useMapUtils from "./hooks/useMapUtils";
+import ContextMenu from "@/contextMenu/ContextMenu";
 
 // TODO: icons
 // TODO: right click context menu
@@ -59,6 +60,7 @@ const MapApp = () => {
             <Layers layer={layer} />
             {/* <CameraControls /> */}
             {/* {Labels} */}
+            <ContextMenu />
           </MainMap>
           {showOverviewMap && (
             <OverviewMap overviewState={widgetState.overview}>

@@ -1,23 +1,14 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 
-import {
-  Cartesian2,
-  Cartesian3,
-  Color,
-  ScreenSpaceEventHandler,
-  ScreenSpaceEventType,
-  CallbackProperty,
-  LabelStyle,
-  NearFarScalar,
-  VerticalOrigin,
-  HorizontalOrigin,
-  DistanceDisplayCondition,
-} from "cesium";
+import { Cartesian2, Cartesian3, Color, ScreenSpaceEventHandler, ScreenSpaceEventType, CallbackProperty } from "cesium";
+import PolygonEntity from "./entities/PolygonEntity";
+import PolylineEntity from "./entities/PolylineEntity";
+import PointEntity from "./entities/PointEntity";
 
 import { Entity, useCesium } from "resium";
 
 import { useSelector, useDispatch } from "react-redux";
-import { setDrawMode, addEntity, type drawState, type DrawEntity, type Position } from "@/store/slices/drawSlice";
+import { setDrawMode, addEntity, type drawState, type DrawEntity } from "@/store/slices/drawSlice";
 
 const DrawController = () => {
   const dispatch = useDispatch();
@@ -32,12 +23,10 @@ const DrawController = () => {
     dispatch(setDrawMode(null));
   };
 
-  // ACTIVE DRAWING
   const [activePositions, setActivePositions] = useState<Cartesian3[]>([]);
 
   const mousePositionRef = useRef<Cartesian3 | null>(null);
 
-  // REFS (avoid stale closures)
   const activePositionsRef = useRef<Cartesian3[]>([]);
 
   const drawModeRef = useRef(drawMode);
@@ -50,7 +39,6 @@ const DrawController = () => {
     activePositionsRef.current = activePositions;
   }, [activePositions]);
 
-  // WORLD POSITION HELPER
   const getWorldPosition = (screenPosition: Cartesian2) => {
     if (!viewer) return null;
 
@@ -67,9 +55,6 @@ const DrawController = () => {
     z: position.z,
   });
 
-  const deserializePosition = (position: Position) => new Cartesian3(position.x, position.y, position.z);
-
-  // SINGLE EVENT HANDLER SETUP
   useEffect(() => {
     if (!viewer) return;
 
@@ -78,6 +63,7 @@ const DrawController = () => {
     // LEFT CLICK
     handler.setInputAction((click: any) => {
       const mode = drawModeRef.current;
+      if (!mode) return;
 
       const position = getWorldPosition(click.position);
 
@@ -108,10 +94,9 @@ const DrawController = () => {
       mousePositionRef.current = position;
     }, ScreenSpaceEventType.MOUSE_MOVE);
 
-    // RIGHT CLICK = FINISH DRAW
     handler.setInputAction(() => {
-      console.log("right click");
       const mode = drawModeRef.current;
+      if (!mode) return;
 
       const positions = activePositionsRef.current;
 
@@ -127,9 +112,6 @@ const DrawController = () => {
       }
 
       // SAVE ENTITY
-      if (mode === "point") {
-        handleClearDrawMode();
-      }
       if (mode === "polyline") {
         handleAddEntitity({
           id: crypto.randomUUID(),
@@ -148,9 +130,12 @@ const DrawController = () => {
       }
 
       // RESET
-      setActivePositions([]);
-      mousePositionRef.current = null;
-    }, ScreenSpaceEventType.RIGHT_CLICK);
+      handleClearDrawMode();
+      requestAnimationFrame(() => {
+        setActivePositions([]);
+        mousePositionRef.current = null;
+      });
+    }, ScreenSpaceEventType.LEFT_DOUBLE_CLICK);
 
     return () => {
       handler.destroy();
@@ -168,66 +153,18 @@ const DrawController = () => {
     }, false);
   }, []);
 
-  const renderedEntities = useMemo(() => {
-    return entities.map((entity) => ({
-      ...entity,
-      cartesianPositions: entity.positions.map(deserializePosition),
-    }));
-  }, [entities]);
-
   return (
     <>
-      {renderedEntities.map((entity) => {
+      {entities.map((entity) => {
         if (entity.type === "point") {
-          return (
-            <Entity
-              key={entity.id}
-              position={entity.cartesianPositions[0]}
-              point={{
-                pixelSize: 10,
-                color: Color.YELLOW,
-              }}
-              label={{
-                text: entity.name,
-                font: "14px sans-serif",
-                style: LabelStyle.FILL_AND_OUTLINE,
-                fillColor: Color.WHITE,
-                outlineColor: Color.BLACK,
-                outlineWidth: 2,
-                verticalOrigin: VerticalOrigin.BOTTOM,
-                horizontalOrigin: HorizontalOrigin.CENTER,
-                pixelOffset: new Cartesian2(0, -12),
-                disableDepthTestDistance: Number.POSITIVE_INFINITY,
-                scaleByDistance: new NearFarScalar(1000, 4, 5000000, 2),
-                distanceDisplayCondition: new DistanceDisplayCondition(0, 5000000),
-              }}
-            />
-          );
+          return <PointEntity key={entity.id} entity={entity} />;
         }
+
         if (entity.type === "polyline") {
-          return (
-            <Entity
-              key={entity.id}
-              polyline={{
-                positions: entity.cartesianPositions,
-                width: 3,
-                material: Color.CYAN,
-                clampToGround: true,
-              }}
-            />
-          );
+          return <PolylineEntity key={entity.id} entity={entity} />;
         }
-        return (
-          <Entity
-            key={entity.id}
-            polygon={{
-              hierarchy: entity.cartesianPositions,
-              material: Color.ORANGE.withAlpha(0.4),
-              outline: true,
-              outlineColor: Color.ORANGE,
-            }}
-          />
-        );
+
+        return <PolygonEntity key={entity.id} entity={entity} />;
       })}
       {activePositions.map((position, index) => (
         <Entity

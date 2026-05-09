@@ -36,7 +36,7 @@ const DrawPanel = () => {
         </Button>
       </div>
 
-      <div className="text-sm hidden md:flex">(right click to end drawing)</div>
+      <div className="text-sm text-slate-300 hidden md:flex">(double click to end drawing)</div>
 
       <div className="flex flex-col gap-2">
         <div className="text-xl font-bold">List of Drawn Features</div>

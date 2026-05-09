@@ -58,7 +58,11 @@ const useDrawPanel = (): IDrawPanelState => {
   };
 
   const handleChangeDrawMode = (newDrawMode: IDrawMode) => {
-    dispatch(setDrawMode(newDrawMode));
+    if (drawMode === newDrawMode) {
+      dispatch(setDrawMode(null));
+    } else {
+      dispatch(setDrawMode(newDrawMode));
+    }
   };
   const handleRenameEntity = (id: string, newName: string) => {
     dispatch(renameEntity({ id, newName }));
