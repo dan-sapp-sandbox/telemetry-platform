@@ -110,6 +110,7 @@ const DrawController = () => {
 
     // RIGHT CLICK = FINISH DRAW
     handler.setInputAction(() => {
+      console.log("right click");
       const mode = drawModeRef.current;
 
       const positions = activePositionsRef.current;
