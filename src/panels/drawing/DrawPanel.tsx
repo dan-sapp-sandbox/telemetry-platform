@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import useDrawPanel from "./useDrawPanel";
 import { cn } from "@/lib/utils";
-import { Edit } from "lucide-react";
+import { Edit, Edit2 } from "lucide-react";
 
 const DrawPanel = () => {
   const { handleChangeDrawMode, handleDeleteEntity, handleRenameEntity, drawMode, entities, flyToDrawEntity } =
@@ -46,7 +46,7 @@ const DrawPanel = () => {
               <div className="flex flex-row p-2 gap-2 items-center">
                 <span>{entity.name}</span>
                 <Button size="icon" onClick={() => handleRenameEntity(entity.id, "new name")}>
-                  <Edit />
+                  <Edit2 />
                 </Button>
               </div>
               <div className="flex p-2 gap-2 justify-between">

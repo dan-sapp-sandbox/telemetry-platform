@@ -1,5 +1,5 @@
 import { useState, type JSX } from "react";
-import { Edit, FileText, Ship, Plane } from "lucide-react";
+import { Edit, FileText, Ship, Plane, Edit2 } from "lucide-react";
 
 interface IGuides {
   drawing: boolean;
@@ -49,7 +49,7 @@ const useGuides = (): IGuideState => {
           <div className="flex flex-col">
             <span className="font-bold">Adding Labels</span>
             <span className="ml-4 text-base flex flex-row items-center">
-              Find feature in list and click <Edit className="size-8 px-2" /> to rename
+              Find feature in list and click <Edit2 className="size-8 px-2" /> to rename
             </span>
           </div>
           <div className="flex flex-col">

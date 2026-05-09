@@ -6,10 +6,12 @@ import OverviewMap from "./OverviewMap";
 import PipViewRectangle from "./PipViewRectangle";
 import PipMap from "./PipMap";
 import Layers from "./Layers";
-import useMapState from "./useMapState";
+import useMapState from "./hooks/useMapState";
 import { CameraContext } from "./types";
 import NavBar from "@/navBar/NavBar";
 import { useTheme } from "@/components/themeToggle/useTheme";
+import useWidgetLayout from "./hooks/useWidgetLayout";
+// import useMapUtils from "./hooks/useMapUtils";
 
 // TODO: icons
 // TODO: right click context menu
@@ -21,22 +23,17 @@ import { useTheme } from "@/components/themeToggle/useTheme";
 
 const MapApp = () => {
   const { theme, setTheme } = useTheme();
-  const mapState = useMapState();
-  const {
-    mainViewerRef,
-    overviewViewerRef,
-    pipViewerRef,
-    pipViewer2Ref,
-    handleDragStart,
-    handleDragEnd,
-    layer,
-    showOverviewMap,
-    showPipMap,
-    showPipMap2,
-    widgetState,
-    containerRef,
-    // Labels,
-  } = mapState;
+  const { handleDragStart, handleDragEnd, showOverviewMap, showPipMap, showPipMap2, widgetState, containerRef } =
+    useWidgetLayout();
+  const { mainViewerRef, overviewViewerRef, pipViewerRef, pipViewer2Ref, layer } = useMapState();
+  // const mapUtils = useMapUtils({
+  //   containerRef,
+  //   mainViewerRef,
+  //   overviewViewerRef,
+  //   pipViewerRef,
+  //   pipViewer2Ref,
+  //   widgetState,
+  // });
   const sensors = useSensors(
     useSensor(PointerSensor),
     useSensor(TouchSensor, {
