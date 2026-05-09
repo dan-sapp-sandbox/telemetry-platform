@@ -1,5 +1,5 @@
 import { Document, Page, Text, View, Image, StyleSheet } from "@react-pdf/renderer";
-import type { ReportSection } from "./useReportBuilderState";
+import type { ReportSection } from "./useReportBuilder";
 import { useMemo } from "react";
 
 const styles = StyleSheet.create({

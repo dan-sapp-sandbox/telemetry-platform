@@ -1,6 +1,6 @@
 import { SortableContext, verticalListSortingStrategy } from "@dnd-kit/sortable";
 import ReportSectionCard from "./ReportSectionCard";
-import type { ReportSection } from "./useReportBuilderState";
+import type { ReportSection } from "./useReportBuilder";
 
 const Column = ({
   title,
