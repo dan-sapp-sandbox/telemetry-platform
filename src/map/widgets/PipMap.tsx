@@ -1,13 +1,13 @@
 import { useContext, useEffect, useMemo, type ReactNode } from "react";
 import { Grip } from "lucide-react";
 import { Viewer, useCesium } from "resium";
-import { CameraContext, type IWidget } from "./types";
+import { CameraContext, type IWidget } from "../types";
 import { Math, Cartographic, Cartesian3 } from "cesium";
 // import { Math, Cartographic, Cartesian3, createWorldTerrainAsync } from "cesium";
 import { useDraggable } from "@dnd-kit/core";
 import { CSS } from "@dnd-kit/utilities";
 import useLocalStorage from "use-local-storage";
-import { defaultPipView, defaultPipView2 } from "./hooks/useMapState";
+import { defaultPipView, defaultPipView2 } from "../hooks/useMapState";
 import { cn } from "@/lib/utils";
 
 const PipInitializer = ({ isPip2 }: { isPip2: boolean }) => {
@@ -131,6 +131,7 @@ const PipMap = ({
           // terrainProvider={terrainProvider}
           contextOptions={contextOptions}
           baseLayerPicker={false}
+          baseLayer={false}
           timeline={false}
           geocoder={false}
           homeButton={false}

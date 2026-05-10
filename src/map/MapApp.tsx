@@ -2,9 +2,9 @@ import { DndContext, TouchSensor, PointerSensor, useSensor, useSensors } from "@
 import { restrictToParentElement } from "@dnd-kit/modifiers";
 import MainMap from "./MainMap";
 // import CameraControls from "./CameraControls";
-import OverviewMap from "./OverviewMap";
-import PipViewRectangle from "./PipViewRectangle";
-import PipMap from "./PipMap";
+import OverviewMap from "./widgets/OverviewMap";
+import PipViewRectangle from "./widgets/PipViewRectangle";
+import PipMap from "./widgets/PipMap";
 import Layers from "./Layers";
 import useMapState from "./hooks/useMapState";
 import { CameraContext } from "./types";
@@ -14,8 +14,6 @@ import useWidgetLayout from "./hooks/useWidgetLayout";
 // import useMapUtils from "./hooks/useMapUtils";
 import ContextMenu from "@/contextMenu/ContextMenu";
 
-// TODO: icons
-// TODO: right click context menu
 // TODO: mobile in general
 // TODO: resize widgets
 // TODO: compass
@@ -27,7 +25,7 @@ const MapApp = () => {
   const { handleDragStart, handleDragEnd, showOverviewMap, showPipMap, showPipMap2, widgetState, containerRef } =
     useWidgetLayout();
   const { mainViewerRef, overviewViewerRef, pipViewerRef, pipViewer2Ref, layer } = useMapState();
-  // const mapUtils = useMapUtils({
+  // const {takeScreenshot,sendPrompt, Labels} = useMapUtils({
   //   containerRef,
   //   mainViewerRef,
   //   overviewViewerRef,

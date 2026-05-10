@@ -1,6 +1,6 @@
 import { useContext, useRef } from "react";
 import { Entity } from "resium";
-import { CameraContext } from "./types";
+import { CameraContext } from "../types";
 import { CallbackProperty, Color, Rectangle } from "cesium";
 
 const reusableRect = Rectangle.fromDegrees(0, 0, 0, 0);

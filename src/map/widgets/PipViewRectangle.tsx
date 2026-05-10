@@ -1,6 +1,6 @@
 import React, { useContext, useMemo, useEffect, useCallback } from "react";
 import { Entity } from "resium";
-import { CameraContext } from "./types";
+import { CameraContext } from "../types";
 import { Cartographic, Cartesian2, Cartesian3, CallbackProperty, Color, Math, PolygonHierarchy } from "cesium";
 import useLocalStorage from "use-local-storage";
 

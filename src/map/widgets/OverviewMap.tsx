@@ -1,7 +1,7 @@
 import { useContext, useEffect, useMemo, type ReactNode } from "react";
 import { Grip } from "lucide-react";
 import { Viewer, useCesium } from "resium";
-import { CameraContext, type IWidget } from "./types";
+import { CameraContext, type IWidget } from "../types";
 import MainViewRectangle from "./MainViewRectangle";
 import { useDraggable } from "@dnd-kit/core";
 import { CSS } from "@dnd-kit/utilities";
@@ -73,6 +73,7 @@ const OverviewMap = ({ children, overviewState }: { children?: ReactNode | React
           full
           contextOptions={contextOptions}
           baseLayerPicker={false}
+          baseLayer={false}
           timeline={false}
           geocoder={false}
           homeButton={false}
