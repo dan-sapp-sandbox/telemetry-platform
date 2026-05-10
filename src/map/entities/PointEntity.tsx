@@ -23,14 +23,36 @@ const PointEntity = ({ entity }: Props) => {
     return deserializePosition(entity.positions[0]);
   }, [entity.positions]);
 
-  return (
+  return entity.icon ? (
     <Entity
       position={position}
       billboard={{
-        image: entity.icon ?? "/icons/marker.png",
+        image: entity.icon,
         scale: 1,
         verticalOrigin: VerticalOrigin.BOTTOM,
         disableDepthTestDistance: Number.POSITIVE_INFINITY,
+      }}
+      label={{
+        text: entity.icon ? "" : entity.name,
+        font: "14px sans-serif",
+        style: LabelStyle.FILL_AND_OUTLINE,
+        fillColor: Color.WHITE,
+        outlineColor: Color.BLACK,
+        outlineWidth: 2,
+        verticalOrigin: VerticalOrigin.BOTTOM,
+        horizontalOrigin: HorizontalOrigin.CENTER,
+        pixelOffset: new Cartesian2(0, -12),
+        disableDepthTestDistance: Number.POSITIVE_INFINITY,
+        scaleByDistance: new NearFarScalar(1000, 4, 5000000, 2),
+        distanceDisplayCondition: new DistanceDisplayCondition(0, 5000000),
+      }}
+    />
+  ) : (
+    <Entity
+      position={position}
+      point={{
+        pixelSize: 10,
+        color: Color.YELLOW,
       }}
       label={{
         text: entity.icon ? "" : entity.name,
