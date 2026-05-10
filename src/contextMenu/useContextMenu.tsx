@@ -108,7 +108,6 @@ const useContextMenu = (): IContextMenu => {
 
     handleAddEntitity({
       id: crypto.randomUUID(),
-      name: "Marker",
       type: "point",
       positions: [serializePosition(contextMenu.worldPosition)],
       icon: lucideToDataUrl(<MapPin size={32} color="#ffffff" fill="#000000" strokeWidth={2} />),

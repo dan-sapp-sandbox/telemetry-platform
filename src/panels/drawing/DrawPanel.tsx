@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import useDrawPanel from "./useDrawPanel";
 import { cn } from "@/lib/utils";
-import { Slash, Edit2, Hexagon, Dot } from "lucide-react";
+import { Slash, Edit2, Hexagon, Dot, Trash2, Locate } from "lucide-react";
 
 const DrawPanel = () => {
   const { handleChangeDrawMode, handleDeleteEntity, handleRenameEntity, drawMode, entities, flyToDrawEntity } =
@@ -42,25 +42,40 @@ const DrawPanel = () => {
         <div className="text-xl font-bold">List of Drawn Features</div>
         <div className="flex flex-col gap-2 p-2 bg-(--foreground)/60">
           {!entities.length && <div>No Features Added</div>}
-          {entities.map((entity) => (
-            <div key={entity.id} className="flex flex-col p-2 gap-2 bg-(--background)">
-              <div className="flex flex-row p-2 gap-2 items-center">
-                <span>{entity.name}</span>
-                <Button size="icon" onClick={() => handleRenameEntity(entity.id, "new name")}>
-                  <Edit2 />
-                </Button>
+          {entities.map((entity) => {
+            const getTypeIcon = () => {
+              switch (entity.type) {
+                case "point":
+                  if (entity.icon) {
+                    return <span>Icon</span>;
+                  }
+                  return <Dot />;
+                case "polyline":
+                  return <Slash />;
+                case "polygon":
+                  return <Hexagon />;
+                default:
+                  return null;
+              }
+            };
+            return (
+              <div key={entity.id} className="flex flex-col p-2 gap-2 bg-(--background)">
+                <div className="flex flex-row p-2 gap-2 items-center">
+                  <span className="w-8">{getTypeIcon()}</span>
+                  <span>{entity.name}</span>
+                  <Button size="icon" onClick={() => handleRenameEntity(entity.id, "new name")}>
+                    <Edit2 />
+                  </Button>
+                  <Button variant="destructive" size="icon" onClick={() => handleDeleteEntity(entity.id)}>
+                    <Trash2 />
+                  </Button>
+                  <Button variant="secondary" size="icon" onClick={() => flyToDrawEntity(entity)}>
+                    <Locate />
+                  </Button>
+                </div>
               </div>
-              <div className="flex p-2 gap-2 justify-between">
-                <span className="capitalize">Type: {entity.type}</span>
-                <Button variant="destructive" onClick={() => handleDeleteEntity(entity.id)}>
-                  Delete
-                </Button>
-                <Button variant="secondary" onClick={() => flyToDrawEntity(entity)}>
-                  Fly To
-                </Button>
-              </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </div>
     </div>

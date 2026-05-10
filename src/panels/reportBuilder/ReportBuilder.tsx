@@ -1,6 +1,6 @@
 import { DndContext, closestCorners, TouchSensor, PointerSensor, useSensor, useSensors } from "@dnd-kit/core";
 import Column from "./Column";
-import useReportBuilderState from "../../sections/reportBuilder/useReportBuilderState";
+import useReportBuilder from "./useReportBuilder";
 import { PDFViewer } from "@react-pdf/renderer";
 import PdfPreview from "./PdfPreview";
 
@@ -8,8 +8,16 @@ const ReportBuilder = () => {
   //TODO: finish text editor
   //TODO: hide/show section
   //TODO: delete section
+  //TODO: fix serializing issue with redux
 
-  const taskBoardState = useReportBuilderState();
+  const {
+    handleDragCancel,
+    handleUpdateReportSections,
+    // handleClearReport,
+    handleDragEnd,
+    handleDragStart,
+    reportSections,
+  } = useReportBuilder();
 
   const sensors = useSensors(
     useSensor(PointerSensor),
@@ -26,16 +34,16 @@ const ReportBuilder = () => {
       <DndContext
         sensors={sensors}
         collisionDetection={closestCorners}
-        onDragStart={taskBoardState.handleDragStart}
-        onDragEnd={taskBoardState.handleDragEnd}
-        onDragCancel={taskBoardState.handleDragCancel}
+        onDragStart={handleDragStart}
+        onDragEnd={handleDragEnd}
+        onDragCancel={handleDragCancel}
       >
         <div className="w-full h-1/2 overflow-y-auto scrollbar-hide">
-          <Column reportState={taskBoardState.reportState} setReportState={taskBoardState.setReportState} />
+          <Column reportSections={reportSections} handleUpdateReportSections={handleUpdateReportSections} />
         </div>
       </DndContext>
       <PDFViewer style={{ width: "100%", height: "100%" }}>
-        <PdfPreview reportState={taskBoardState.reportState} />
+        <PdfPreview reportSections={reportSections} />
       </PDFViewer>
     </div>
   );

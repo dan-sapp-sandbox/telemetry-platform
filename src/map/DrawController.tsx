@@ -72,7 +72,6 @@ const DrawController = () => {
       if (mode === "point") {
         handleAddEntitity({
           id: crypto.randomUUID(),
-          name: "New Point",
           type: "point",
           positions: [serializePosition(position)],
         });
@@ -115,7 +114,6 @@ const DrawController = () => {
       if (mode === "polyline") {
         handleAddEntitity({
           id: crypto.randomUUID(),
-          name: "New Line",
           type: mode,
           positions: positions.map(serializePosition),
         });
@@ -123,7 +121,6 @@ const DrawController = () => {
       if (mode === "polygon") {
         handleAddEntitity({
           id: crypto.randomUUID(),
-          name: "New Polygon",
           type: mode,
           positions: positions.map(serializePosition),
         });

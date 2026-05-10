@@ -1,21 +1,21 @@
 import { SortableContext, verticalListSortingStrategy } from "@dnd-kit/sortable";
 import ReportSectionCard from "./ReportSectionCard";
-import type { ReportSection } from "./useReportBuilder";
+import type { ReportSection } from "@/store/slices/reportSlice";
 
 const Column = ({
   title,
-  reportState,
-  setReportState,
+  reportSections,
+  handleUpdateReportSections,
 }: {
   title?: string;
-  reportState: ReportSection[];
-  setReportState: (newState: ReportSection[]) => void;
+  reportSections: ReportSection[];
+  handleUpdateReportSections: (newState: ReportSection[]) => void;
 }) => {
   const handleUpdateSection = (updatedSection: ReportSection) => {
-    const newReportState = reportState.map((section) =>
+    const newReportState = reportSections.map((section) =>
       section.id === updatedSection.id ? { ...updatedSection, id: crypto.randomUUID() } : section,
     );
-    setReportState(newReportState);
+    handleUpdateReportSections(newReportState);
   };
   return (
     <div className="bg-(--column-bg) rounded md:rounded p-2 h-full lg:max-w-200">
@@ -25,9 +25,9 @@ const Column = ({
         </h2>
       )}
 
-      <SortableContext items={reportState.map((t) => t.id)} strategy={verticalListSortingStrategy}>
+      <SortableContext items={reportSections.map((t) => t.id)} strategy={verticalListSortingStrategy}>
         <div className="space-y-2 md:space-y-3 h-full overflow-y-auto scrollbar-hide">
-          {reportState.map((section) => (
+          {reportSections.map((section) => (
             <ReportSectionCard key={section.id} section={section} handleUpdateSection={handleUpdateSection} />
           ))}
         </div>

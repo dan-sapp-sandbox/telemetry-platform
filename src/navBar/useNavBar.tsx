@@ -4,8 +4,8 @@ import SettingsPanel from "@/panels/settings/SettingsPanel";
 import GuidePanel from "@/panels/guides/GuidePanel";
 import DrawPanel from "@/panels/drawing/DrawPanel";
 import ReportBuilderPanel from "@/panels/reportBuilder/ReportBuilderPanel";
-import VesselPanel from "@/panels/VesselPanel";
-import AircraftPanel from "@/panels/AircraftPanel";
+import VesselPanel from "@/panels/vessels/VesselPanel";
+import AircraftPanel from "@/panels/aircraft/AircraftPanel";
 import { cn } from "@/lib/utils";
 
 type panelType = "intro" | "settings" | "guide" | "draw" | "report-builder" | "vessels" | "aircraft";

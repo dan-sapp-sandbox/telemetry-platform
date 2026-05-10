@@ -1,6 +1,6 @@
-import { Document, Page, Text, View, Image, StyleSheet } from "@react-pdf/renderer";
-import type { ReportSection } from "./useReportBuilder";
 import { useMemo } from "react";
+import { Document, Page, Text, View, Image, StyleSheet } from "@react-pdf/renderer";
+import type { ReportSection } from "@/store/slices/reportSlice";
 
 const styles = StyleSheet.create({
   page: {
@@ -16,8 +16,8 @@ const styles = StyleSheet.create({
   },
 });
 
-const PdfPreview = ({ reportState }: { reportState: ReportSection[] }) => {
-  const documentKey = reportState.map((s) => s.id).join(",");
+const PdfPreview = ({ reportSections }: { reportSections: ReportSection[] }) => {
+  const documentKey = reportSections.map((s) => s.id).join(",");
   const getSection = (section: ReportSection) => {
     switch (section.type) {
       case "text":
@@ -44,7 +44,7 @@ const PdfPreview = ({ reportState }: { reportState: ReportSection[] }) => {
     () => (
       <Document key={documentKey}>
         <Page size="A4" style={styles.page}>
-          {reportState.map((section) => getSection(section))}
+          {reportSections.map((section) => getSection(section))}
         </Page>
       </Document>
     ),

@@ -33,7 +33,7 @@ const PointEntity = ({ entity }: Props) => {
         disableDepthTestDistance: Number.POSITIVE_INFINITY,
       }}
       label={{
-        text: entity.icon ? "" : entity.name,
+        text: entity.name,
         font: "14px sans-serif",
         style: LabelStyle.FILL_AND_OUTLINE,
         fillColor: Color.WHITE,
@@ -51,11 +51,11 @@ const PointEntity = ({ entity }: Props) => {
     <Entity
       position={position}
       point={{
-        pixelSize: 10,
-        color: Color.YELLOW,
+        pixelSize: 12,
+        color: Color.RED,
       }}
       label={{
-        text: entity.icon ? "" : entity.name,
+        text: entity.name,
         font: "14px sans-serif",
         style: LabelStyle.FILL_AND_OUTLINE,
         fillColor: Color.WHITE,

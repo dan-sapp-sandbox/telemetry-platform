@@ -10,7 +10,7 @@ export interface Position {
 
 export interface DrawEntity {
   id: string;
-  name: string;
+  name?: string;
   type: IDrawMode;
   positions: Position[];
   icon?: string;
