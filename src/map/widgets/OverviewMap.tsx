@@ -1,7 +1,8 @@
 import { useContext, useEffect, useMemo, type ReactNode } from "react";
 import { Grip } from "lucide-react";
 import { Viewer, useCesium } from "resium";
-import { CameraContext, type IWidget } from "../types";
+import { CameraContext } from "../types";
+import type { IWidget } from "@/store/slices/widgetSlice";
 import MainViewRectangle from "./MainViewRectangle";
 import { useDraggable } from "@dnd-kit/core";
 import { CSS } from "@dnd-kit/utilities";

@@ -1,7 +1,8 @@
 import { useContext, useEffect, useMemo, type ReactNode } from "react";
 import { Grip } from "lucide-react";
 import { Viewer, useCesium } from "resium";
-import { CameraContext, type IWidget } from "../types";
+import { CameraContext } from "../types";
+import type { IWidget } from "@/store/slices/widgetSlice";
 import { Math, Cartographic, Cartesian3 } from "cesium";
 // import { Math, Cartographic, Cartesian3, createWorldTerrainAsync } from "cesium";
 import { useDraggable } from "@dnd-kit/core";
