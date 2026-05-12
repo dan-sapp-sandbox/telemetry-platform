@@ -1,16 +1,16 @@
-import { type ReactNode } from "react";
 import { createSlice } from "@reduxjs/toolkit";
 import { type Descendant } from "slate";
 import { initReportSections } from "../mockData/initReport";
 
+export type SectionType = "image" | "text";
+
 export interface ReportSection {
   id: string;
-  type: string;
+  type: SectionType;
   styles?: {
     [key: string]: string | number;
   };
   content?: Descendant[];
-  pdfContent?: ReactNode;
   imageUrl?: string;
 }
 

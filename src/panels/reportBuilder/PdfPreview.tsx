@@ -1,6 +1,7 @@
 import { useMemo } from "react";
 import { Document, Page, Text, View, Image, StyleSheet } from "@react-pdf/renderer";
 import type { ReportSection } from "@/store/slices/reportSlice";
+import { Element as SlateElement, Text as SlateText } from "slate";
 
 const styles = StyleSheet.create({
   page: {
@@ -22,8 +23,25 @@ const PdfPreview = ({ reportSections }: { reportSections: ReportSection[] }) => 
     switch (section.type) {
       case "text":
         return (
-          <View key={section.id} style={{ ...styles.section, ...section.styles }}>
-            {section.pdfContent}
+          <View key={section.id} style={{ ...styles.section, ...section.styles }} wrap={true}>
+            {section.content?.map((node, i) => {
+              if (SlateElement.isElement(node)) {
+                return (
+                  <Text key={i} wrap={true}>
+                    {node.children
+                      .map((child, j) => {
+                        if (SlateText.isText(child)) {
+                          return child.text;
+                        }
+                        return "";
+                      })
+                      .join("")}
+                  </Text>
+                );
+              }
+
+              return null;
+            })}
           </View>
         );
       case "image":

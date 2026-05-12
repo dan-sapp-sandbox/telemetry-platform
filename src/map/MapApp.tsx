@@ -13,6 +13,7 @@ import { useTheme } from "@/components/themeToggle/useTheme";
 import useWidgetLayout from "./hooks/useWidgetLayout";
 // import useMapUtils from "./hooks/useMapUtils";
 import ContextMenu from "@/contextMenu/ContextMenu";
+import useVessels from "./hooks/useVessels";
 
 // TODO: mobile in general
 // TODO: resize widgets
@@ -25,6 +26,7 @@ const MapApp = () => {
   const { handleDragStart, handleDragEnd, showOverviewMap, showPipMap, showPipMap2, widgetState, containerRef } =
     useWidgetLayout();
   const { mainViewerRef, overviewViewerRef, pipViewerRef, pipViewer2Ref, layer } = useMapState();
+  const { VesselEntities } = useVessels();
   // const {takeScreenshot,sendPrompt, Labels} = useMapUtils({
   //   containerRef,
   //   mainViewerRef,
@@ -56,6 +58,7 @@ const MapApp = () => {
             <PipViewRectangle show={showPipMap} isPip2={false} />
             <PipViewRectangle show={showPipMap2} isPip2={true} />
             <Layers layer={layer} />
+            <VesselEntities />
             {/* <CameraControls /> */}
             {/* {Labels} */}
             <ContextMenu />
