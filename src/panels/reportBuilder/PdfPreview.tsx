@@ -1,7 +1,6 @@
 import { useMemo } from "react";
 import { Document, Page, Text, View, Image, StyleSheet } from "@react-pdf/renderer";
 import type { ReportSection } from "@/store/slices/reportSlice";
-import { Element as SlateElement, Text as SlateText } from "slate";
 import { type CustomElement } from "@/components/textEditor";
 import type { Descendant } from "slate";
 
