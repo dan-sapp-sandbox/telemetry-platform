@@ -4,9 +4,10 @@ import { CSS } from "@dnd-kit/utilities";
 import { cn } from "@/lib/utils";
 import { ChevronDown, ChevronUp, Grip } from "lucide-react";
 import { type ReportSection } from "@/store/slices/reportSlice";
-import TextEditor, { type CustomElement } from "@/components/textEditor";
+import TextEditor from "@/components/textEditor";
+// import { type CustomElement } from "@/components/textEditor";
 import type { Descendant } from "slate";
-import { Text, View } from "@react-pdf/renderer";
+// import { Text, View } from "@react-pdf/renderer";
 
 const ReportSectionCard = ({
   section,
