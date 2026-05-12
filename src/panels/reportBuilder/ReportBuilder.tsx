@@ -38,7 +38,7 @@ const ReportBuilder = () => {
         onDragEnd={handleDragEnd}
         onDragCancel={handleDragCancel}
       >
-        <div className="w-full h-1/2 overflow-y-auto scrollbar-hide">
+        <div className="w-full h-50vh overflow-y-auto scrollbar-hide">
           <Column reportSections={reportSections} handleUpdateReportSections={handleUpdateReportSections} />
         </div>
       </DndContext>

@@ -1,5 +1,5 @@
 import { type JSX } from "react";
-import { Edit, FileText, Ship, Plane, Edit2 } from "lucide-react";
+import { Edit, FileText, Ship, Plane, Edit2, Locate, Upload, Download } from "lucide-react";
 
 export interface IGuides {
   drawing: boolean;
@@ -38,8 +38,8 @@ export const guides: ITopicGuide[] = [
         </div>
         <div className="flex flex-col">
           <span className="font-bold">Import/Export Features as GeoJSON</span>
-          <span className="ml-4 text-base">
-            Click Point/Line/Polygon, then click on the map, double click to end line/polygon
+          <span className="ml-4 text-base flex items-center gap-2">
+            Use the <Upload /> <Download /> buttons in the Drawing Panel
           </span>
         </div>
       </div>
@@ -53,7 +53,7 @@ export const guides: ITopicGuide[] = [
       <div className="flex flex-col gap-2">
         <div className="flex flex-col">
           <span className="font-bold">Show/Hide Vessels</span>
-          <span className="ml-4 text-base">...</span>
+          <span className="ml-4 text-base">Use the toggle in the Vessel Panel</span>
         </div>
         <div className="flex flex-col">
           <span className="font-bold">Search for Vessel</span>
@@ -61,7 +61,9 @@ export const guides: ITopicGuide[] = [
         </div>
         <div className="flex flex-col">
           <span className="font-bold">Center on Vessel</span>
-          <span className="ml-4 text-base">...</span>
+          <span className="ml-4 text-base flex items-center gap-2">
+            Click the <Locate /> Icon on the Vessel Entry
+          </span>
         </div>
       </div>
     ),
@@ -74,7 +76,7 @@ export const guides: ITopicGuide[] = [
       <div className="flex flex-col gap-2">
         <div className="flex flex-col">
           <span className="font-bold">Show/Hide Aircraft</span>
-          <span className="ml-4 text-base">...</span>
+          <span className="ml-4 text-base">Use the toggle in the Aircraft Panel</span>
         </div>
         <div className="flex flex-col">
           <span className="font-bold">Search for Aircraft</span>
@@ -82,7 +84,9 @@ export const guides: ITopicGuide[] = [
         </div>
         <div className="flex flex-col">
           <span className="font-bold">Center on Aircraft</span>
-          <span className="ml-4 text-base">...</span>
+          <span className="ml-4 text-base flex items-center gap-2">
+            Click the <Locate /> Icon on the Aircraft Entry
+          </span>
         </div>
       </div>
     ),
@@ -95,15 +99,15 @@ export const guides: ITopicGuide[] = [
       <div className="flex flex-col gap-2">
         <div className="flex flex-col">
           <span className="font-bold">View Report</span>
-          <span className="ml-4 text-base">...</span>
+          <span className="ml-4 text-base">View in the Report Builder Panel</span>
         </div>
         <div className="flex flex-col">
           <span className="font-bold">Add Text Section</span>
-          <span className="ml-4 text-base">...</span>
+          <span className="ml-4 text-base">Click the Add Text Section Button</span>
         </div>
         <div className="flex flex-col">
           <span className="font-bold">Add Map Image</span>
-          <span className="ml-4 text-base">...</span>
+          <span className="ml-4 text-base">Right Click the map and use the Screenshot to Report button</span>
         </div>
       </div>
     ),

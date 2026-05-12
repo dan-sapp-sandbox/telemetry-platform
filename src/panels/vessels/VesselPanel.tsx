@@ -9,7 +9,7 @@ const VesselPanel = () => {
   const { vessels, flyToVessel, showVessels, handleToggleShowVessels, showVesselPaths, handleToggleShowVesselPaths } =
     useVesselPanel();
   return (
-    <div className="w-full flex flex-col gap-4 md:gap-12 p-8">
+    <div className="w-full flex flex-col gap-4 p-4">
       <div className="text-2xl font-bold">Vessels</div>
       <div className="flex items-center gap-4">
         <Switch checked={showVessels} onCheckedChange={handleToggleShowVessels} />
