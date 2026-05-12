@@ -2,6 +2,7 @@ import { createContext, type RefObject } from "react";
 import { Viewer } from "cesium";
 
 type CameraContextType = {
+  containerRef: RefObject<HTMLDivElement | null>;
   mainViewerRef: RefObject<Viewer | null>;
   overviewViewerRef: RefObject<Viewer | null>;
   pipViewerRef: RefObject<Viewer | null>;
@@ -9,20 +10,9 @@ type CameraContextType = {
 };
 
 export const CameraContext = createContext<CameraContextType>({
+  containerRef: { current: null },
   mainViewerRef: { current: null },
   overviewViewerRef: { current: null },
   pipViewerRef: { current: null },
   pipViewer2Ref: { current: null },
 });
-
-export interface IWidget {
-  top: number;
-  left: number;
-  aspect: number;
-  width: number;
-}
-export interface IWidgetState {
-  overview: IWidget;
-  pip: IWidget;
-  pip2: IWidget;
-}

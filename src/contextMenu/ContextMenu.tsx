@@ -3,7 +3,7 @@ import useContextMenu from "./useContextMenu";
 import { Button } from "@/components/ui/button";
 
 const ContextMenu = () => {
-  const { contextMenu, hideContextMenu, menuRef, addMarker } = useContextMenu();
+  const { contextMenu, hideContextMenu, menuRef, addMarker, takeScreenshot } = useContextMenu();
 
   if (!contextMenu) return null;
   return (
@@ -17,6 +17,14 @@ const ContextMenu = () => {
     >
       <Button variant="ghost" onClick={addMarker}>
         Add Marker
+      </Button>
+      <Separator />
+      <Button variant="ghost" onClick={() => takeScreenshot(true)}>
+        Download Screenshot
+      </Button>
+      <Separator />
+      <Button variant="ghost" onClick={() => takeScreenshot()}>
+        Screenshot to Report
       </Button>
       <Separator />
       <Button variant="ghost" onClick={hideContextMenu}>

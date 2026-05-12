@@ -23,18 +23,11 @@ import useVessels from "./hooks/useVessels";
 
 const MapApp = () => {
   const { theme, setTheme } = useTheme();
-  const { handleDragStart, handleDragEnd, showOverviewMap, showPipMap, showPipMap2, widgetState, containerRef } =
+  const { handleDragStart, handleDragEnd, showOverviewMap, showPipMap, showPipMap2, widgetLayout, containerRef } =
     useWidgetLayout();
   const { mainViewerRef, overviewViewerRef, pipViewerRef, pipViewer2Ref, layer } = useMapState();
   const { VesselEntities } = useVessels();
-  // const {takeScreenshot,sendPrompt, Labels} = useMapUtils({
-  //   containerRef,
-  //   mainViewerRef,
-  //   overviewViewerRef,
-  //   pipViewerRef,
-  //   pipViewer2Ref,
-  //   widgetState,
-  // });
+  // const {sendPrompt, Labels} = useMapUtils();
   const sensors = useSensors(
     useSensor(PointerSensor),
     useSensor(TouchSensor, {
@@ -45,7 +38,7 @@ const MapApp = () => {
     }),
   );
   return (
-    <CameraContext.Provider value={{ mainViewerRef, overviewViewerRef, pipViewerRef, pipViewer2Ref }}>
+    <CameraContext.Provider value={{ containerRef, mainViewerRef, overviewViewerRef, pipViewerRef, pipViewer2Ref }}>
       <NavBar theme={theme} setTheme={setTheme} />
       <div ref={containerRef} className="relative h-full w-full overflow-hidden cursor-pointer">
         <DndContext
@@ -64,17 +57,17 @@ const MapApp = () => {
             <ContextMenu />
           </MainMap>
           {showOverviewMap && (
-            <OverviewMap overviewState={widgetState.overview}>
+            <OverviewMap overviewState={widgetLayout.overview}>
               <Layers layer={layer} />
             </OverviewMap>
           )}
           {showPipMap && (
-            <PipMap pipState={widgetState.pip} isPip2={false}>
+            <PipMap pipState={widgetLayout.pip} isPip2={false}>
               <Layers layer={layer} />
             </PipMap>
           )}
           {showPipMap2 && (
-            <PipMap pipState={widgetState.pip2} isPip2={true}>
+            <PipMap pipState={widgetLayout.pip2} isPip2={true}>
               <Layers layer={layer} />
             </PipMap>
           )}
