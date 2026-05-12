@@ -29,7 +29,7 @@ const PdfPreview = ({ reportSections }: { reportSections: ReportSection[] }) => 
                 return (
                   <Text key={i} wrap={true}>
                     {node.children
-                      .map((child, j) => {
+                      .map((child) => {
                         if (SlateText.isText(child)) {
                           return child.text;
                         }

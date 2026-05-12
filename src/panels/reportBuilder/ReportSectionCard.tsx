@@ -33,58 +33,57 @@ const ReportSectionCard = ({
     handleUpdateSection({
       ...section,
       content: newVal,
-      pdfContent: slateToPdfNodes(newVal),
     });
   };
 
-  function slateToPdfNodes(nodes: Descendant[], keyPrefix = "node"): React.ReactNode[] {
-    return nodes.map((node, index) => {
-      const key = `${keyPrefix}-${index}`;
+  // function slateToPdfNodes(nodes: Descendant[], keyPrefix = "node"): React.ReactNode[] {
+  //   return nodes.map((node, index) => {
+  //     const key = `${keyPrefix}-${index}`;
 
-      if ("text" in node) {
-        let style: any = {};
-        if (node.bold) style.fontWeight = "bold";
-        if (node.italic) style.fontStyle = "italic";
-        if (node.underline) style.textDecoration = "underline";
+  //     if ("text" in node) {
+  //       let style: any = {};
+  //       if (node.bold) style.fontWeight = "bold";
+  //       if (node.italic) style.fontStyle = "italic";
+  //       if (node.underline) style.textDecoration = "underline";
 
-        return (
-          <Text key={key} style={style}>
-            {node.text}
-          </Text>
-        );
-      }
-      const element = node as CustomElement;
+  //       return (
+  //         <Text key={key} style={style}>
+  //           {node.text}
+  //         </Text>
+  //       );
+  //     }
+  //     const element = node as CustomElement;
 
-      switch (element.type) {
-        case "paragraph":
-          return (
-            <View key={key} style={{ marginBottom: 4 }}>
-              {slateToPdfNodes(element.children, `${key}-child`)}
-            </View>
-          );
+  //     switch (element.type) {
+  //       case "paragraph":
+  //         return (
+  //           <View key={key} style={{ marginBottom: 4 }}>
+  //             {slateToPdfNodes(element.children, `${key}-child`)}
+  //           </View>
+  //         );
 
-        case "heading":
-          return (
-            <Text key={key} style={{ fontSize: 18, fontWeight: "bold", marginBottom: 4 }}>
-              {element.children.map((child, i) => (
-                <Text key={`${key}-child-${i}`}>{"text" in child ? child.text : ""}</Text>
-              ))}
-            </Text>
-          );
+  //       case "heading":
+  //         return (
+  //           <Text key={key} style={{ fontSize: 18, fontWeight: "bold", marginBottom: 4 }}>
+  //             {element.children.map((child, i) => (
+  //               <Text key={`${key}-child-${i}`}>{"text" in child ? child.text : ""}</Text>
+  //             ))}
+  //           </Text>
+  //         );
 
-        case "list-item":
-          return (
-            <View key={key} style={{ flexDirection: "row", marginBottom: 2 }}>
-              <Text>{"• "}</Text>
-              <View style={{ flex: 1 }}>{slateToPdfNodes(element.children, `${key}-child`)}</View>
-            </View>
-          );
+  //       case "list-item":
+  //         return (
+  //           <View key={key} style={{ flexDirection: "row", marginBottom: 2 }}>
+  //             <Text>{"• "}</Text>
+  //             <View style={{ flex: 1 }}>{slateToPdfNodes(element.children, `${key}-child`)}</View>
+  //           </View>
+  //         );
 
-        default:
-          return <View key={key} />;
-      }
-    });
-  }
+  //       default:
+  //         return <View key={key} />;
+  //     }
+  //   });
+  // }
 
   const getPreview = (section: ReportSection) => {
     switch (section.type) {
