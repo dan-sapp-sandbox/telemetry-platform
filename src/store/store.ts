@@ -1,4 +1,5 @@
 import { configureStore } from "@reduxjs/toolkit";
+import { api } from "./services/api";
 
 import mapReducer from "./slices/mapSlice";
 import drawReducer from "./slices/drawSlice";
@@ -15,5 +16,10 @@ export const store = configureStore({
     vessels: vesselReducer,
     aircraft: aircraftReducer,
     widget: widgetReducer,
+    [api.reducerPath]: api.reducer,
   },
+  middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(api.middleware),
 });
+
+export type RootState = ReturnType<typeof store.getState>;
+export type AppDispatch = typeof store.dispatch;
