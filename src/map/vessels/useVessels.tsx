@@ -28,7 +28,7 @@ const useVessels = (): IVesselState => {
   const [bounds, setBounds] = useState<VesselBounds | null>(null);
   const { mainViewerRef } = useContext(CameraContext);
   const {
-    data: vessels = [],
+    data: vessels,
     // isLoading,
     // error,
   } = useGetVesselsQuery(bounds!, {
@@ -60,7 +60,7 @@ const useVessels = (): IVesselState => {
   const { showVessels } = useSelector((state: { vessels: vesselState }) => state.vessels);
 
   const VesselEntities = (): JSX.Element[] => {
-    if (!vessels?.length) return [];
+    if (!vessels) return [];
     return vessels.map((vessel) => <VesselEntity key={vessel.id} vessel={vessel} />);
   };
 

@@ -28,15 +28,15 @@ export default async function handler(req: Request) {
     }
 
     const filtered = vessels.filter((vessel) => {
-      const inLatitude = vessel.latitude >= south && vessel.latitude <= north;
+      const inLatitude = vessel.lat >= south && vessel.lat <= north;
 
       let inLongitude = false;
 
       // handle international date line
       if (west <= east) {
-        inLongitude = vessel.longitude >= west && vessel.longitude <= east;
+        inLongitude = vessel.lon >= west && vessel.lon <= east;
       } else {
-        inLongitude = vessel.longitude >= west || vessel.longitude <= east;
+        inLongitude = vessel.lon >= west || vessel.lon <= east;
       }
 
       return inLatitude && inLongitude;

@@ -2,16 +2,16 @@
   {
     "id": 1,
     "name": "Aurora",
-    "latitude": 28.7749,
-    "longitude": 50.4194,
+    "lat": 28.7749,
+    "lon": 50.4194,
     "heading": 120,
     "speed": 14
   },
   {
     "id": 2,
     "name": "Northwind",
-    "latitude": 29.7749,
-    "longitude": 50.4194,
+    "lat": 29.7749,
+    "lon": 50.4194,
     "heading": 270,
     "speed": 8
   }
