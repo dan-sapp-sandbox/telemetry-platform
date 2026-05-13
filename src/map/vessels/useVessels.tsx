@@ -5,7 +5,6 @@ import VesselEntity from "./VesselEntity";
 import { useGetVesselsQuery, type VesselBounds } from "@/store/services/api";
 import { CameraContext } from "../types";
 import { Math as CesiumMath, Viewer } from "cesium";
-import { mockVessels } from "@/store/mockData/initVessels";
 
 export interface IVesselState {
   VesselEntities: () => JSX.Element[];
@@ -29,7 +28,7 @@ const useVessels = (): IVesselState => {
   const [bounds, setBounds] = useState<VesselBounds | null>(null);
   const { mainViewerRef } = useContext(CameraContext);
   const {
-    data: vessels = mockVessels,
+    data: vessels = [],
     // isLoading,
     // error,
   } = useGetVesselsQuery(bounds!, {
@@ -61,6 +60,7 @@ const useVessels = (): IVesselState => {
   const { showVessels } = useSelector((state: { vessels: vesselState }) => state.vessels);
 
   const VesselEntities = (): JSX.Element[] => {
+    if (!vessels?.length) return [];
     return vessels.map((vessel) => <VesselEntity key={vessel.id} vessel={vessel} />);
   };
 
