@@ -1,8 +1,8 @@
 import useVessels from "./useVessels";
 
 const Vessels = () => {
-  const { VesselEntities } = useVessels();
-  return <VesselEntities />;
+  const { VesselEntities, showVessels } = useVessels();
+  return showVessels ? <VesselEntities /> : null;
 };
 
 export default Vessels;
