@@ -28,8 +28,8 @@ const useVessels = (): IVesselState => {
   const { mainViewerRef } = useContext(CameraContext);
   const {
     data: vessels = [],
-    isLoading,
-    error,
+    // isLoading,
+    // error,
   } = useGetVesselsQuery(bounds!, {
     skip: !bounds,
   });
