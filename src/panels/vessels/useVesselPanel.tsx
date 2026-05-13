@@ -1,5 +1,6 @@
-import { useContext, useState, useEffect } from "react";
+import { useContext } from "react";
 import { useSelector, useDispatch } from "react-redux";
+import { skipToken } from "@reduxjs/toolkit/query/react";
 import { type vesselState, type Vessel, setShowVessels, setShowVesselPaths } from "@/store/slices/vesselSlice";
 import { CameraContext } from "@/map/types";
 import { Cartographic, Cartesian3, Math as CesiumMath, Viewer } from "cesium";
@@ -28,38 +29,11 @@ export const getBounds = (viewer: Viewer): VesselBounds | null => {
 };
 
 const useVesselPanel = (): IVesselPanel => {
-  const [bounds, setBounds] = useState<VesselBounds | null>(null);
   const { mainViewerRef } = useContext(CameraContext);
   const dispatch = useDispatch();
   const main = mainViewerRef.current;
-  const {
-    data: vessels = [],
-    // isLoading,
-    // error,
-  } = useGetVesselsQuery(bounds!, {
-    skip: !bounds,
-  });
+  const { data: vessels = [] } = useGetVesselsQuery(skipToken);
   const { showVessels, showVesselPaths } = useSelector((state: { vessels: vesselState }) => state.vessels);
-
-  useEffect(() => {
-    if (!main) return;
-
-    const updateBounds = () => {
-      const nextBounds = getBounds(main);
-
-      if (nextBounds) {
-        setBounds(nextBounds);
-      }
-    };
-
-    updateBounds();
-
-    main.camera.moveEnd.addEventListener(updateBounds);
-
-    return () => {
-      main.camera.moveEnd.removeEventListener(updateBounds);
-    };
-  }, [main]);
 
   const handleToggleShowVessels = () => {
     dispatch(setShowVessels(!showVessels));
