@@ -47,7 +47,6 @@ const useVessels = (): IVesselState => {
       }
     };
 
-    // initial load
     updateBounds();
 
     viewer.camera.moveEnd.addEventListener(updateBounds);
