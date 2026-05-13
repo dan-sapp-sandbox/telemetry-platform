@@ -1,5 +1,5 @@
 import { useState, useContext, useEffect, type JSX } from "react";
-import type { vesselState } from "@/store/slices/vesselSlice";
+import type { Vessel, vesselState } from "@/store/slices/vesselSlice";
 import { useSelector } from "react-redux";
 import VesselEntity from "./VesselEntity";
 import { useGetVesselsQuery, type VesselBounds } from "@/store/services/api";
@@ -27,12 +27,14 @@ const useVessels = (): IVesselState => {
   const [bounds, setBounds] = useState<VesselBounds | null>(null);
   const { mainViewerRef } = useContext(CameraContext);
   const {
-    data: vessels = [],
+    data,
     // isLoading,
     // error,
   } = useGetVesselsQuery(bounds!, {
     skip: !bounds,
   });
+  console.log("data", data);
+  const vessels: Vessel[] = [];
   const viewer = mainViewerRef?.current;
 
   useEffect(() => {
@@ -59,6 +61,7 @@ const useVessels = (): IVesselState => {
   const { showVessels } = useSelector((state: { vessels: vesselState }) => state.vessels);
 
   const VesselEntities = (): JSX.Element[] => {
+    return [];
     if (!showVessels) return [];
     return vessels.map((vessel) => <VesselEntity key={vessel.id} vessel={vessel} />);
   };
