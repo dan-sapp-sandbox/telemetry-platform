@@ -28,8 +28,8 @@ const vesselSlice = createSlice({
   initialState,
 
   reducers: {
-    addVessel: (state, action) => {
-      state.vessels = [...state.vessels, action.payload];
+    setVessels: (state, action) => {
+      state.vessels = action.payload;
     },
     setShowVessels: (state, action) => {
       state.showVessels = action.payload;
@@ -40,6 +40,6 @@ const vesselSlice = createSlice({
   },
 });
 
-export const { addVessel, setShowVessels, setShowVesselPaths } = vesselSlice.actions;
+export const { setVessels, setShowVessels, setShowVesselPaths } = vesselSlice.actions;
 
 export default vesselSlice.reducer;

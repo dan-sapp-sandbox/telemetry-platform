@@ -1,10 +1,8 @@
 import { useContext } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { skipToken } from "@reduxjs/toolkit/query/react";
 import { type vesselState, type Vessel, setShowVessels, setShowVesselPaths } from "@/store/slices/vesselSlice";
 import { CameraContext } from "@/map/types";
-import { Cartographic, Cartesian3, Math as CesiumMath, Viewer } from "cesium";
-import { useGetVesselsQuery, type VesselBounds } from "@/store/services/api";
+import { Cartographic, Cartesian3 } from "cesium";
 
 export interface IVesselPanel {
   vessels: Vessel[];
@@ -15,25 +13,11 @@ export interface IVesselPanel {
   handleToggleShowVesselPaths: () => void;
 }
 
-export const getBounds = (viewer: Viewer): VesselBounds | null => {
-  const rect = viewer.camera.computeViewRectangle();
-
-  if (!rect) return null;
-
-  return {
-    west: CesiumMath.toDegrees(rect.west),
-    south: CesiumMath.toDegrees(rect.south),
-    east: CesiumMath.toDegrees(rect.east),
-    north: CesiumMath.toDegrees(rect.north),
-  };
-};
-
 const useVesselPanel = (): IVesselPanel => {
   const { mainViewerRef } = useContext(CameraContext);
   const dispatch = useDispatch();
   const main = mainViewerRef.current;
-  const { data: vessels = [] } = useGetVesselsQuery(skipToken);
-  const { showVessels, showVesselPaths } = useSelector((state: { vessels: vesselState }) => state.vessels);
+  const { vessels, showVessels, showVesselPaths } = useSelector((state: { vessels: vesselState }) => state.vessels);
 
   const handleToggleShowVessels = () => {
     dispatch(setShowVessels(!showVessels));

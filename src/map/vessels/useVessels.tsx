@@ -1,6 +1,6 @@
 import { useState, useContext, useEffect, type JSX } from "react";
-import type { vesselState } from "@/store/slices/vesselSlice";
-import { useSelector } from "react-redux";
+import { setVessels, type vesselState } from "@/store/slices/vesselSlice";
+import { useDispatch, useSelector } from "react-redux";
 import VesselEntity from "./VesselEntity";
 import { useGetVesselsQuery, type VesselBounds } from "@/store/services/api";
 import { CameraContext } from "../types";
@@ -25,6 +25,7 @@ export const getBounds = (viewer: Viewer): VesselBounds | null => {
 };
 
 const useVessels = (): IVesselState => {
+  const dispatch = useDispatch();
   const [bounds, setBounds] = useState<VesselBounds | null>(null);
   const { mainViewerRef } = useContext(CameraContext);
   const {
@@ -35,6 +36,10 @@ const useVessels = (): IVesselState => {
     skip: !bounds,
   });
   const viewer = mainViewerRef?.current;
+
+  useEffect(() => {
+    dispatch(setVessels(vessels));
+  }, [vessels]);
 
   useEffect(() => {
     if (!viewer) return;
