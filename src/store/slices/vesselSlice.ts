@@ -1,5 +1,4 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { mockVessels } from "../mockData/initVessels";
 
 export type Vessel = {
   id: string;
@@ -14,12 +13,14 @@ export type Vessel = {
 export interface vesselState {
   vessels: Vessel[];
   showVessels: boolean;
+  showVesselNames: boolean;
   showVesselPaths: boolean;
 }
 
 const initialState: vesselState = {
-  vessels: mockVessels,
+  vessels: [],
   showVessels: false,
+  showVesselNames: false,
   showVesselPaths: false,
 };
 
@@ -34,12 +35,15 @@ const vesselSlice = createSlice({
     setShowVessels: (state, action) => {
       state.showVessels = action.payload;
     },
+    setShowVesselNames: (state, action) => {
+      state.showVesselNames = action.payload;
+    },
     setShowVesselPaths: (state, action) => {
       state.showVesselPaths = action.payload;
     },
   },
 });
 
-export const { setVessels, setShowVessels, setShowVesselPaths } = vesselSlice.actions;
+export const { setVessels, setShowVessels, setShowVesselNames, setShowVesselPaths } = vesselSlice.actions;
 
 export default vesselSlice.reducer;

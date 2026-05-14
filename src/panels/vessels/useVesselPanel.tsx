@@ -1,6 +1,12 @@
 import { useContext } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { type vesselState, type Vessel, setShowVessels, setShowVesselPaths } from "@/store/slices/vesselSlice";
+import {
+  type vesselState,
+  type Vessel,
+  setShowVessels,
+  setShowVesselNames,
+  setShowVesselPaths,
+} from "@/store/slices/vesselSlice";
 import { CameraContext } from "@/map/types";
 import { Cartographic, Cartesian3 } from "cesium";
 
@@ -9,6 +15,8 @@ export interface IVesselPanel {
   flyToVessel: (vessel: Vessel) => void;
   showVessels: boolean;
   handleToggleShowVessels: () => void;
+  showVesselNames: boolean;
+  handleToggleShowVesselNames: () => void;
   showVesselPaths: boolean;
   handleToggleShowVesselPaths: () => void;
 }
@@ -17,10 +25,15 @@ const useVesselPanel = (): IVesselPanel => {
   const { mainViewerRef } = useContext(CameraContext);
   const dispatch = useDispatch();
   const main = mainViewerRef.current;
-  const { vessels, showVessels, showVesselPaths } = useSelector((state: { vessels: vesselState }) => state.vessels);
+  const { vessels, showVessels, showVesselNames, showVesselPaths } = useSelector(
+    (state: { vessels: vesselState }) => state.vessels,
+  );
 
   const handleToggleShowVessels = () => {
     dispatch(setShowVessels(!showVessels));
+  };
+  const handleToggleShowVesselNames = () => {
+    dispatch(setShowVesselNames(!showVesselNames));
   };
   const handleToggleShowVesselPaths = () => {
     dispatch(setShowVesselPaths(!showVesselPaths));
@@ -50,6 +63,8 @@ const useVesselPanel = (): IVesselPanel => {
     flyToVessel,
     showVessels,
     handleToggleShowVessels,
+    showVesselNames,
+    handleToggleShowVesselNames,
     showVesselPaths,
     handleToggleShowVesselPaths,
   };

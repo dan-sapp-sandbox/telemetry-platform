@@ -26,6 +26,7 @@ export const getBounds = (viewer: Viewer): VesselBounds | null => {
 
 const useVessels = (): IVesselState => {
   const dispatch = useDispatch();
+  const { showVessels, showVesselNames } = useSelector((state: { vessels: vesselState }) => state.vessels);
   const [bounds, setBounds] = useState<VesselBounds | null>(null);
   const { mainViewerRef } = useContext(CameraContext);
   const {
@@ -61,11 +62,9 @@ const useVessels = (): IVesselState => {
     };
   }, [viewer]);
 
-  const { showVessels } = useSelector((state: { vessels: vesselState }) => state.vessels);
-
   const VesselEntities = (): JSX.Element[] => {
     if (!vessels) return [];
-    return vessels.map((vessel) => <VesselEntity key={vessel.id} vessel={vessel} />);
+    return vessels.map((vessel) => <VesselEntity key={vessel.id} vessel={vessel} showVesselNames={showVesselNames} />);
   };
 
   return {

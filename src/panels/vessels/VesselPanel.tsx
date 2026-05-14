@@ -5,15 +5,26 @@ import { Locate, Edit2 } from "lucide-react";
 
 const VesselPanel = () => {
   // TODO: timeseries data
-  // TODO: restrict to vessels in Camera BBox
-  const { vessels, flyToVessel, showVessels, handleToggleShowVessels, showVesselPaths, handleToggleShowVesselPaths } =
-    useVesselPanel();
+  const {
+    vessels,
+    flyToVessel,
+    showVessels,
+    handleToggleShowVessels,
+    showVesselNames,
+    handleToggleShowVesselNames,
+    showVesselPaths,
+    handleToggleShowVesselPaths,
+  } = useVesselPanel();
   return (
     <div className="w-full flex flex-col gap-4 p-4">
       <div className="text-2xl font-bold">Vessels</div>
       <div className="flex items-center gap-4">
         <Switch checked={showVessels} onCheckedChange={handleToggleShowVessels} />
         <span className="text-(--text) font-bold">Show Vessels on Map</span>
+      </div>
+      <div className="flex items-center gap-4">
+        <Switch checked={showVesselNames} onCheckedChange={handleToggleShowVesselNames} />
+        <span className="text-(--text) font-bold">Show Vessel Names on Map</span>
       </div>
       <div className="flex items-center gap-4">
         <Switch checked={showVesselPaths} onCheckedChange={handleToggleShowVesselPaths} />

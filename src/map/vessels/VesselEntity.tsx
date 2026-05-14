@@ -8,12 +8,14 @@ import {
   Cartesian2,
   NearFarScalar,
   DistanceDisplayCondition,
+  Math as CesiumMath,
 } from "cesium";
 import { Entity } from "resium";
 import type { Vessel } from "@/store/slices/vesselSlice";
 
 interface Props {
   vessel: Vessel;
+  showVesselNames: boolean;
 }
 
 const shipSvg = `
@@ -24,34 +26,46 @@ const shipSvg = `
 
 const shipIcon = `data:image/svg+xml;charset=utf-8,${encodeURIComponent(shipSvg)}`;
 
-const VesselEntity = ({ vessel }: Props) => {
+const VesselEntity = ({ vessel, showVesselNames }: Props) => {
   const position = useMemo(() => {
     const { lat, lon } = vessel;
     return Cartesian3.fromDegrees(lon, lat);
   }, [vessel.lat, vessel.lon]);
 
-  return (
+  return showVesselNames ? (
     <Entity
       position={position}
       billboard={{
         image: shipIcon,
-        scale: 1,
+        scale: 0.5,
+        rotation: CesiumMath.toRadians(vessel.heading),
         verticalOrigin: VerticalOrigin.BOTTOM,
         disableDepthTestDistance: Number.POSITIVE_INFINITY,
       }}
       label={{
         text: vessel.name,
-        font: "14px sans-serif",
+        font: "8px sans-serif",
         style: LabelStyle.FILL_AND_OUTLINE,
         fillColor: Color.WHITE,
         outlineColor: Color.BLACK,
         outlineWidth: 2,
         verticalOrigin: VerticalOrigin.BOTTOM,
         horizontalOrigin: HorizontalOrigin.CENTER,
-        pixelOffset: new Cartesian2(0, -12),
+        pixelOffset: new Cartesian2(0, -28),
         disableDepthTestDistance: Number.POSITIVE_INFINITY,
         scaleByDistance: new NearFarScalar(1000, 4, 5000000, 2),
         distanceDisplayCondition: new DistanceDisplayCondition(0, 5000000),
+      }}
+    />
+  ) : (
+    <Entity
+      position={position}
+      billboard={{
+        image: shipIcon,
+        scale: 0.5,
+        rotation: CesiumMath.toRadians(vessel.heading),
+        verticalOrigin: VerticalOrigin.BOTTOM,
+        disableDepthTestDistance: Number.POSITIVE_INFINITY,
       }}
     />
   );
