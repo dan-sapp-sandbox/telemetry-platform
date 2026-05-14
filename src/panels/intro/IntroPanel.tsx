@@ -43,7 +43,7 @@ const IntroPanel = ({ openGuide }: { openGuide: () => void }) => {
             className="w-fit flex items-center md:gap-4 text-(--text) hover:text-(--text-hover) cursor-pointer"
             onClick={() => introState.handleOpenGithubLink()}
           >
-            <span className="text-base md:text-xl">GitHub</span>
+            <span className="text-base md:text-xl">GitHub Repo</span>
             <ExternalLink />
           </div>
         </div>

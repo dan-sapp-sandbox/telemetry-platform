@@ -5,7 +5,7 @@ interface IIntroState {
 }
 
 const useIntroState = (): IIntroState => {
-  const githubURL = "https://github.com/dan-sapp-sandbox";
+  const githubURL = "https://github.com/dan-sapp-sandbox/sandbox";
   const linkedInURL = "https://www.linkedin.com/in/dan-sapp-744145b6/";
   const handleOpenGithubLink = () => {
     window.open(githubURL, "_blank", "noopener,noreferrer");
