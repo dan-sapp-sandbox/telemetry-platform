@@ -33,7 +33,7 @@ const VesselPanel = () => {
       <div className="flex flex-col gap-2">
         <div className="text-xl font-bold">List of Vessels</div>
         <div className="flex flex-col gap-2 p-2 bg-(--foreground)/60">
-          {!vessels.length && <div>No Vessels Available</div>}
+          {!vessels?.length && <div>No Vessels Available</div>}
           {vessels.map((vessel) => {
             return (
               <div key={vessel.id} className="flex flex-col p-2 gap-2 bg-(--background)">

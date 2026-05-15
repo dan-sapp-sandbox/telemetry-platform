@@ -13,7 +13,7 @@ const initialState: mapState = {
   showOverviewMap: false,
   showPipMap: false,
   showPipMap2: false,
-  layer: "carto-dark",
+  layer: "satellite",
 };
 
 const mapSlice = createSlice({

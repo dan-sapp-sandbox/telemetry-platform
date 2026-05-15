@@ -29,14 +29,14 @@ const useVessels = (): IVesselState => {
   const { showVessels, showVesselNames } = useSelector((state: { vessels: vesselState }) => state.vessels);
   const [bounds, setBounds] = useState<VesselBounds | null>(null);
   const { mainViewerRef } = useContext(CameraContext);
+  const viewer = mainViewerRef?.current;
   const {
     data: vessels,
     // isLoading,
     // error,
   } = useGetVesselsQuery(bounds!, {
-    skip: !bounds,
+    skip: !bounds || !viewer,
   });
-  const viewer = mainViewerRef?.current;
 
   useEffect(() => {
     dispatch(setVessels(vessels));

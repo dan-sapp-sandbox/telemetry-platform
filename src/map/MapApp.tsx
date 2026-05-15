@@ -14,7 +14,7 @@ import useWidgetLayout from "./hooks/useWidgetLayout";
 // import useMapUtils from "./hooks/useMapUtils";
 import ContextMenu from "@/contextMenu/ContextMenu";
 import Vessels from "./vessels/Vessels";
-import DataLayer from "./DataLayer";
+// import DataLayer from "./DataLayer";
 
 // TODO: mobile in general
 // TODO: resize widgets
@@ -51,7 +51,7 @@ const MapApp = () => {
             <PipViewRectangle show={showPipMap} isPip2={false} />
             <PipViewRectangle show={showPipMap2} isPip2={true} />
             {/* <Layers layer={layer} /> */}
-            <DataLayer />
+            {/* <DataLayer /> */}
             <Vessels />
             {/* <CameraControls /> */}
             {/* {Labels} */}
