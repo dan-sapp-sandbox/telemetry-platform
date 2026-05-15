@@ -19,8 +19,8 @@ export interface vesselState {
 
 const initialState: vesselState = {
   vessels: [],
-  showVessels: false,
-  showVesselNames: false,
+  showVessels: true,
+  showVesselNames: true,
   showVesselPaths: false,
 };
 

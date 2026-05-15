@@ -22,7 +22,7 @@ const InitialCamera = () => {
   const [init] = useLocalStorage("main-cam-init", {
     lat: 42,
     lon: 0,
-    height: 2_000_000,
+    height: 5_000_000,
     heading: 0,
     pitch: -Math.PI / 2,
     roll: 0,
