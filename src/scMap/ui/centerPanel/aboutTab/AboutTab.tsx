@@ -4,14 +4,13 @@ import useAboutTab from "./useAboutTab";
 const AboutTab = () => {
   const { handleDownloadResume, handleOpenLinkedInLink, handleOpenGithubLink } = useAboutTab();
   return (
-    <div className="flex h-full">
+    <div className="flex h-full p-2">
       <div className="flex flex-col gap-2 w-1/2">
         <div className="flex gap-2">
-          {/* <img src="/me2.png" className="h-16 rounded" alt="profile pic" /> */}
           <span className="text-lg font-bold text-(--text)">Hi, I'm Dan Sapp.</span>
         </div>
         <span>
-          I build interactive web applications focused on visualization, realtime data, and thoughtful user experience.
+          I'm a Geospatial Software Engineer focused on the Typescript, React, Cesium, FastAPI, postGIS stack.
         </span>
       </div>
       <div className="flex flex-col w-1/2 p-1 gap-2">

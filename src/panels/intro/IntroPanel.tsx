@@ -15,8 +15,7 @@ const IntroPanel = ({ openGuide }: { openGuide: () => void }) => {
           </div>
           <div className="flex flex-col md:gap-4 text-(--text)">
             <span className="text-base md:text-lg">
-              I build interactive web applications focused on visualization, realtime data, and thoughtful user
-              experience.
+              I'm a geospatial software engineer focused on the Typescript, React, Cesium, FastAPI stack
             </span>
           </div>
           <div
