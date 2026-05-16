@@ -25,7 +25,7 @@ const TabButton = ({ active, label, onClick }: { active: boolean; label: string;
 const CenterPanel = () => {
   const [activeTab, setActiveTab] = useState<TabId>("details");
   return (
-    <div className="absolute lg:static bottom-42 flex w-full lg:flex-1 h-50 lg:h-48 xl:h-68 flex-col border border-white/10 bg-zinc-900/70 backdrop-blur-xl shadow-2xl overflow-hidden">
+    <div className="absolute md:static bottom-42 flex w-full md:flex-1 h-50 md:h-48 xl:h-68 flex-col border border-white/10 bg-zinc-900/70 backdrop-blur-xl shadow-2xl overflow-hidden">
       <div className="flex items-center gap-1 h-10 px-6 border-b border-white/10 bg-zinc-950/40">
         <TabButton active={activeTab === "ai"} onClick={() => setActiveTab("ai")} label="AI" />
         <TabButton active={activeTab === "details"} onClick={() => setActiveTab("details")} label="Details" />

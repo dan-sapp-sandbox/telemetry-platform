@@ -7,30 +7,32 @@ const AboutTab = () => {
     <div className="flex h-full p-2">
       <div className="flex flex-col gap-2 w-1/2">
         <div className="flex gap-2">
-          <span className="text-lg font-bold text-(--text)">Hi, I'm Dan Sapp.</span>
+          <span className="md:text-lg font-bold text-(--text)">Hi, I'm Dan Sapp.</span>
         </div>
-        <span>I'm a Geospatial Software Engineer focused on Typescript, React, Cesium, FastAPI, and postGIS.</span>
+        <span className="text-sm lg:text-base text-(--text)">
+          I'm a Geospatial Software Engineer focused on Typescript, React, Cesium, FastAPI, and postGIS.
+        </span>
       </div>
       <div className="flex flex-col w-1/2 p-1 gap-2">
         <div
           className="flex justify-end items-center gap-2 text-(--text)/80 hover:text-(--text-hover) cursor-pointer"
           onClick={() => handleDownloadResume()}
         >
-          <span className="text-base">Download Resume</span>
+          <span className="text-sm md:text-base">Download Resume</span>
           <Download className="size-4" />
         </div>
         <div
           className="flex justify-end items-center gap-2 text-(--text)/80 hover:text-(--text-hover) cursor-pointer"
           onClick={() => handleOpenLinkedInLink()}
         >
-          <span className="text-base">LinkedIn</span>
+          <span className="text-sm md:text-base">LinkedIn</span>
           <ExternalLink className="size-4" />
         </div>
         <div
           className="flex justify-end items-center gap-2 text-(--text)/80 hover:text-(--text-hover) cursor-pointer"
           onClick={() => handleOpenGithubLink()}
         >
-          <span className="text-base">GitHub Repo</span>
+          <span className="text-sm md:text-base">GitHub Repo</span>
           <ExternalLink className="size-4" />
         </div>
       </div>
