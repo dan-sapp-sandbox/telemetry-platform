@@ -9,7 +9,7 @@ import { CameraContext } from "@/map/types";
 const SCMap = () => {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const { mainViewerRef, overviewViewerRef, pipViewerRef, pipViewer2Ref } = useMapState();
-  const mapWrapperStyles = "relative w-full h-[calc(100%-19rem)] lg:h-[calc(100%-12rem)] xl:h-[calc(100%-17rem)]";
+  const mapWrapperStyles = "relative w-full h-[calc(100%-23rem)] lg:h-[calc(100%-12rem)] xl:h-[calc(100%-17rem)]";
   return (
     <CameraContext.Provider value={{ containerRef, mainViewerRef, overviewViewerRef, pipViewerRef, pipViewer2Ref }}>
       <div className="relative h-full w-full cursor-pointer">
