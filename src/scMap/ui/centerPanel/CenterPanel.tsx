@@ -1,7 +1,9 @@
 import { cn } from "@/lib/utils";
 import { useState } from "react";
+import AITab from "./AITab";
+import DetailsTab from "./detailsTab/DetailsTab";
 
-type TabId = "ai" | "inspector" | "logs";
+type TabId = "ai" | "details" | "logs";
 
 const TabButton = ({ active, label, onClick }: { active: boolean; label: string; onClick: () => void }) => {
   return (
@@ -19,33 +21,6 @@ const TabButton = ({ active, label, onClick }: { active: boolean; label: string;
   );
 };
 
-const AITab = () => {
-  return (
-    <div className="flex flex-col h-full gap-3">
-      <div className="text-xs text-zinc-400">Command Interface</div>
-
-      <input
-        className="h-10 px-3 rounded-lg bg-zinc-800/60 border border-white/10 outline-none text-(--text)"
-        placeholder="Ask SC Intelligence... /track /analyze /draw"
-      />
-
-      <div className="flex-1 space-y-2 overflow-auto">
-        <div className="p-2 rounded bg-zinc-800/40 border border-white/10">Ready for commands.</div>
-      </div>
-    </div>
-  );
-};
-
-const InspectorTab = () => {
-  return (
-    <div className="space-y-2">
-      <div className="text-xs text-zinc-400">No selection</div>
-
-      <div className="p-3 rounded-lg bg-zinc-800/40 border border-white/10">Select a vessel or object to inspect</div>
-    </div>
-  );
-};
-
 const LogsTab = () => {
   return (
     <div className="space-y-2 font-mono text-xs">
@@ -57,20 +32,20 @@ const LogsTab = () => {
 };
 
 const CenterPanel = () => {
-  const [activeTab, setActiveTab] = useState<TabId>("ai");
+  const [activeTab, setActiveTab] = useState<TabId>("details");
   return (
     <div className="flex-1 h-35 lg:h-48 xl:h-68 flex flex-col border border-white/10 bg-zinc-900/70 backdrop-blur-xl shadow-2xl overflow-hidden">
       <div className="flex items-center gap-1 h-10 px-6 border-b border-white/10 bg-zinc-950/40">
         <TabButton active={activeTab === "ai"} onClick={() => setActiveTab("ai")} label="AI" />
 
-        <TabButton active={activeTab === "inspector"} onClick={() => setActiveTab("inspector")} label="Inspector" />
+        <TabButton active={activeTab === "details"} onClick={() => setActiveTab("details")} label="Details" />
 
         <TabButton active={activeTab === "logs"} onClick={() => setActiveTab("logs")} label="Logs" />
       </div>
 
       <div className="flex-1 overflow-auto p-3 text-sm text-zinc-200">
         {activeTab === "ai" && <AITab />}
-        {activeTab === "inspector" && <InspectorTab />}
+        {activeTab === "details" && <DetailsTab />}
         {activeTab === "logs" && <LogsTab />}
       </div>
     </div>

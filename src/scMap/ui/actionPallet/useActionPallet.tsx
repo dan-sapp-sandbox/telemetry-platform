@@ -2,7 +2,7 @@ import { useState } from "react";
 import MainPallet from "./MainPallet";
 import LayersPallet from "./LayersPallet";
 import DrawPallet from "./DrawPallet";
-import VesselsPallet from "./VesselsPallet";
+import VesselsPallet from "./vesselsPallet/VesselsPallet";
 import AircraftPallet from "./AircraftPallet";
 import type { actionPanel } from "./utils";
 

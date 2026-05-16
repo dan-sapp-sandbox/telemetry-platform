@@ -2,7 +2,7 @@ import MiniMap from "./MiniMap";
 import { Edit, Plane, Ship } from "lucide-react";
 import ActionPallet from "./actionPallet/ActionPallet";
 import { cn } from "@/lib/utils";
-import CenterPanel from "./CenterPanel";
+import CenterPanel from "./centerPanel/CenterPanel";
 
 const Overlay = () => {
   const miniMapSectionStyles = cn([

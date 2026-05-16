@@ -3,8 +3,8 @@ import { Edit, Plane, Ship, Layers } from "lucide-react";
 
 const MainPallet = ({ setActivePanel }: { setActivePanel: (type: actionPanel | null) => void }) => {
   return (
-    <div className="grid grid-rows-[auto_1fr_auto] gap-4 px-2 h-full">
-      <div className="grid grid-cols-4 gap-3 content-start">
+    <div className="flex flex-col gap-4 p-2 h-full w-full">
+      <div className="flex gap-3">
         <button className={buttonStyles} onClick={() => setActivePanel("draw")}>
           <Edit className={iconStyles} />
           <span className={buttonTextStyles}>Draw</span>

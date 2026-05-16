@@ -10,5 +10,12 @@ export const buttonStyles = cn([
   "flex flex-col gap-px items-center justify-center rounded-xl bg-slate-700/60 border border-white/10 hover:bg-slate-600/80 hover:border-cyan-400/40",
   "w-10 h-10 lg:w-16 lg:h-16 xl:w-20 xl:h-20",
 ]);
-export const buttonTextStyles = "text-(--text)/80 lg:text-xs xl:text-base";
-export const iconStyles = "text-(--text)/80 lg:size-6 xl:size-10";
+export const buttonTextStyles = "text-(--text)/70 lg:text-xs xl:text-base";
+export const iconStyles = "text-(--text)/70 lg:size-6 xl:size-10";
+
+export const backButtonStyles = cn([
+  "flex flex-col gap-px items-center justify-center rounded-xl bg-slate-700/60 border border-white/10 hover:bg-slate-600/80 hover:border-cyan-400/40",
+  "w-10 h-10 lg:w-12 lg:h-10 xl:w-20 xl:h-20",
+]);
+export const backButtonTextStyles = "text-(--text)/70 lg:text-xs xl:text-base";
+export const backIconStyles = "text-(--text)/70 lg:size-6 xl:size-10";
