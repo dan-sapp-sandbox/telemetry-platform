@@ -74,7 +74,7 @@ const InitialCamera = () => {
 
 const MainMap = ({ children }: { children?: ReactNode | ReactNode[] }) => {
   const { viewer } = useCesium();
-  const contextOptions = useMemo(() => ({ webgl: { alpha: true, antialias: true, preserveDrawingBuffer: false } }), []);
+  const contextOptions = useMemo(() => ({ webgl: { alpha: true } }), []);
   // const terrainProvider = createWorldTerrainAsync();
 
   useEffect(() => {

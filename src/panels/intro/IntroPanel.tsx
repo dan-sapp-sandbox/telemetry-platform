@@ -11,10 +11,10 @@ const IntroPanel = ({ openGuide }: { openGuide: () => void }) => {
             <img src="/me2.png" className="h-22 md:h-32 rounded-2xl" alt="profile pic" />
           </div>
           <div>
-            <span className="text-xl md:text-4xl font-bold text-(--text)">Hi, I'm Dan Sapp.</span>
+            <span className="text-xl md:text-2xl font-bold text-(--text)">Hi, I'm Dan Sapp.</span>
           </div>
           <div className="flex flex-col md:gap-4 text-(--text)">
-            <span className="text-base md:text-xl">
+            <span className="text-base md:text-lg">
               I build interactive web applications focused on visualization, realtime data, and thoughtful user
               experience.
             </span>

@@ -14,6 +14,7 @@ import useWidgetLayout from "./hooks/useWidgetLayout";
 // import useMapUtils from "./hooks/useMapUtils";
 import ContextMenu from "@/contextMenu/ContextMenu";
 import Vessels from "./vessels/Vessels";
+import CommandBar from "@/commandBar/CommandBar";
 // import DataLayer from "./DataLayer";
 
 // TODO: mobile in general
@@ -40,39 +41,44 @@ const MapApp = () => {
   return (
     <CameraContext.Provider value={{ containerRef, mainViewerRef, overviewViewerRef, pipViewerRef, pipViewer2Ref }}>
       <NavBar theme={theme} setTheme={setTheme} />
-      <div ref={containerRef} className="relative h-full w-full overflow-hidden cursor-pointer">
-        <DndContext
-          sensors={sensors}
-          modifiers={[restrictToParentElement]}
-          onDragStart={handleDragStart}
-          onDragEnd={handleDragEnd}
-        >
-          <MainMap>
-            <PipViewRectangle show={showPipMap} isPip2={false} />
-            <PipViewRectangle show={showPipMap2} isPip2={true} />
-            {/* <Layers layer={layer} /> */}
-            {/* <DataLayer /> */}
-            <Vessels />
-            {/* <CameraControls /> */}
-            {/* {Labels} */}
-            <ContextMenu />
-          </MainMap>
-          {showOverviewMap && (
-            <OverviewMap overviewState={widgetLayout.overview}>
-              <Layers layer={layer} />
-            </OverviewMap>
-          )}
-          {showPipMap && (
-            <PipMap pipState={widgetLayout.pip} isPip2={false}>
-              <Layers layer={layer} />
-            </PipMap>
-          )}
-          {showPipMap2 && (
-            <PipMap pipState={widgetLayout.pip2} isPip2={true}>
-              <Layers layer={layer} />
-            </PipMap>
-          )}
-        </DndContext>
+      <div className="flex flex-col w-full h-full">
+        <div className="flex w-full h-full">
+          <div ref={containerRef} className="relative h-full w-full overflow-hidden cursor-pointer">
+            <DndContext
+              sensors={sensors}
+              modifiers={[restrictToParentElement]}
+              onDragStart={handleDragStart}
+              onDragEnd={handleDragEnd}
+            >
+              <MainMap>
+                <PipViewRectangle show={showPipMap} isPip2={false} />
+                <PipViewRectangle show={showPipMap2} isPip2={true} />
+                {/* <Layers layer={layer} /> */}
+                {/* <DataLayer /> */}
+                <Vessels />
+                {/* <CameraControls /> */}
+                {/* {Labels} */}
+                <ContextMenu />
+              </MainMap>
+              {showOverviewMap && (
+                <OverviewMap overviewState={widgetLayout.overview}>
+                  <Layers layer={layer} />
+                </OverviewMap>
+              )}
+              {showPipMap && (
+                <PipMap pipState={widgetLayout.pip} isPip2={false}>
+                  <Layers layer={layer} />
+                </PipMap>
+              )}
+              {showPipMap2 && (
+                <PipMap pipState={widgetLayout.pip2} isPip2={true}>
+                  <Layers layer={layer} />
+                </PipMap>
+              )}
+            </DndContext>
+          </div>
+        </div>
+        <CommandBar />
       </div>
     </CameraContext.Provider>
   );

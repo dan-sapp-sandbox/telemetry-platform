@@ -46,8 +46,8 @@ const useNavBar = (): INavBarState => {
   ]);
   const iconStyles = cn(["size-8 md:size-10"]);
   const panelStyles = cn(
-    "absolute top-0 left-12 md:left-18 h-full",
-    "w-[calc(100vw-3rem)] md:w-120",
+    "absolute top-0 left-12 md:left-18 bottom-10 md:bottom-32",
+    "w-[calc(100vw-3rem)] md:w-110",
     "z-1000 bg-(--background)/80 border-l border-white/10",
     "transform-gpu transition-transform duration-500 ease-out",
     showPanel ? "translate-x-0" : "-translate-x-full",

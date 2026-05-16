@@ -7,9 +7,9 @@ import useGuides from "./useGuides";
 const GuidePanel = () => {
   const { expanded, guides, handleToggleExpand } = useGuides();
   return (
-    <div className="w-full flex flex-col gap-4 md:gap-12 p-4">
+    <div className="w-full flex flex-col gap-4 md:gap-12 p-4 overflow-y-auto">
       <div className="text-2xl font-bold">App Guide</div>
-      <div className="w-full flex flex-col bg-(--foreground)/50 py-2">
+      <div className="w-full flex flex-col bg-(--foreground)/50 py-2 ">
         {guides.map((topic, i) => (
           <Fragment key={topic.id}>
             <div className={cn([expanded[topic.id] ? "" : "", ""])}>
