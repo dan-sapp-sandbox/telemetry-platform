@@ -9,7 +9,7 @@ const AboutTab = () => {
         <div className="flex gap-2">
           <span className="md:text-lg font-bold text-(--text)">Hi, I'm Dan Sapp.</span>
         </div>
-        <span className="text-sm lg:text-base text-(--text)">
+        <span className="text-sm text-(--text)">
           I'm a Geospatial Software Engineer focused on Typescript, React, Cesium, FastAPI, and postGIS.
         </span>
       </div>

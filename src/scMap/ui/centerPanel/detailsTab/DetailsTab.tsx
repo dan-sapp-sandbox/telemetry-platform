@@ -6,7 +6,7 @@ const DetailsTab = () => {
   if (activePanel === "vessels") {
     return <VesselDetails />;
   }
-  return <div>Choose a Topic from Action Pallet</div>;
+  return <div>Choose a Topic from the Action Pallet</div>;
 };
 
 export default DetailsTab;
