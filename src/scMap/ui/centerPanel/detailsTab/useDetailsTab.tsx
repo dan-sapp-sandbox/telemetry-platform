@@ -15,7 +15,7 @@ const useDetailsTab = (): IDetailsTab => {
   const [selectedVessel, setSelectedVessel] = useState<Vessel | null>(null);
   const { mainViewerRef } = useContext(CameraContext);
   const main = mainViewerRef.current;
-  const { vessels } = useSelector((state: { vessels: vesselState }) => state.vessels);
+  const { vessels = [] } = useSelector((state: { vessels: vesselState }) => state.vessels);
 
   const flyToVessel = (vessel: Vessel) => {
     if (!main) return;
