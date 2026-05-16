@@ -3,7 +3,6 @@ import { useSelector } from "react-redux";
 import { type vesselState, type Vessel } from "@/store/slices/vesselSlice";
 import { CameraContext } from "@/map/types";
 import { Cartographic, Cartesian3 } from "cesium";
-import type { actionPallet } from "@/store/slices/actionPalletSlice";
 
 export interface IVesselDetails {
   vessels: Vessel[];
