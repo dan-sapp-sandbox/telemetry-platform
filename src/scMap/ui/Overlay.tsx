@@ -1,6 +1,6 @@
 import MiniMap from "./MiniMap";
 import { Edit, Plane, Ship } from "lucide-react";
-import ActionPallet from "./ActionPallet";
+import ActionPallet from "./actionPallet/ActionPallet";
 import { cn } from "@/lib/utils";
 import CenterPanel from "./CenterPanel";
 
