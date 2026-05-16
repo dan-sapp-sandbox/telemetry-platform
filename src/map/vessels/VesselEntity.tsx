@@ -44,14 +44,14 @@ const VesselEntity = ({ vessel, showVesselNames }: Props) => {
       }}
       label={{
         text: vessel.name,
-        font: "8px sans-serif",
+        font: "5px sans-serif",
         style: LabelStyle.FILL_AND_OUTLINE,
         fillColor: Color.WHITE,
         outlineColor: Color.BLACK,
         outlineWidth: 2,
         verticalOrigin: VerticalOrigin.BOTTOM,
         horizontalOrigin: HorizontalOrigin.CENTER,
-        pixelOffset: new Cartesian2(0, -28),
+        pixelOffset: new Cartesian2(0, -16),
         disableDepthTestDistance: Number.POSITIVE_INFINITY,
         scaleByDistance: new NearFarScalar(1000, 4, 5000000, 2),
         distanceDisplayCondition: new DistanceDisplayCondition(0, 5000000),

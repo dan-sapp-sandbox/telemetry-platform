@@ -7,6 +7,7 @@ import reportReducer from "./slices/reportSlice";
 import vesselReducer from "./slices/vesselSlice";
 import aircraftReducer from "./slices/aircraftSlice";
 import widgetReducer from "./slices/widgetSlice";
+import actionPalletReducer from "./slices/actionPalletSlice";
 
 export const store = configureStore({
   reducer: {
@@ -16,6 +17,7 @@ export const store = configureStore({
     vessels: vesselReducer,
     aircraft: aircraftReducer,
     widget: widgetReducer,
+    actionPallet: actionPalletReducer,
     [api.reducerPath]: api.reducer,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(api.middleware),

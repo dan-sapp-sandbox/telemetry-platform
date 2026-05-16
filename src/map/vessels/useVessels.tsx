@@ -1,4 +1,4 @@
-import { useState, useContext, useEffect, type JSX } from "react";
+import { useState, useContext, useEffect, useMemo, type JSX } from "react";
 import { setVessels, type vesselState } from "@/store/slices/vesselSlice";
 import { useDispatch, useSelector } from "react-redux";
 import VesselEntity from "./VesselEntity";
@@ -7,7 +7,7 @@ import { CameraContext } from "../types";
 import { Math as CesiumMath, Viewer } from "cesium";
 
 export interface IVesselState {
-  VesselEntities: () => JSX.Element[];
+  vesselEntities: JSX.Element[];
   showVessels: boolean;
 }
 
@@ -62,13 +62,14 @@ const useVessels = (): IVesselState => {
     };
   }, [viewer]);
 
-  const VesselEntities = (): JSX.Element[] => {
+  const vesselEntities = useMemo(() => {
     if (!vessels) return [];
+
     return vessels.map((vessel) => <VesselEntity key={vessel.id} vessel={vessel} showVesselNames={showVesselNames} />);
-  };
+  }, [vessels, showVesselNames]);
 
   return {
-    VesselEntities,
+    vesselEntities,
     showVessels,
   };
 };
