@@ -4,7 +4,6 @@ import { renameEntity, deleteEntity } from "@/store/slices/drawSlice";
 import type { DrawEntity, drawState, Position } from "@/store/slices/drawSlice";
 import { CameraContext } from "@/map/types";
 import { BoundingSphere, Cartesian3, Cartographic } from "cesium";
-import { select } from "slate";
 
 interface IDrawDetails {
   handleRenameEntity: (entity: DrawEntity, newName: string) => void;
