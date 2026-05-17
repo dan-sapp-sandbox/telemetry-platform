@@ -37,7 +37,7 @@ const VesselEntity = ({ vessel, showVesselNames }: Props) => {
       position={position}
       billboard={{
         image: shipIcon,
-        scale: 0.3,
+        scale: 0.25,
         rotation: CesiumMath.toRadians(vessel.heading),
         verticalOrigin: VerticalOrigin.BOTTOM,
         disableDepthTestDistance: Number.POSITIVE_INFINITY,
@@ -62,7 +62,7 @@ const VesselEntity = ({ vessel, showVesselNames }: Props) => {
       position={position}
       billboard={{
         image: shipIcon,
-        scale: 0.5,
+        scale: 0.25,
         rotation: CesiumMath.toRadians(vessel.heading),
         verticalOrigin: VerticalOrigin.BOTTOM,
         disableDepthTestDistance: Number.POSITIVE_INFINITY,

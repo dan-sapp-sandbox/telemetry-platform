@@ -6,9 +6,6 @@ import { Slash, Edit2, Hexagon, Dot, Trash2, Locate } from "lucide-react";
 const DrawPanel = () => {
   const { handleChangeDrawMode, handleDeleteEntity, handleRenameEntity, drawMode, entities, flyToDrawEntity } =
     useDrawPanel();
-  // TODO: finish rename workflow
-  // TODO: mobile styling
-  // TODO: upload/download geojson
   return (
     <div className="w-full flex flex-col gap-4 md:gap-12 p-4 overflow-y-auto">
       <div className="text-2xl font-bold">Draw</div>

@@ -26,7 +26,7 @@ const VesselDetails = () => {
             <div
               key={vessel.id}
               className={cn([
-                "cursor-pointer px-2 py-1 transition-colors text-(--text) hover:bg-blue-400/30",
+                "cursor-pointer px-2 py-1 transition-colors text-(--text)/80 hover:bg-blue-400/30",
                 getBackgroundStyles(),
               ])}
               onClick={() => setSelectedVessel(vessel)}
@@ -38,23 +38,21 @@ const VesselDetails = () => {
       </div>
       <Separator orientation="vertical" />
       {selectedVessel ? (
-        <div className="flex flex-col flex-1 pl-2">
-          <div className="bg-slate-800/50 py-2">Name: {selectedVessel.name}</div>
-          <div className="bg-slate-700/50 py-2">Type: {selectedVessel.type}</div>
+        <div className="flex flex-col flex-1 pl-2 text-(--text)/80">
+          <div className="bg-slate-800/50 py-1">Name: {selectedVessel.name}</div>
+          <div className="bg-slate-700/50 py-1">Type: {selectedVessel.type}</div>
           <div
-            className="flex items-center gap-2 cursor-pointer py-2 bg-slate-800/50 hover-bg-blue-800/50 "
+            className="flex items-center gap-2 cursor-pointer py-1 bg-slate-800/50 hover-bg-blue-800/50 hover:text-blue-300/80"
             onClick={() => flyToVessel(selectedVessel)}
           >
             <Locate className="size-4" />
-            <div className="hover:text-blue-700">Center Map on Vessel</div>
+            <div className="">Center Map on Vessel</div>
           </div>
         </div>
       ) : (
-        <div className="flex-col flex-1 pl-2 gap-2">
-          <div className="text-xs text-zinc-400">No selection</div>
-          <div className="p-3 rounded-lg bg-zinc-800/40 border border-white/10">
-            Select a vessel or object to inspect
-          </div>
+        <div className="flex-col flex-1 pl-2 gap-2 text-(--text)/80">
+          <div className="text-sm">No selection</div>
+          <div className="text-sm p-3 rounded-lg bg-zinc-800/40 border border-white/10">Select a vessel to inspect</div>
         </div>
       )}
     </div>

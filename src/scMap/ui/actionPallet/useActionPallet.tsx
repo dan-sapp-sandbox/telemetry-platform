@@ -1,7 +1,7 @@
 import { useSelector, useDispatch } from "react-redux";
 import MainPallet from "./MainPallet";
 import LayersPallet from "./LayersPallet";
-import DrawPallet from "./DrawPallet";
+import DrawPallet from "../drawPallet/DrawPallet";
 import VesselsPallet from "./vesselsPallet/VesselsPallet";
 import AircraftPallet from "./AircraftPallet";
 import { setActivePanel, type actionPallet } from "@/store/slices/actionPalletSlice";

@@ -15,7 +15,7 @@ const VesselsPallet = ({ goBack }: { goBack: () => void }) => {
   return (
     <div className="flex flex-col gap-3">
       <div className="flex justify-between">
-        <div className="w-4" />
+        <div className="w-10" />
         <div className="text-(--text)/80">Vessels</div>
         <button className={backButtonStyles} onClick={goBack}>
           <ArrowBigLeft className={backIconStyles} />

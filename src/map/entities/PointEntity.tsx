@@ -28,13 +28,13 @@ const PointEntity = ({ entity }: Props) => {
       position={position}
       billboard={{
         image: entity.icon,
-        scale: 1,
+        scale: 0.7,
         verticalOrigin: VerticalOrigin.BOTTOM,
         disableDepthTestDistance: Number.POSITIVE_INFINITY,
       }}
       label={{
         text: entity.name,
-        font: "14px sans-serif",
+        font: "5px sans-serif",
         style: LabelStyle.FILL_AND_OUTLINE,
         fillColor: Color.WHITE,
         outlineColor: Color.BLACK,
@@ -51,12 +51,12 @@ const PointEntity = ({ entity }: Props) => {
     <Entity
       position={position}
       point={{
-        pixelSize: 12,
+        pixelSize: 7,
         color: Color.RED,
       }}
       label={{
         text: entity.name,
-        font: "14px sans-serif",
+        font: "5px sans-serif",
         style: LabelStyle.FILL_AND_OUTLINE,
         fillColor: Color.WHITE,
         outlineColor: Color.BLACK,

@@ -1,12 +1,17 @@
 import useDetailsTab from "./useDetailsTab";
 import VesselDetails from "./vesselDetails/VesselDetails";
+import DrawDetails from "./drawDetails/DrawDetails";
 
 const DetailsTab = () => {
   const { activePanel } = useDetailsTab();
-  if (activePanel === "vessels") {
-    return <VesselDetails />;
+  switch (activePanel) {
+    case "vessels":
+      return <VesselDetails />;
+    case "draw":
+      return <DrawDetails />;
+    default:
+      return <div className="text-(--text)/80">Choose a Topic from the Action Pallet</div>;
   }
-  return <div>Choose a Topic from the Action Pallet</div>;
 };
 
 export default DetailsTab;

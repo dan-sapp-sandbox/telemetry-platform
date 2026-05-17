@@ -1,10 +1,8 @@
 import { cn } from "@/lib/utils";
-import { useState } from "react";
 import AITab from "./AITab";
 import DetailsTab from "./detailsTab/DetailsTab";
 import AboutTab from "./aboutTab/AboutTab";
-
-type TabId = "ai" | "details" | "about";
+import useCenterPanel from "./useCenterPanel";
 
 const TabButton = ({ active, label, onClick }: { active: boolean; label: string; onClick: () => void }) => {
   return (
@@ -23,7 +21,7 @@ const TabButton = ({ active, label, onClick }: { active: boolean; label: string;
 };
 
 const CenterPanel = () => {
-  const [activeTab, setActiveTab] = useState<TabId>("details");
+  const { activeTab, setActiveTab } = useCenterPanel();
   return (
     <div className="absolute md:static bottom-42 flex w-full md:flex-1 h-50 md:h-48 xl:h-68 flex-col border border-white/10 bg-zinc-900/70 backdrop-blur-xl shadow-2xl overflow-hidden">
       <div className="flex items-center gap-1 h-10 px-6 border-b border-white/10 bg-zinc-950/40">
@@ -32,7 +30,7 @@ const CenterPanel = () => {
         <TabButton active={activeTab === "about"} onClick={() => setActiveTab("about")} label="About" />
       </div>
 
-      <div className="flex-1 overflow-auto p-3 text-sm text-zinc-200">
+      <div className="flex-1 overflow-auto p-3">
         {activeTab === "ai" && <AITab />}
         {activeTab === "details" && <DetailsTab />}
         {activeTab === "about" && <AboutTab />}
