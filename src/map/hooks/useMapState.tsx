@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
 import type { RefObject } from "react";
-import { Cartesian3, Cartographic, Math, Viewer } from "cesium";
+import { Cartesian3, Cartographic, Math as CesiumMath, Viewer } from "cesium";
 import type { ILayer, mapState } from "@/store/slices/mapSlice";
 import useLocalStorage from "use-local-storage";
 import { useSelector } from "react-redux";
@@ -72,13 +72,13 @@ const useMapState = (): IMapState => {
         const mainCam = main.camera;
 
         const carto = Cartographic.fromCartesian(mainCam.position);
-        const boostedHeight = carto.height * 3 < 4500000 ? carto.height * 3 : 3800000;
+        const boostedHeight = Math.max(carto.height * 2, 3000000);
 
         const boostedPosition = Cartesian3.fromRadians(carto.longitude, carto.latitude, boostedHeight);
 
         setInitCameraView({
-          lon: Math.toDegrees(carto.longitude),
-          lat: Math.toDegrees(carto.latitude),
+          lon: CesiumMath.toDegrees(carto.longitude),
+          lat: CesiumMath.toDegrees(carto.latitude),
           height: carto.height,
           heading: mainCam.heading,
           pitch: mainCam.pitch,

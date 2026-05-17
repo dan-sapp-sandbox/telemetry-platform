@@ -4,7 +4,7 @@ import { Color, IonImageryProvider } from "cesium";
 import { CameraContext } from "@/map/types";
 import MainViewRectangle from "@/map/widgets/MainViewRectangle";
 
-const OverviewInitializer = () => {
+const MiniMapInitializer = () => {
   const { viewer } = useCesium();
   const { overviewViewerRef, mainViewerRef } = useContext(CameraContext);
 
@@ -30,7 +30,7 @@ const OverviewInitializer = () => {
     controller.enableTranslate = false;
     controller.enableLook = false;
 
-    viewer.scene.morphTo2D(0);
+    // viewer.scene.morphTo2D(0);
     viewer.useDefaultRenderLoop = true;
     viewer.scene.requestRenderMode = false;
     viewer.resolutionScale = 1.0;
@@ -76,7 +76,7 @@ const MiniMap = ({ children }: { children?: ReactNode | ReactNode[] }) => {
       selectionIndicator={false}
       infoBox={false}
     >
-      <OverviewInitializer />
+      <MiniMapInitializer />
       <MainViewRectangle />
       {children}
     </Viewer>

@@ -1,7 +1,14 @@
 import { useContext, useEffect, useMemo, type ReactNode } from "react";
 import { Viewer, useCesium } from "resium";
 import { CameraContext } from "./types";
-import { Viewer as CesiumViewer, Cartesian3, ScreenSpaceEventType, IonImageryProvider, Color } from "cesium";
+import {
+  Viewer as CesiumViewer,
+  Cartesian3,
+  ScreenSpaceEventType,
+  IonImageryProvider,
+  Color,
+  createWorldTerrainAsync,
+} from "cesium";
 import useLocalStorage from "use-local-storage";
 import DrawController from "./DrawController";
 
@@ -75,7 +82,7 @@ const InitialCamera = () => {
 const MainMap = ({ children }: { children?: ReactNode | ReactNode[] }) => {
   const { viewer } = useCesium();
   const contextOptions = useMemo(() => ({ webgl: { alpha: true } }), []);
-  // const terrainProvider = createWorldTerrainAsync();
+  const terrainProvider = createWorldTerrainAsync();
 
   useEffect(() => {
     if (!viewer) return;
@@ -85,7 +92,7 @@ const MainMap = ({ children }: { children?: ReactNode | ReactNode[] }) => {
   return (
     <Viewer
       full
-      // terrainProvider={terrainProvider}
+      terrainProvider={terrainProvider}
       contextOptions={contextOptions}
       baseLayerPicker={false}
       baseLayer={false}

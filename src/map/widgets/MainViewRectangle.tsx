@@ -31,9 +31,9 @@ const MainViewRectangle = () => {
     <Entity
       rectangle={{
         coordinates: rectangleRef.current,
-        material: Color.RED.withAlpha(0.25),
+        material: Color.GREEN.withAlpha(0.2),
         outline: true,
-        outlineColor: Color.YELLOW,
+        outlineColor: Color.GREENYELLOW.withAlpha(0.8),
         height: 0,
       }}
     />
