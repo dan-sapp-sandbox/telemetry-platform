@@ -1,4 +1,4 @@
-import { Locate } from "lucide-react";
+import { Locate, Save, Trash2 } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
 import useVesselDetails from "./useVesselDetails";
@@ -26,7 +26,7 @@ const VesselDetails = () => {
             <div
               key={vessel.id}
               className={cn([
-                "cursor-pointer px-2 py-1 transition-colors text-(--text)/80 hover:bg-blue-400/30",
+                "cursor-pointer px-4 py-1 transition-colors text-(--text)/80 hover:bg-blue-400/30",
                 getBackgroundStyles(),
               ])}
               onClick={() => setSelectedVessel(vessel)}
@@ -38,19 +38,48 @@ const VesselDetails = () => {
       </div>
       <Separator orientation="vertical" />
       {selectedVessel ? (
-        <div className="flex flex-col flex-1 pl-2 text-(--text)/80">
-          <div className="bg-slate-800/50 py-1">Name: {selectedVessel.name}</div>
-          <div className="bg-slate-700/50 py-1">Type: {selectedVessel.type}</div>
-          <div
-            className="flex items-center gap-2 cursor-pointer py-1 bg-slate-800/50 hover-bg-blue-800/50 hover:text-blue-300/80"
+        <div className="flex flex-col flex-1 p-4 text-(--text)/80 gap-6">
+          <div className="flex flex-col gap-2">
+            <div className="">Name: {selectedVessel.name}</div>
+            <div className="">Type: {selectedVessel.type}</div>
+          </div>
+          <button
+            className={cn([
+              "w-fit flex items-center gap-2 cursor-pointer",
+              "bg-zinc-600/80 hover-bg-blue-800/50 hover:text-emerald-400/50 p-2 hover:border-emerald-400/30",
+            ])}
             onClick={() => flyToVessel(selectedVessel)}
           >
-            <Locate className="size-4" />
-            <div className="">Center Map on Vessel</div>
+            <Locate className="size-5" />
+            <span className="text-sm">Center Map on Vessel</span>
+          </button>
+          <div className="flex gap-2">
+            <button
+              className={cn([
+                "w-fit flex items-center gap-2 cursor-pointer disabled:bg-zinc-600/30 disabled:text-(--text)/40 disabled:border-transparent",
+                "bg-zinc-600/80 hover-bg-blue-800/50 hover:text-emerald-400/50 p-2 hover:border-emerald-400/30",
+              ])}
+              disabled
+              onClick={() => flyToVessel(selectedVessel)}
+            >
+              <Save className="size-5" />
+              <span className="text-sm">Save Changes</span>
+            </button>
+            <button
+              className={cn([
+                "w-fit flex items-center gap-2 cursor-pointer disabled:bg-zinc-600/30 disabled:text-(--text)/40 disabled:border-0",
+                "bg-zinc-600/80 hover-bg-blue-800/50 hover:text-emerald-400/50 p-2 hover:border-emerald-400/30",
+              ])}
+              disabled
+              onClick={() => flyToVessel(selectedVessel)}
+            >
+              <Trash2 className="size-5" />
+              <span className="text-sm">Discard Changes</span>
+            </button>
           </div>
         </div>
       ) : (
-        <div className="flex-col flex-1 pl-2 gap-2 text-(--text)/80">
+        <div className="flex-col flex-1 p-4 gap-2 text-(--text)/80">
           <div className="text-sm">No selection</div>
           <div className="text-sm p-3 rounded-lg bg-zinc-800/40 border border-white/10">Select a vessel to inspect</div>
         </div>

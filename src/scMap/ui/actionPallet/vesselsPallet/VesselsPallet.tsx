@@ -13,7 +13,7 @@ const VesselsPallet = ({ goBack }: { goBack: () => void }) => {
     handleToggleShowVesselPaths,
   } = useVesselPallet();
   return (
-    <div className="flex flex-col gap-3">
+    <div className="flex flex-col gap-3 lg:gap-4 xl:gap-6">
       <div className="flex justify-between">
         <div className="w-10" />
         <div className="text-(--text)/80">Vessels</div>
@@ -21,15 +21,15 @@ const VesselsPallet = ({ goBack }: { goBack: () => void }) => {
           <ArrowBigLeft className={backIconStyles} />
         </button>
       </div>
-      <div className="flex items-center gap-6">
+      <div className="flex items-center gap-6 cursor-pointer" onClick={handleToggleShowVessels}>
         <Switch checked={showVessels} onCheckedChange={handleToggleShowVessels} />
         <span className="text-sm text-(--text)/80 font-bold">Show Vessels on Map</span>
       </div>
-      <div className="flex items-center gap-6">
+      <div className="flex items-center gap-6 cursor-pointer" onClick={handleToggleShowVesselNames}>
         <Switch checked={showVesselNames} onCheckedChange={handleToggleShowVesselNames} />
         <span className="text-sm text-(--text)/80 font-bold">Show Vessel Names on Map</span>
       </div>
-      <div className="flex items-center gap-6">
+      <div className="flex items-center gap-6 cursor-pointer" onClick={handleToggleShowVesselPaths}>
         <Switch checked={showVesselPaths} onCheckedChange={handleToggleShowVesselPaths} />
         <span className="text-sm text-(--text)/80 font-bold">Show Vessel Paths on Map</span>
       </div>

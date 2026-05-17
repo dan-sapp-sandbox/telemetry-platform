@@ -6,7 +6,7 @@ import CenterPanel from "./centerPanel/CenterPanel";
 
 const Overlay = () => {
   const miniMapSectionStyles = cn([
-    "flex items-center bg-zinc-800 md:rounded-tr-2xl pl-2",
+    "flex items-center bg-zinc-800/90 md:rounded-tr-2xl pl-2",
     "h-42 w-42 md:h-55 lg:w-55 xl:h-75 xl:w-75 gap-2",
     "border-t-1 border-r-1 border-emerald-400/30",
     // "h-42 w-42 md:h-55 lg:w-63 xl:h-75 xl:w-85 gap-2",
