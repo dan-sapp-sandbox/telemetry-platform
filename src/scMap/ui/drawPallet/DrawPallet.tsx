@@ -1,4 +1,4 @@
-import { Slash, Hexagon, Dot, ArrowBigLeft, X } from "lucide-react";
+import { Slash, Hexagon, Dot, ArrowBigLeft } from "lucide-react";
 import { backButtonStyles, backIconStyles } from "../actionPallet/utils";
 import useDrawPallet from "./useDrawPallet";
 import { cn } from "@/lib/utils";
@@ -6,7 +6,6 @@ import { buttonStyles, iconStyles, buttonTextStyles } from "../actionPallet/util
 
 const DrawPallet = ({ goBack }: { goBack: () => void }) => {
   const { handleChangeDrawMode, drawMode } = useDrawPallet();
-  // TODO: mobile styling
   // TODO: upload/download geojson
   return (
     <div className="flex flex-col gap-3 h-full">
@@ -39,10 +38,6 @@ const DrawPallet = ({ goBack }: { goBack: () => void }) => {
           <Hexagon className={iconStyles} />
           <span className={buttonTextStyles}>Polygon</span>
         </button>
-        {/* <button className={buttonStyles} onClick={() => handleChangeDrawMode(null)}>
-          <X className={iconStyles} />
-          <span className={buttonTextStyles}>Cancel</span>
-        </button> */}
       </div>
       <div className="self-end text-sm text-(--text)/70">(double click to end drawing)</div>
     </div>
