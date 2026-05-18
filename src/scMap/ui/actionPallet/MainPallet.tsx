@@ -3,7 +3,7 @@ import { Edit, Plane, Ship, Layers } from "lucide-react";
 
 const MainPallet = ({ handleSetActivePanel }: { handleSetActivePanel: (type: actionPanel | null) => void }) => {
   return (
-    <div className="flex flex-col gap-4 p-2 h-full w-full">
+    <div className="flex flex-col md:flex-row gap-3 p-2 h-full w-full">
       <div className="flex gap-3">
         <button className={buttonStyles} onClick={() => handleSetActivePanel("draw")}>
           <Edit className={iconStyles} />
@@ -14,7 +14,8 @@ const MainPallet = ({ handleSetActivePanel }: { handleSetActivePanel: (type: act
           <Ship className={iconStyles} />
           <span className={buttonTextStyles}>Vessels</span>
         </button>
-
+      </div>
+      <div className="flex flex-col md:flex-row gap-3">
         <button className={buttonStyles} onClick={() => handleSetActivePanel("aircraft")}>
           <Plane className={iconStyles} />
           <span className={buttonTextStyles}>Aircraft</span>
