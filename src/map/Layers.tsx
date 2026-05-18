@@ -92,9 +92,10 @@ const Layers = () => {
       layers.removeAll();
 
       const baseLayer = layers.addImageryProvider(baseProvider);
-      baseLayer.alpha = 0.5;
+      baseLayer.alpha = 1.0;
 
       if (layer === "population-density") {
+        baseLayer.alpha = 0.5;
         const overlay = layers.addImageryProvider(providers.populationDensity);
         overlay.alpha = 0.8;
       }
