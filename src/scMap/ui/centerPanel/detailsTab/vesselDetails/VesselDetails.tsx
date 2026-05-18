@@ -26,7 +26,7 @@ const VesselDetails = () => {
             <div
               key={vessel.id}
               className={cn([
-                "cursor-pointer px-4 py-1 transition-colors text-(--text)/80 hover:bg-blue-400/30",
+                "cursor-pointer px-4 py-1 transition-colors text-sm text-(--text)/80 hover:bg-blue-400/30",
                 getBackgroundStyles(),
               ])}
               onClick={() => setSelectedVessel(vessel)}
