@@ -16,7 +16,7 @@ export const iconStyles = "text-(--text)/70 lg:size-6 xl:size-10 group-hover:tex
 
 export const backButtonStyles = cn([
   "flex flex-col gap-px items-center justify-center rounded-xl bg-slate-700/60 border border-emerald-400/10 hover:bg-slate-700/90 hover:border-emerald-400/40",
-  "group w-10 h-10 lg:w-12 lg:h-10 xl:w-12 xl:h-10",
+  "group w-8 h-6 lg:w-12 lg:h-10 xl:w-12 xl:h-10 p-px md:p-1",
 ]);
 export const backButtonTextStyles = "text-(--text)/70 lg:text-xs xl:text-base group-hover:text-emerald-400/70";
 export const backIconStyles = "text-(--text)/70 lg:size-6 xl:size-10 group-hover:text-emerald-400/70";
