@@ -27,7 +27,7 @@ const MapApp = () => {
   const { theme, setTheme } = useTheme();
   const { handleDragStart, handleDragEnd, showOverviewMap, showPipMap, showPipMap2, widgetLayout, containerRef } =
     useWidgetLayout();
-  const { mainViewerRef, overviewViewerRef, pipViewerRef, pipViewer2Ref, layer } = useMapState();
+  const { mainViewerRef, overviewViewerRef, pipViewerRef, pipViewer2Ref } = useMapState();
   // const {sendPrompt, Labels} = useMapUtils();
   const sensors = useSensors(
     useSensor(PointerSensor),
