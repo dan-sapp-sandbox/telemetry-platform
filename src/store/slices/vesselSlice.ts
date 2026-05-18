@@ -31,15 +31,6 @@ const vesselSlice = createSlice({
   initialState,
 
   reducers: {
-    setSelectedVesselById: (state, action) => {
-      console.log("vessels", state.vessels);
-      console.log("action.payload", action.payload);
-      console.log(
-        "test",
-        state.vessels.find((vessel) => vessel.id === action.payload),
-      );
-      state.selectedVessel = state.vessels.find((vessel) => vessel.id === action.payload) || null;
-    },
     setSelectedVessel: (state, action) => {
       state.selectedVessel = action.payload;
     },
@@ -58,13 +49,7 @@ const vesselSlice = createSlice({
   },
 });
 
-export const {
-  setSelectedVesselById,
-  setSelectedVessel,
-  setVessels,
-  setShowVessels,
-  setShowVesselNames,
-  setShowVesselPaths,
-} = vesselSlice.actions;
+export const { setSelectedVessel, setVessels, setShowVessels, setShowVesselNames, setShowVesselPaths } =
+  vesselSlice.actions;
 
 export default vesselSlice.reducer;

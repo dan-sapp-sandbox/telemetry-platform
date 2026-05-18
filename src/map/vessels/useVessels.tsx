@@ -13,7 +13,9 @@ export interface IVesselState {
 
 const useVessels = (): IVesselState => {
   const dispatch = useDispatch();
-  const { showVessels, showVesselNames } = useSelector((state: { vessels: vesselState }) => state.vessels);
+  const { showVessels, showVesselNames, selectedVessel } = useSelector(
+    (state: { vessels: vesselState }) => state.vessels,
+  );
   const [bounds, setBounds] = useState<VesselBounds | null>(null);
   const { mainViewerRef } = useContext(CameraContext);
   const viewer = mainViewerRef?.current;
@@ -48,8 +50,11 @@ const useVessels = (): IVesselState => {
   const vesselEntities = useMemo(() => {
     if (!vessels) return [];
 
-    return vessels.map((vessel) => <VesselEntity key={vessel.id} vessel={vessel} showVesselNames={showVesselNames} />);
-  }, [vessels, showVesselNames]);
+    return vessels.map((vessel) => {
+      const isSelected = selectedVessel?.id === vessel.id;
+      return <VesselEntity key={vessel.id} vessel={vessel} showVesselNames={showVesselNames} isSelected={isSelected} />;
+    });
+  }, [vessels, showVesselNames, selectedVessel]);
 
   return {
     vesselEntities,

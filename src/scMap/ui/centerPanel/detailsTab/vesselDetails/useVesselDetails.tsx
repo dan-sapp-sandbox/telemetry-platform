@@ -16,7 +16,6 @@ const useVesselDetails = (): IVesselDetails => {
   const { mainViewerRef } = useContext(CameraContext);
   const main = mainViewerRef.current;
   const { vessels = [], selectedVessel } = useSelector((state: { vessels: vesselState }) => state.vessels);
-  console.log("selectedVessel", selectedVessel);
 
   const handleSetSelectedVessel = (vessel: Vessel | null) => {
     dispatch(setSelectedVessel(vessel));
