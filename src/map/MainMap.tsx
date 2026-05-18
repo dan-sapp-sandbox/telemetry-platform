@@ -1,14 +1,7 @@
 import { useContext, useEffect, useMemo, type ReactNode } from "react";
 import { Viewer, useCesium } from "resium";
 import { CameraContext } from "./types";
-import {
-  Viewer as CesiumViewer,
-  Cartesian3,
-  ScreenSpaceEventType,
-  IonImageryProvider,
-  Color,
-  createWorldTerrainAsync,
-} from "cesium";
+import { Viewer as CesiumViewer, Cartesian3, ScreenSpaceEventType, Color, createWorldTerrainAsync } from "cesium";
 import useLocalStorage from "use-local-storage";
 import DrawController from "./DrawController";
 import { useDispatch, useSelector } from "react-redux";
@@ -24,23 +17,6 @@ const RegisterMainViewer = () => {
     if (!viewer) return;
     mainViewerRef.current = viewer as CesiumViewer;
   }, [viewer, mainViewerRef]);
-
-  // useEffect(() => {
-  //   if (!viewer) return;
-
-  //   let isCancelled = false;
-
-  //   IonImageryProvider.fromAssetId(2).then((provider) => {
-  //     if (isCancelled) return;
-
-  //     viewer.imageryLayers.removeAll();
-  //     viewer.imageryLayers.addImageryProvider(provider);
-  //   });
-
-  //   return () => {
-  //     isCancelled = true;
-  //   };
-  // }, [viewer]);
 
   return null;
 };

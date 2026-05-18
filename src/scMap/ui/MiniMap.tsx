@@ -1,6 +1,6 @@
 import { useContext, useEffect, useMemo, type ReactNode } from "react";
 import { Viewer, useCesium } from "resium";
-import { Color, IonImageryProvider } from "cesium";
+import { Color } from "cesium";
 import { CameraContext } from "@/map/types";
 import MainViewRectangle from "@/map/widgets/MainViewRectangle";
 import Layers from "@/map/Layers";
@@ -38,23 +38,6 @@ const MiniMapInitializer = () => {
     viewer.scene.backgroundColor = Color.BLACK;
     viewer.scene.globe.baseColor = Color.BLACK;
   }, [viewer, mainViewerRef]);
-
-  // useEffect(() => {
-  //   if (!viewer) return;
-
-  //   let isCancelled = false;
-
-  //   IonImageryProvider.fromAssetId(2).then((provider) => {
-  //     if (isCancelled) return;
-
-  //     viewer.imageryLayers.removeAll();
-  //     viewer.imageryLayers.addImageryProvider(provider);
-  //   });
-
-  //   return () => {
-  //     isCancelled = true;
-  //   };
-  // }, [viewer]);
 
   return null;
 };

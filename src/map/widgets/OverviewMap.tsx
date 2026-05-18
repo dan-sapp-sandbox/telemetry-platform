@@ -1,7 +1,6 @@
 import { useContext, useEffect, useMemo, type ReactNode } from "react";
 import { Grip } from "lucide-react";
 import { Viewer, useCesium } from "resium";
-import { IonImageryProvider } from "cesium";
 import { CameraContext } from "../types";
 import type { IWidget } from "@/store/slices/widgetSlice";
 import MainViewRectangle from "./MainViewRectangle";
@@ -37,23 +36,6 @@ const OverviewInitializer = () => {
     viewer.useDefaultRenderLoop = true;
     viewer.scene.requestRenderMode = false;
   }, [viewer, mainViewerRef]);
-
-  // useEffect(() => {
-  //   if (!viewer) return;
-
-  //   let isCancelled = false;
-
-  //   IonImageryProvider.fromAssetId(2).then((provider) => {
-  //     if (isCancelled) return;
-
-  //     viewer.imageryLayers.removeAll();
-  //     viewer.imageryLayers.addImageryProvider(provider);
-  //   });
-
-  //   return () => {
-  //     isCancelled = true;
-  //   };
-  // }, [viewer]);
 
   return null;
 };
