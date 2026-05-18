@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { type vesselState, type Vessel, setSelectedVessel } from "@/store/slices/vesselSlice";
 import { CameraContext } from "@/map/types";
