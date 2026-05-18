@@ -90,7 +90,6 @@ const useContextMenu = (): IContextMenu => {
     }, ScreenSpaceEventType.RIGHT_CLICK);
 
     handler.setInputAction(() => {
-      //
       if (drawModeRef.current) return;
 
       if (contextMenuRef.current) {

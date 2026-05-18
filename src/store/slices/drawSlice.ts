@@ -19,11 +19,13 @@ export interface DrawEntity {
 export interface drawState {
   drawMode: IDrawMode;
   entities: DrawEntity[];
+  selectedEntity: DrawEntity | null;
 }
 
 const initialState: drawState = {
   drawMode: null,
   entities: [],
+  selectedEntity: null,
 };
 
 const drawSlice = createSlice({
@@ -31,6 +33,9 @@ const drawSlice = createSlice({
   initialState,
 
   reducers: {
+    setSelectedEntity: (state, action) => {
+      state.selectedEntity = action.payload;
+    },
     setDrawMode: (state, action) => {
       state.drawMode = action.payload;
     },
@@ -59,6 +64,6 @@ const drawSlice = createSlice({
   },
 });
 
-export const { setDrawMode, addEntity, renameEntity, deleteEntity, setEntites } = drawSlice.actions;
+export const { setSelectedEntity, setDrawMode, addEntity, renameEntity, deleteEntity, setEntites } = drawSlice.actions;
 
 export default drawSlice.reducer;

@@ -56,6 +56,10 @@ const VesselEntity = ({ vessel, showVesselNames }: Props) => {
         scaleByDistance: new NearFarScalar(1000, 4, 5000000, 2),
         distanceDisplayCondition: new DistanceDisplayCondition(0, 5000000),
       }}
+      properties={{
+        entityType: "vessel",
+        id: vessel.id,
+      }}
     />
   ) : (
     <Entity
@@ -66,6 +70,10 @@ const VesselEntity = ({ vessel, showVesselNames }: Props) => {
         rotation: CesiumMath.toRadians(vessel.heading),
         verticalOrigin: VerticalOrigin.BOTTOM,
         disableDepthTestDistance: Number.POSITIVE_INFINITY,
+      }}
+      properties={{
+        entityType: "vessel",
+        id: vessel.id,
       }}
     />
   );

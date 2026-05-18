@@ -4,7 +4,7 @@ import { cn } from "@/lib/utils";
 import useVesselDetails from "./useVesselDetails";
 
 const VesselDetails = () => {
-  const { vessels, selectedVessel, setSelectedVessel, flyToVessel } = useVesselDetails();
+  const { vessels, selectedVessel, handleSetSelectedVessel, flyToVessel } = useVesselDetails();
   return (
     <div className="flex h-full">
       <div className="flex flex-col w-1/3 overflow-y-auto scrollbar-hide">
@@ -29,7 +29,7 @@ const VesselDetails = () => {
                 "cursor-pointer px-4 py-1 transition-colors text-sm text-(--text)/80 hover:bg-blue-400/30",
                 getBackgroundStyles(),
               ])}
-              onClick={() => setSelectedVessel(vessel)}
+              onClick={() => handleSetSelectedVessel(vessel)}
             >
               {vessel.name}
             </div>

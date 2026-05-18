@@ -22,6 +22,10 @@ const PolylineEntity = ({ entity }: Props) => {
         material: Color.CYAN,
         clampToGround: true,
       }}
+      properties={{
+        entityType: "draw",
+        id: entity.id,
+      }}
     />
   );
 };

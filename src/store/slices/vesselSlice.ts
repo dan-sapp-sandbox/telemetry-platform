@@ -12,6 +12,7 @@ export type Vessel = {
 
 export interface vesselState {
   vessels: Vessel[];
+  selectedVessel: Vessel | null;
   showVessels: boolean;
   showVesselNames: boolean;
   showVesselPaths: boolean;
@@ -19,6 +20,7 @@ export interface vesselState {
 
 const initialState: vesselState = {
   vessels: [],
+  selectedVessel: null,
   showVessels: true,
   showVesselNames: false,
   showVesselPaths: false,
@@ -29,6 +31,18 @@ const vesselSlice = createSlice({
   initialState,
 
   reducers: {
+    setSelectedVesselById: (state, action) => {
+      console.log("vessels", state.vessels);
+      console.log("action.payload", action.payload);
+      console.log(
+        "test",
+        state.vessels.find((vessel) => vessel.id === action.payload),
+      );
+      state.selectedVessel = state.vessels.find((vessel) => vessel.id === action.payload) || null;
+    },
+    setSelectedVessel: (state, action) => {
+      state.selectedVessel = action.payload;
+    },
     setVessels: (state, action) => {
       state.vessels = action.payload;
     },
@@ -44,6 +58,13 @@ const vesselSlice = createSlice({
   },
 });
 
-export const { setVessels, setShowVessels, setShowVesselNames, setShowVesselPaths } = vesselSlice.actions;
+export const {
+  setSelectedVesselById,
+  setSelectedVessel,
+  setVessels,
+  setShowVessels,
+  setShowVesselNames,
+  setShowVesselPaths,
+} = vesselSlice.actions;
 
 export default vesselSlice.reducer;

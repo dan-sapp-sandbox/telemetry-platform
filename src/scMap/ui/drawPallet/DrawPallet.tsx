@@ -6,7 +6,6 @@ import { buttonStyles, iconStyles, buttonTextStyles } from "../actionPallet/util
 
 const DrawPallet = ({ goBack }: { goBack: () => void }) => {
   const { handleChangeDrawMode, drawMode } = useDrawPallet();
-  // TODO: finish rename workflow
   // TODO: mobile styling
   // TODO: upload/download geojson
   return (
@@ -20,32 +19,32 @@ const DrawPallet = ({ goBack }: { goBack: () => void }) => {
       </div>
       <div className="flex justify-between">
         <button
-          className={cn([buttonStyles, drawMode === "point" ? "bg-blue-400/30" : ""])}
+          className={cn([buttonStyles, drawMode === "point" ? "bg-emerald-400/35" : ""])}
           onClick={() => handleChangeDrawMode("point")}
         >
           <Dot className={iconStyles} />
           <span className={buttonTextStyles}>Point</span>
         </button>
         <button
-          className={cn([buttonStyles, drawMode === "polyline" ? "bg-blue-400/30" : ""])}
+          className={cn([buttonStyles, drawMode === "polyline" ? "bg-emerald-400/35" : ""])}
           onClick={() => handleChangeDrawMode("polyline")}
         >
           <Slash className={iconStyles} />
           <span className={buttonTextStyles}>Line</span>
         </button>
         <button
-          className={cn([buttonStyles, drawMode === "polygon" ? "bg-blue-400/30" : ""])}
+          className={cn([buttonStyles, drawMode === "polygon" ? "bg-emerald-400/35" : ""])}
           onClick={() => handleChangeDrawMode("polygon")}
         >
           <Hexagon className={iconStyles} />
           <span className={buttonTextStyles}>Polygon</span>
         </button>
-        <button className={buttonStyles} onClick={() => handleChangeDrawMode(null)}>
+        {/* <button className={buttonStyles} onClick={() => handleChangeDrawMode(null)}>
           <X className={iconStyles} />
           <span className={buttonTextStyles}>Cancel</span>
-        </button>
+        </button> */}
       </div>
-      <div className="justify-end text-sm text-(--text)/70">(double click to end drawing)</div>
+      <div className="self-end text-sm text-(--text)/70">(double click to end drawing)</div>
     </div>
   );
 };

@@ -22,6 +22,10 @@ const PolygonEntity = ({ entity }: Props) => {
         outline: true,
         outlineColor: Color.ORANGE,
       }}
+      properties={{
+        entityType: "draw",
+        id: entity.id,
+      }}
     />
   );
 };

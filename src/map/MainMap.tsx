@@ -11,6 +11,10 @@ import {
 } from "cesium";
 import useLocalStorage from "use-local-storage";
 import DrawController from "./DrawController";
+import { useDispatch, useSelector } from "react-redux";
+import { setSelectedVessel, type vesselState } from "@/store/slices/vesselSlice";
+import { setActivePanel } from "@/store/slices/actionPalletSlice";
+import { setSelectedEntity, type drawState } from "@/store/slices/drawSlice";
 
 const RegisterMainViewer = () => {
   const { viewer } = useCesium();
@@ -42,6 +46,9 @@ const RegisterMainViewer = () => {
 };
 
 const InitialCamera = () => {
+  const dispatch = useDispatch();
+  const { vessels } = useSelector((state: { vessels: vesselState }) => state.vessels);
+  const { entities } = useSelector((state: { draw: drawState }) => state.draw);
   const [init] = useLocalStorage("main-cam-init-v7", {
     lat: 27.2,
     lon: 51.1,
@@ -51,6 +58,11 @@ const InitialCamera = () => {
     roll: 0,
   });
   const { viewer } = useCesium();
+
+  useEffect(() => {
+    if (!viewer) return;
+    setTimeout(() => viewer.resize(), 0);
+  }, [viewer]);
 
   useEffect(() => {
     if (!viewer) return;
@@ -77,18 +89,46 @@ const InitialCamera = () => {
     viewer.cesiumWidget.screenSpaceEventHandler.removeInputAction(ScreenSpaceEventType.LEFT_DOUBLE_CLICK);
   }, [viewer]);
 
+  useEffect(() => {
+    if (!viewer) return;
+    const handler = viewer.screenSpaceEventHandler;
+
+    handler.setInputAction((event: any) => {
+      if (!vessels) return;
+      const picked = viewer.scene.pick(event.position);
+      const entity = picked?.id;
+      if (!entity) {
+        viewer.selectedEntity = undefined;
+        return;
+      }
+      // intercept logic
+      if (entity.properties?.type?.getValue() === "blocked") {
+        return; // ignore selection
+      }
+      const entityId = entity.properties.id.getValue();
+      const entityType = entity.properties.entityType.getValue();
+      if (entityType === "vessel") {
+        const matchingVessel = vessels.find((vessel) => vessel.id === entityId);
+        if (!matchingVessel) return;
+        dispatch(setSelectedVessel(matchingVessel));
+        dispatch(setActivePanel("vessels"));
+      }
+      if (entityType === "draw") {
+        const matchingEntity = entities.find((vessel) => vessel.id === entityId);
+        if (!matchingEntity) return;
+        dispatch(setSelectedEntity(matchingEntity));
+        dispatch(setActivePanel("draw"));
+      }
+      // viewer.selectedEntity = entity;
+    }, ScreenSpaceEventType.LEFT_CLICK);
+  }, [viewer, vessels, entities]);
+
   return null;
 };
 
 const MainMap = ({ children }: { children?: ReactNode | ReactNode[] }) => {
-  const { viewer } = useCesium();
   const contextOptions = useMemo(() => ({ webgl: { alpha: true } }), []);
   const terrainProvider = createWorldTerrainAsync();
-
-  useEffect(() => {
-    if (!viewer) return;
-    setTimeout(() => viewer.resize(), 0);
-  }, [viewer]);
 
   return (
     <Viewer
@@ -106,6 +146,8 @@ const MainMap = ({ children }: { children?: ReactNode | ReactNode[] }) => {
       navigationHelpButton={false}
       requestRenderMode={false}
       maximumRenderTimeChange={Infinity}
+      infoBox={false}
+      selectionIndicator={false}
     >
       <InitialCamera />
       <RegisterMainViewer />
