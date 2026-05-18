@@ -9,7 +9,7 @@ const DrawDetails = () => {
   return (
     <div className="flex h-full">
       <div className="flex flex-col w-1/3 overflow-y-auto scrollbar-hide">
-        {!entities.length && <div className="text-(--text)/80">None</div>}
+        {!entities.length && <div className="text-(--text)/80 p-4 text-sm">None</div>}
         {entities.map((entity, index) => {
           const getBackgroundStyles = () => {
             if (index % 2 === 0) {
@@ -62,9 +62,8 @@ const DrawDetails = () => {
           </div>
         </div>
       ) : (
-        <div className="flex-col flex-1 pl-2 gap-2 text-(--text)/80">
-          <div className="text-sm">No selection</div>
-          <div className="p-3 rounded-lg bg-zinc-800/40 border border-white/10">Select a Entity to inspect</div>
+        <div className="flex-col flex-1 p-4 gap-4 text-(--text)/80">
+          <div className="text-sm">No Selection</div>
         </div>
       )}
     </div>

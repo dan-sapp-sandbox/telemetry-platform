@@ -4,25 +4,12 @@ import { useDispatch, useSelector } from "react-redux";
 import VesselEntity from "./VesselEntity";
 import { useGetVesselsQuery, type VesselBounds } from "@/store/services/api";
 import { CameraContext } from "../types";
-import { Math as CesiumMath, Viewer } from "cesium";
+import { getBounds } from "./utils";
 
 export interface IVesselState {
   vesselEntities: JSX.Element[];
   showVessels: boolean;
 }
-
-export const getBounds = (viewer: Viewer): VesselBounds | null => {
-  const rect = viewer.camera.computeViewRectangle();
-
-  if (!rect) return null;
-
-  return {
-    west: CesiumMath.toDegrees(rect.west),
-    south: CesiumMath.toDegrees(rect.south),
-    east: CesiumMath.toDegrees(rect.east),
-    north: CesiumMath.toDegrees(rect.north),
-  };
-};
 
 const useVessels = (): IVesselState => {
   const dispatch = useDispatch();
@@ -30,11 +17,7 @@ const useVessels = (): IVesselState => {
   const [bounds, setBounds] = useState<VesselBounds | null>(null);
   const { mainViewerRef } = useContext(CameraContext);
   const viewer = mainViewerRef?.current;
-  const {
-    data: vessels,
-    // isLoading,
-    // error,
-  } = useGetVesselsQuery(bounds!, {
+  const { data: vessels } = useGetVesselsQuery(bounds!, {
     skip: !bounds || !viewer,
   });
 

@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
 import type { RefObject } from "react";
-import { Cartesian3, Cartographic, Math as CesiumMath, Viewer } from "cesium";
+import { Cartesian2, Cartesian3, Cartographic, Math as CesiumMath, Viewer } from "cesium";
 import type { ILayer, mapState } from "@/store/slices/mapSlice";
 import useLocalStorage from "use-local-storage";
 import { useSelector } from "react-redux";
@@ -67,25 +67,37 @@ const useMapState = (): IMapState => {
       const sync = () => {
         const main = mainViewerRef.current;
         const overview = overviewViewerRef.current;
+
         if (!main || !overview) return;
 
-        const mainCam = main.camera;
+        const scene = main.scene;
+        const camera = main.camera;
 
-        const carto = Cartographic.fromCartesian(mainCam.position);
-        const boostedHeight = Math.max(carto.height * 2, 3000000);
+        const center = new Cartesian2(scene.canvas.clientWidth / 2, scene.canvas.clientHeight / 2);
 
-        const boostedPosition = Cartesian3.fromRadians(carto.longitude, carto.latitude, boostedHeight);
+        const ellipsoid = scene.globe.ellipsoid;
+
+        const cartesian = camera.pickEllipsoid(center, ellipsoid);
+
+        if (!cartesian) return;
+
+        const carto = Cartographic.fromCartesian(cartesian);
+
+        const overviewHeight = Math.min(8_000_000, Math.max(camera.positionCartographic.height * 2, 3_000_000));
+
+        const destination = Cartesian3.fromRadians(carto.longitude, carto.latitude, overviewHeight);
 
         setInitCameraView({
           lon: CesiumMath.toDegrees(carto.longitude),
           lat: CesiumMath.toDegrees(carto.latitude),
-          height: carto.height,
-          heading: mainCam.heading,
-          pitch: mainCam.pitch,
-          roll: mainCam.roll,
+          height: overviewHeight,
+          heading: 0,
+          pitch: -Math.PI / 2,
+          roll: 0,
         });
+
         overview.camera.setView({
-          destination: boostedPosition,
+          destination,
           orientation: {
             heading: 0,
             pitch: -Math.PI / 2,
