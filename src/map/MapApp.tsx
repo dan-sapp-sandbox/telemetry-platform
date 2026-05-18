@@ -53,7 +53,7 @@ const MapApp = () => {
               <MainMap>
                 <PipViewRectangle show={showPipMap} isPip2={false} />
                 <PipViewRectangle show={showPipMap2} isPip2={true} />
-                {/* <Layers layer={layer} /> */}
+                <Layers />
                 {/* <DataLayer /> */}
                 <Vessels />
                 {/* <CameraControls /> */}
@@ -62,17 +62,17 @@ const MapApp = () => {
               </MainMap>
               {showOverviewMap && (
                 <OverviewMap overviewState={widgetLayout.overview}>
-                  <Layers layer={layer} />
+                  <Layers />
                 </OverviewMap>
               )}
               {showPipMap && (
                 <PipMap pipState={widgetLayout.pip} isPip2={false}>
-                  <Layers layer={layer} />
+                  <Layers />
                 </PipMap>
               )}
               {showPipMap2 && (
                 <PipMap pipState={widgetLayout.pip2} isPip2={true}>
-                  <Layers layer={layer} />
+                  <Layers />
                 </PipMap>
               )}
             </DndContext>

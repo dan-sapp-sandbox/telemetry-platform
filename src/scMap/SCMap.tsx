@@ -2,6 +2,7 @@ import MainMap from "../map/MainMap";
 import ContextMenu from "@/contextMenu/ContextMenu";
 import Vessels from "../map/vessels/Vessels";
 import Overlay from "./ui/Overlay";
+import Layers from "@/map/Layers";
 import { useRef } from "react";
 import useMapState from "@/map/hooks/useMapState";
 import { CameraContext } from "@/map/types";
@@ -17,6 +18,7 @@ const SCMap = () => {
           <MainMap>
             <Vessels />
             <ContextMenu />
+            <Layers />
           </MainMap>
         </div>
         <Overlay />

@@ -1,55 +1,115 @@
-import type { ILayer } from "@/store/slices/mapSlice";
-import { useMemo } from "react";
-import { ImageryLayer } from "resium";
+import { useEffect, useMemo, useRef } from "react";
+import { useCesium } from "resium";
 import { OpenStreetMapImageryProvider, IonImageryProvider, UrlTemplateImageryProvider } from "cesium";
+import { useSelector } from "react-redux";
+import { type mapState } from "@/store/slices/mapSlice";
 
-const Layers = ({ layer }: { layer: ILayer }) => {
-  const osmProvider = useMemo(() => new OpenStreetMapImageryProvider({ url: "https://tile.openstreetmap.org/" }), []);
-  const esriSat = useMemo(
-    () =>
-      new UrlTemplateImageryProvider({
+const TILE_BASE_URL = "https://vtumnamsiwcnmoysyqzi.supabase.co/storage/v1/object/public/tiles";
+
+const Layers = () => {
+  const { layer } = useSelector((state: { map: mapState }) => state.map);
+
+  const { viewer } = useCesium();
+  const satelliteRef = useRef<Promise<IonImageryProvider> | null>(null);
+
+  const providers = useMemo(
+    () => ({
+      osm: new OpenStreetMapImageryProvider({
+        url: "https://tile.openstreetmap.org/",
+      }),
+
+      esriSat: new UrlTemplateImageryProvider({
         url: "https://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
       }),
-    [],
-  );
-  const cartoLight = useMemo(
-    () => new UrlTemplateImageryProvider({ url: "https://a.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png" }),
-    [],
-  );
-  const cartoDark = useMemo(
-    () => new UrlTemplateImageryProvider({ url: "https://a.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png" }),
-    [],
-  );
-  const cartoVoyager = useMemo(
-    () =>
-      new UrlTemplateImageryProvider({ url: "https://a.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}.png" }),
+
+      "carto-light": new UrlTemplateImageryProvider({
+        url: "https://a.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png",
+      }),
+
+      "carto-dark": new UrlTemplateImageryProvider({
+        url: "https://a.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png",
+      }),
+
+      "carto-voyager": new UrlTemplateImageryProvider({
+        url: "https://a.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}.png",
+      }),
+
+      populationDensity: new UrlTemplateImageryProvider({
+        url: `${TILE_BASE_URL}/population/{z}/{x}/{y}.png`,
+        minimumLevel: 0,
+        maximumLevel: 5,
+      }),
+    }),
     [],
   );
 
-  const satProvider = useMemo(() => IonImageryProvider.fromAssetId(2), []);
-
-  const provider = useMemo(() => {
-    switch (layer) {
-      case "esriSat":
-        return esriSat;
-      case "osm":
-        return osmProvider;
-      case "satellite":
-        return satProvider;
-      case "carto-light":
-        return cartoLight;
-      case "carto-dark":
-        return cartoDark;
-      case "carto-voyager":
-        return cartoVoyager;
-      default:
-        return osmProvider;
+  useEffect(() => {
+    if (!satelliteRef.current) {
+      satelliteRef.current = IonImageryProvider.fromAssetId(2);
     }
-  }, [layer, esriSat, osmProvider, satProvider, cartoLight, cartoDark, cartoVoyager]);
+  }, []);
 
-  if (!provider) return null;
+  useEffect(() => {
+    if (!viewer) return;
 
-  return <ImageryLayer imageryProvider={provider} />;
+    let cancelled = false;
+
+    const applyLayers = async () => {
+      let baseProvider;
+
+      switch (layer) {
+        case "satellite":
+        case "population-density":
+          baseProvider = await satelliteRef.current!;
+          break;
+
+        case "esriSat":
+          baseProvider = providers.esriSat;
+          break;
+
+        case "carto-light":
+          baseProvider = providers["carto-light"];
+          break;
+
+        case "carto-dark":
+          baseProvider = providers["carto-dark"];
+          break;
+
+        case "carto-voyager":
+          baseProvider = providers["carto-voyager"];
+          break;
+
+        case "osm":
+        default:
+          baseProvider = providers.osm;
+      }
+
+      if (cancelled) return;
+
+      const layers = viewer.imageryLayers;
+
+      // Remove old AFTER new provider exists
+      layers.removeAll();
+
+      const baseLayer = layers.addImageryProvider(baseProvider);
+      baseLayer.alpha = 0.5;
+
+      if (layer === "population-density") {
+        const overlay = layers.addImageryProvider(providers.populationDensity);
+        overlay.alpha = 0.8;
+      }
+
+      viewer.scene.requestRender();
+    };
+
+    applyLayers();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [viewer, layer, providers]);
+
+  return null;
 };
 
 export default Layers;

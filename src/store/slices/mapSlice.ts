@@ -1,6 +1,13 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-export type ILayer = "esriSat" | "osm" | "satellite" | "carto-light" | "carto-dark" | "carto-voyager";
+export type ILayer =
+  | "esriSat"
+  | "osm"
+  | "satellite"
+  | "carto-light"
+  | "carto-dark"
+  | "carto-voyager"
+  | "population-density";
 
 export interface mapState {
   showOverviewMap: boolean;
@@ -13,7 +20,7 @@ const initialState: mapState = {
   showOverviewMap: false,
   showPipMap: false,
   showPipMap2: false,
-  layer: "satellite",
+  layer: "esriSat",
 };
 
 const mapSlice = createSlice({

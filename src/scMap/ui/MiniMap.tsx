@@ -3,6 +3,7 @@ import { Viewer, useCesium } from "resium";
 import { Color, IonImageryProvider } from "cesium";
 import { CameraContext } from "@/map/types";
 import MainViewRectangle from "@/map/widgets/MainViewRectangle";
+import Layers from "@/map/Layers";
 
 const MiniMapInitializer = () => {
   const { viewer } = useCesium();
@@ -38,22 +39,22 @@ const MiniMapInitializer = () => {
     viewer.scene.globe.baseColor = Color.BLACK;
   }, [viewer, mainViewerRef]);
 
-  useEffect(() => {
-    if (!viewer) return;
+  // useEffect(() => {
+  //   if (!viewer) return;
 
-    let isCancelled = false;
+  //   let isCancelled = false;
 
-    IonImageryProvider.fromAssetId(2).then((provider) => {
-      if (isCancelled) return;
+  //   IonImageryProvider.fromAssetId(2).then((provider) => {
+  //     if (isCancelled) return;
 
-      viewer.imageryLayers.removeAll();
-      viewer.imageryLayers.addImageryProvider(provider);
-    });
+  //     viewer.imageryLayers.removeAll();
+  //     viewer.imageryLayers.addImageryProvider(provider);
+  //   });
 
-    return () => {
-      isCancelled = true;
-    };
-  }, [viewer]);
+  //   return () => {
+  //     isCancelled = true;
+  //   };
+  // }, [viewer]);
 
   return null;
 };
@@ -78,6 +79,7 @@ const MiniMap = ({ children }: { children?: ReactNode | ReactNode[] }) => {
     >
       <MiniMapInitializer />
       <MainViewRectangle />
+      <Layers />
       {children}
     </Viewer>
   );

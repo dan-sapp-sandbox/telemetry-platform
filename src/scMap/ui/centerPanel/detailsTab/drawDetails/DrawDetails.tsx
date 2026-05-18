@@ -4,7 +4,7 @@ import { cn } from "@/lib/utils";
 import useDrawDetails from "./useDrawDetails";
 
 const DrawDetails = () => {
-  const { handleRenameEntity, handleDeleteEntity, flyToDrawEntity, entities, selectedEntity, setSelectedEntity } =
+  const { handleRenameEntity, handleDeleteEntity, flyToDrawEntity, entities, selectedEntity, handleSetSelectedEntity } =
     useDrawDetails();
   return (
     <div className="flex h-full">
@@ -31,7 +31,7 @@ const DrawDetails = () => {
                 "cursor-pointer px-2 py-0.5 transition-colors text-(--text)/80 hover:bg-blue-400/30",
                 getBackgroundStyles(),
               ])}
-              onClick={() => setSelectedEntity(entity)}
+              onClick={() => handleSetSelectedEntity(entity)}
             >
               {entity.name || entity.type}
             </div>

@@ -38,22 +38,22 @@ const OverviewInitializer = () => {
     viewer.scene.requestRenderMode = false;
   }, [viewer, mainViewerRef]);
 
-  useEffect(() => {
-    if (!viewer) return;
+  // useEffect(() => {
+  //   if (!viewer) return;
 
-    let isCancelled = false;
+  //   let isCancelled = false;
 
-    IonImageryProvider.fromAssetId(2).then((provider) => {
-      if (isCancelled) return;
+  //   IonImageryProvider.fromAssetId(2).then((provider) => {
+  //     if (isCancelled) return;
 
-      viewer.imageryLayers.removeAll();
-      viewer.imageryLayers.addImageryProvider(provider);
-    });
+  //     viewer.imageryLayers.removeAll();
+  //     viewer.imageryLayers.addImageryProvider(provider);
+  //   });
 
-    return () => {
-      isCancelled = true;
-    };
-  }, [viewer]);
+  //   return () => {
+  //     isCancelled = true;
+  //   };
+  // }, [viewer]);
 
   return null;
 };

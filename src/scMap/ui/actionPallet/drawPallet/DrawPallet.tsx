@@ -1,8 +1,8 @@
 import { Slash, Hexagon, Dot, ArrowBigLeft } from "lucide-react";
-import { backButtonStyles, backIconStyles } from "../actionPallet/utils";
+import { backButtonStyles, backIconStyles } from "../utils";
 import useDrawPallet from "./useDrawPallet";
 import { cn } from "@/lib/utils";
-import { buttonStyles, iconStyles, buttonTextStyles } from "../actionPallet/utils";
+import { buttonStyles, iconStyles, buttonTextStyles } from "../utils";
 
 const DrawPallet = ({ goBack }: { goBack: () => void }) => {
   const { handleChangeDrawMode, drawMode } = useDrawPallet();
