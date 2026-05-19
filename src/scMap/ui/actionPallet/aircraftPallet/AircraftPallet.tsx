@@ -7,10 +7,10 @@ const AircraftPallet = ({ goBack }: { goBack: () => void }) => {
   const {
     showAircraft,
     showAircraftNames,
-    showAircraftPaths,
+    // showAircraftPaths,
     handleToggleShowAircraft,
     handleToggleShowAircraftNames,
-    handleToggleShowAircraftPaths,
+    // handleToggleShowAircraftPaths,
   } = useAircraftPallet();
   return (
     <div className="flex flex-col gap-3 lg:gap-4 xl:gap-6">
@@ -29,10 +29,10 @@ const AircraftPallet = ({ goBack }: { goBack: () => void }) => {
         <Switch checked={showAircraftNames} onCheckedChange={handleToggleShowAircraftNames} />
         <span className="text-sm text-(--text)/80 font-bold">Show Aircraft Names on Map</span>
       </div>
-      <div className="flex items-center gap-6 cursor-pointer" onClick={handleToggleShowAircraftPaths}>
+      {/* <div className="flex items-center gap-6 cursor-pointer" onClick={handleToggleShowAircraftPaths}>
         <Switch checked={showAircraftPaths} onCheckedChange={handleToggleShowAircraftPaths} />
         <span className="text-sm text-(--text)/80 font-bold">Show Vessel Paths on Map</span>
-      </div>
+      </div> */}
     </div>
   );
 };

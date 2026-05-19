@@ -8,16 +8,26 @@ export interface VesselBounds {
   north: number;
 }
 
+export interface CommandResponse {
+  action: string | null;
+  args: Record<string, any>;
+}
+
+export interface CommandRequest {
+  prompt: string;
+}
+
 export const api = createApi({
   reducerPath: "api",
   baseQuery: fetchBaseQuery({
     baseUrl: "https://sandbox-api-nifl.onrender.com/api/",
+    // baseUrl: "http://127.0.0.1:8000/api/",
   }),
   endpoints: (builder) => ({
     getVessels: builder.query<Vessel[], VesselBounds>({
       async queryFn(bounds, _api, _extraOptions, fetchWithBQ) {
         const result = await fetchWithBQ({
-          url: "vessels",
+          url: "vessels/get-vessels",
           params: bounds,
         });
 
@@ -32,7 +42,14 @@ export const api = createApi({
         };
       },
     }),
+    sendCommandPrompt: builder.mutation<CommandResponse, CommandRequest>({
+      query: (body) => ({
+        url: "ai/commands",
+        method: "POST",
+        body,
+      }),
+    }),
   }),
 });
 
-export const { useGetVesselsQuery } = api;
+export const { useGetVesselsQuery, useSendCommandPromptMutation } = api;

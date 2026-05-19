@@ -10,7 +10,7 @@ export interface IVesselDetails {
 }
 
 const useCenterPanel = (): IVesselDetails => {
-  const [activeTab, setActiveTab] = useState<TabId>("details");
+  const [activeTab, setActiveTab] = useState<TabId>("ai");
   const { activePanel } = useSelector((state: { actionPallet: actionPallet }) => state.actionPallet);
 
   useEffect(() => {

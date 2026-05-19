@@ -1,7 +1,6 @@
 import { DndContext, TouchSensor, PointerSensor, useSensor, useSensors } from "@dnd-kit/core";
 import { restrictToParentElement } from "@dnd-kit/modifiers";
 import MainMap from "./MainMap";
-// import CameraControls from "./CameraControls";
 import OverviewMap from "./widgets/OverviewMap";
 import PipViewRectangle from "./widgets/PipViewRectangle";
 import PipMap from "./widgets/PipMap";
@@ -11,16 +10,13 @@ import { CameraContext } from "./types";
 import NavBar from "@/navBar/NavBar";
 import { useTheme } from "@/components/themeToggle/useTheme";
 import useWidgetLayout from "./hooks/useWidgetLayout";
-// import useMapUtils from "./hooks/useMapUtils";
 import ContextMenu from "@/contextMenu/ContextMenu";
 import Vessels from "./vessels/Vessels";
-import CommandBar from "@/commandBar/CommandBar";
 
 const MapApp = () => {
   const { theme, setTheme } = useTheme();
   const { handleDragStart, handleDragEnd, showOverviewMap, showPipMap, widgetLayout, containerRef } = useWidgetLayout();
   const { mainViewerRef, overviewViewerRef, pipViewerRef } = useMapState();
-  // const {sendPrompt, Labels} = useMapUtils();
   const sensors = useSensors(
     useSensor(PointerSensor),
     useSensor(TouchSensor, {
@@ -62,7 +58,6 @@ const MapApp = () => {
             </DndContext>
           </div>
         </div>
-        <CommandBar />
       </div>
     </CameraContext.Provider>
   );
