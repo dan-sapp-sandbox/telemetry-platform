@@ -1,4 +1,4 @@
-import { Locate, Save, Trash2 } from "lucide-react";
+import { Locate } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
 import useVesselDetails from "./useVesselDetails";
@@ -41,7 +41,7 @@ const VesselDetails = () => {
         <div className="flex flex-col flex-1 p-4 text-(--text)/80 gap-6">
           <div className="flex flex-col gap-2">
             <div className="">Name: {selectedVessel.name}</div>
-            <div className="">Type: {selectedVessel.type}</div>
+            <div className="capitalize">Type: {selectedVessel.type}</div>
           </div>
           <button
             className={cn([
@@ -53,30 +53,6 @@ const VesselDetails = () => {
             <Locate className="size-5" />
             <span className="text-sm">Center Map on Vessel</span>
           </button>
-          {/* <div className="flex gap-2">
-            <button
-              className={cn([
-                "w-fit flex items-center gap-2 cursor-pointer disabled:bg-zinc-600/30 disabled:text-(--text)/40 disabled:border-transparent",
-                "bg-zinc-600/80 hover-bg-blue-800/50 hover:text-emerald-400/50 p-2 hover:border-emerald-400/30",
-              ])}
-              disabled
-              onClick={() => flyToVessel(selectedVessel)}
-            >
-              <Save className="size-5" />
-              <span className="text-sm">Save Changes</span>
-            </button>
-            <button
-              className={cn([
-                "w-fit flex items-center gap-2 cursor-pointer disabled:bg-zinc-600/30 disabled:text-(--text)/40 disabled:border-0",
-                "bg-zinc-600/80 hover-bg-blue-800/50 hover:text-emerald-400/50 p-2 hover:border-emerald-400/30",
-              ])}
-              disabled
-              onClick={() => flyToVessel(selectedVessel)}
-            >
-              <Trash2 className="size-5" />
-              <span className="text-sm">Discard Changes</span>
-            </button>
-          </div> */}
         </div>
       ) : (
         <div className="flex-col flex-1 p-4 gap-2 text-(--text)/80">
