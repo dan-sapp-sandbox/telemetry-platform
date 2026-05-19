@@ -41,6 +41,7 @@ const drawSlice = createSlice({
     },
     addEntity: (state, action) => {
       state.entities = [...state.entities, action.payload];
+      state.selectedEntity = action.payload;
     },
     renameEntity: (state, action) => {
       const { id, newName } = action.payload;

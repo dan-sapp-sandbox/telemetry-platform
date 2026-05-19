@@ -15,19 +15,12 @@ import useWidgetLayout from "./hooks/useWidgetLayout";
 import ContextMenu from "@/contextMenu/ContextMenu";
 import Vessels from "./vessels/Vessels";
 import CommandBar from "@/commandBar/CommandBar";
-// import DataLayer from "./DataLayer";
-
-// TODO: mobile in general
-// TODO: resize widgets
-// TODO: compass
-// TODO: finish send to report utility
-// TODO: finish ai command layer
 
 const MapApp = () => {
   const { theme, setTheme } = useTheme();
   const { handleDragStart, handleDragEnd, showOverviewMap, showPipMap, showPipMap2, widgetLayout, containerRef } =
     useWidgetLayout();
-  const { mainViewerRef, overviewViewerRef, pipViewerRef, pipViewer2Ref } = useMapState();
+  const { mainViewerRef, overviewViewerRef, pipViewerRef } = useMapState();
   // const {sendPrompt, Labels} = useMapUtils();
   const sensors = useSensors(
     useSensor(PointerSensor),
@@ -39,7 +32,7 @@ const MapApp = () => {
     }),
   );
   return (
-    <CameraContext.Provider value={{ containerRef, mainViewerRef, overviewViewerRef, pipViewerRef, pipViewer2Ref }}>
+    <CameraContext.Provider value={{ containerRef, mainViewerRef, overviewViewerRef, pipViewerRef }}>
       <NavBar theme={theme} setTheme={setTheme} />
       <div className="flex flex-col w-full h-full">
         <div className="flex w-full h-full">
@@ -51,13 +44,10 @@ const MapApp = () => {
               onDragEnd={handleDragEnd}
             >
               <MainMap>
-                <PipViewRectangle show={showPipMap} isPip2={false} />
-                <PipViewRectangle show={showPipMap2} isPip2={true} />
+                <PipViewRectangle show={showPipMap} />
                 <Layers />
-                {/* <DataLayer /> */}
                 <Vessels />
                 {/* <CameraControls /> */}
-                {/* {Labels} */}
                 <ContextMenu />
               </MainMap>
               {showOverviewMap && (
@@ -66,12 +56,7 @@ const MapApp = () => {
                 </OverviewMap>
               )}
               {showPipMap && (
-                <PipMap pipState={widgetLayout.pip} isPip2={false}>
-                  <Layers />
-                </PipMap>
-              )}
-              {showPipMap2 && (
-                <PipMap pipState={widgetLayout.pip2} isPip2={true}>
+                <PipMap pipState={widgetLayout.pip}>
                   <Layers />
                 </PipMap>
               )}

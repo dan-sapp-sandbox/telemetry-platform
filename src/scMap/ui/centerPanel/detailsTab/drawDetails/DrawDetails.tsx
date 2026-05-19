@@ -45,7 +45,7 @@ const DrawDetails = () => {
             Name: {selectedEntity.name || "none"}
             <Edit2 className="size-4" onClick={() => handleRenameEntity(selectedEntity, "new name")} />
           </div>
-          <div className="bg-slate-700/50 py-0.5">Type: {selectedEntity.type}</div>
+          <div className="bg-slate-700/50 py-0.5 capitalize">Type: {selectedEntity.type}</div>
           <div
             className="flex items-center gap-2 cursor-pointer py-0.5 bg-slate-800/50 hover-bg-blue-800/50 hover:text-blue-300/80"
             onClick={() => flyToDrawEntity(selectedEntity)}

@@ -8,6 +8,7 @@ import { MapPin } from "lucide-react";
 import { CameraContext } from "@/map/types";
 import type { IWidgetState } from "@/store/slices/widgetSlice";
 import { addSectionToReport } from "@/store/slices/reportSlice";
+import { setActivePanel } from "@/store/slices/actionPalletSlice";
 
 const lucideToDataUrl = (icon: React.ReactElement) => {
   const svgString = renderToStaticMarkup(icon);
@@ -28,10 +29,11 @@ interface IContextMenu {
 }
 
 const useContextMenu = (): IContextMenu => {
+  // TODO: show lat/lon in context menu (copyable)
   const dispatch = useDispatch();
   const { drawMode } = useSelector((state: { draw: drawState }) => state.draw);
   const { widgetLayout } = useSelector((state: { widget: IWidgetState }) => state.widget);
-  const { containerRef, mainViewerRef, overviewViewerRef, pipViewerRef, pipViewer2Ref } = useContext(CameraContext);
+  const { containerRef, mainViewerRef, overviewViewerRef, pipViewerRef } = useContext(CameraContext);
   const { viewer } = useCesium();
 
   const drawModeRef = useRef(drawMode);
@@ -104,6 +106,7 @@ const useContextMenu = (): IContextMenu => {
 
   const handleAddEntitity = (newEntity: DrawEntity) => {
     dispatch(addEntity(newEntity));
+    dispatch(setActivePanel("draw"));
   };
 
   const serializePosition = (position: Cartesian3) => ({
@@ -131,7 +134,6 @@ const useContextMenu = (): IContextMenu => {
       { ref: mainViewerRef, state: null },
       { ref: overviewViewerRef, state: widgetLayout.overview },
       { ref: pipViewerRef, state: widgetLayout.pip },
-      { ref: pipViewer2Ref, state: widgetLayout.pip2 },
     ];
 
     // Wait for all viewers to render

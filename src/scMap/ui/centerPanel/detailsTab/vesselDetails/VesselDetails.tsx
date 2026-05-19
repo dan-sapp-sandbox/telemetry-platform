@@ -53,7 +53,7 @@ const VesselDetails = () => {
             <Locate className="size-5" />
             <span className="text-sm">Center Map on Vessel</span>
           </button>
-          <div className="flex gap-2">
+          {/* <div className="flex gap-2">
             <button
               className={cn([
                 "w-fit flex items-center gap-2 cursor-pointer disabled:bg-zinc-600/30 disabled:text-(--text)/40 disabled:border-transparent",
@@ -76,7 +76,7 @@ const VesselDetails = () => {
               <Trash2 className="size-5" />
               <span className="text-sm">Discard Changes</span>
             </button>
-          </div>
+          </div> */}
         </div>
       ) : (
         <div className="flex-col flex-1 p-4 gap-2 text-(--text)/80">

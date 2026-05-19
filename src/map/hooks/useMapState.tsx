@@ -6,11 +6,11 @@ import useLocalStorage from "use-local-storage";
 import { useSelector } from "react-redux";
 
 export const defaultMainView = {
-  heading: 6.283185307179581,
-  height: 2000101.0682877784,
-  lat: 29.927546494228835,
-  lon: 54.599629924910886,
-  pitch: -1.5682332501783933,
+  heading: 0,
+  height: 9_000_000,
+  lat: 27.75,
+  lon: 53.37,
+  pitch: -Math.PI / 2,
   roll: 0,
 };
 export const defaultPipView = {
@@ -18,15 +18,7 @@ export const defaultPipView = {
   lat: 29.240000000000006,
   lon: 50.314,
   heading: 6.283185307179581,
-  pitch: -1.5684928999831915,
-  roll: 0,
-};
-export const defaultPipView2 = {
-  heading: 6.283185307179581,
-  height: 11966.533380187617,
-  lat: 35.69627462795138,
-  lon: 51.38925863136245,
-  pitch: -1.5684928999831915,
+  pitch: -Math.PI / 2,
   roll: 0,
 };
 
@@ -35,7 +27,6 @@ export interface IMapState {
   mainViewerRef: RefObject<Viewer | null>;
   overviewViewerRef: RefObject<Viewer | null>;
   pipViewerRef: RefObject<Viewer | null>;
-  pipViewer2Ref: RefObject<Viewer | null>;
   layer: ILayer;
   showOverviewMap: boolean;
   showPipMap: boolean;
@@ -49,7 +40,6 @@ const useMapState = (): IMapState => {
   const mainViewerRef = useRef<Viewer | null>(null);
   const overviewViewerRef = useRef<Viewer | null>(null);
   const pipViewerRef = useRef<Viewer | null>(null);
-  const pipViewer2Ref = useRef<Viewer | null>(null);
   const [_init, setInitCameraView] = useLocalStorage("main-cam-init", defaultMainView);
 
   useEffect(() => {
@@ -88,9 +78,9 @@ const useMapState = (): IMapState => {
         const destination = Cartesian3.fromRadians(carto.longitude, carto.latitude, overviewHeight);
 
         setInitCameraView({
-          lon: CesiumMath.toDegrees(carto.longitude),
-          lat: CesiumMath.toDegrees(carto.latitude),
-          height: overviewHeight,
+          lon: CesiumMath.toDegrees(camera.positionCartographic.longitude),
+          lat: CesiumMath.toDegrees(camera.positionCartographic.latitude),
+          height: camera.positionCartographic.height,
           heading: 0,
           pitch: -Math.PI / 2,
           roll: 0,
@@ -106,11 +96,11 @@ const useMapState = (): IMapState => {
         });
       };
 
-      main.camera.changed.addEventListener(sync);
+      main.camera.moveEnd.addEventListener(sync);
       sync();
 
       cleanup = () => {
-        main.camera.changed.removeEventListener(sync);
+        main.camera.moveEnd.removeEventListener(sync);
       };
     };
 
@@ -125,7 +115,6 @@ const useMapState = (): IMapState => {
     mainViewerRef,
     overviewViewerRef,
     pipViewerRef,
-    pipViewer2Ref,
     layer,
     showOverviewMap,
     showPipMap,

@@ -9,8 +9,8 @@ const VesselsPallet = ({ goBack }: { goBack: () => void }) => {
     handleToggleShowVessels,
     showVesselNames,
     handleToggleShowVesselNames,
-    showVesselPaths,
-    handleToggleShowVesselPaths,
+    // showVesselPaths,
+    // handleToggleShowVesselPaths,
   } = useVesselPallet();
   return (
     <div className="flex flex-col gap-3 lg:gap-4 xl:gap-6">
@@ -29,10 +29,10 @@ const VesselsPallet = ({ goBack }: { goBack: () => void }) => {
         <Switch checked={showVesselNames} onCheckedChange={handleToggleShowVesselNames} />
         <span className="text-sm text-(--text)/80 font-bold">Show Vessel Names on Map</span>
       </div>
-      <div className="flex items-center gap-6 cursor-pointer" onClick={handleToggleShowVesselPaths}>
+      {/* <div className="flex items-center gap-6 cursor-pointer" onClick={handleToggleShowVesselPaths}>
         <Switch checked={showVesselPaths} onCheckedChange={handleToggleShowVesselPaths} />
         <span className="text-sm text-(--text)/80 font-bold">Show Vessel Paths on Map</span>
-      </div>
+      </div> */}
     </div>
   );
 };

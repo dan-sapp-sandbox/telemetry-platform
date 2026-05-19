@@ -4,10 +4,10 @@ import { CameraContext } from "../types";
 import { Cartographic, Cartesian2, Cartesian3, CallbackProperty, Color, Math, PolygonHierarchy } from "cesium";
 import useLocalStorage from "use-local-storage";
 
-const PipViewRectangle = ({ show, isPip2 }: { show: boolean; isPip2: boolean }) => {
-  const { mainViewerRef, pipViewerRef, pipViewer2Ref } = useContext(CameraContext);
-  const pipRef = isPip2 ? pipViewer2Ref : pipViewerRef;
-  const pipId = isPip2 ? "pip-2-cam-init" : "pip-cam-init";
+const PipViewRectangle = ({ show }: { show: boolean }) => {
+  const { mainViewerRef, pipViewerRef } = useContext(CameraContext);
+  const pipRef = pipViewerRef;
+  const pipId = "pip-cam-init";
 
   const [_init, setInitCameraView] = useLocalStorage(pipId, {
     lat: 42,
@@ -190,9 +190,9 @@ const PipViewRectangle = ({ show, isPip2 }: { show: boolean; isPip2: boolean }) 
       <Entity
         polygon={{
           hierarchy: frustum,
-          material: isPip2 ? Color.BLUE.withAlpha(0.2) : Color.DARKMAGENTA.withAlpha(0.2),
+          material: Color.DARKMAGENTA.withAlpha(0.2),
           outline: true,
-          outlineColor: isPip2 ? Color.BLUE : Color.DARKMAGENTA,
+          outlineColor: Color.DARKMAGENTA,
           outlineWidth: 1,
         }}
       />
@@ -200,7 +200,7 @@ const PipViewRectangle = ({ show, isPip2 }: { show: boolean; isPip2: boolean }) 
         polyline={{
           positions: diagonal1,
           width: 1,
-          material: isPip2 ? Color.BLUE : Color.DARKMAGENTA,
+          material: Color.DARKMAGENTA,
           arcType: 0,
         }}
       />
@@ -208,7 +208,7 @@ const PipViewRectangle = ({ show, isPip2 }: { show: boolean; isPip2: boolean }) 
         polyline={{
           positions: diagonal2,
           width: 1,
-          material: isPip2 ? Color.BLUE : Color.DARKMAGENTA,
+          material: Color.DARKMAGENTA,
           arcType: 0,
         }}
       />

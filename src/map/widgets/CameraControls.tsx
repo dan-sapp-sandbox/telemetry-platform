@@ -5,14 +5,13 @@ import { Plus, Minus } from "lucide-react";
 import useLocalStorage from "use-local-storage";
 import { useContext } from "react";
 import { CameraContext } from "../types";
-import { defaultMainView, defaultPipView, defaultPipView2 } from "../hooks/useMapState";
+import { defaultMainView, defaultPipView } from "../hooks/useMapState";
 
 const CameraControls = () => {
   const [_initMainView, setInitMainView] = useLocalStorage("main-cam-init", defaultMainView);
   const [_initPipView, setInitPipView] = useLocalStorage("pip-cam-init", defaultPipView);
-  const [_initPipView2, setInitPipView2] = useLocalStorage("pip-2-cam-init", defaultPipView2);
   const { viewer } = useCesium();
-  const { pipViewerRef, pipViewer2Ref } = useContext(CameraContext);
+  const { pipViewerRef } = useContext(CameraContext);
 
   const zoomIn = () => viewer?.camera?.zoomIn(150_000);
   const zoomOut = () => viewer?.camera?.zoomOut(150_000);
@@ -20,7 +19,6 @@ const CameraControls = () => {
   const reset = () => {
     setInitMainView(defaultMainView);
     setInitPipView(defaultPipView);
-    setInitPipView2(defaultPipView2);
     viewer?.camera?.flyTo({
       destination: Cartesian3.fromDegrees(defaultMainView.lon, defaultMainView.lat, defaultMainView.height),
       orientation: {
@@ -35,14 +33,6 @@ const CameraControls = () => {
         heading: defaultPipView.heading,
         pitch: defaultPipView.pitch,
         roll: defaultPipView.roll,
-      },
-    });
-    pipViewer2Ref.current?.camera?.flyTo({
-      destination: Cartesian3.fromDegrees(defaultPipView2.lon, defaultPipView2.lat, defaultPipView2.height),
-      orientation: {
-        heading: defaultPipView2.heading,
-        pitch: defaultPipView2.pitch,
-        roll: defaultPipView2.roll,
       },
     });
   };

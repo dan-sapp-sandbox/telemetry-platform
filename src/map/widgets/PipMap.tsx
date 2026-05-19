@@ -4,20 +4,19 @@ import { Viewer, useCesium } from "resium";
 import { CameraContext } from "../types";
 import type { IWidget } from "@/store/slices/widgetSlice";
 import { Math, Cartographic, Cartesian3 } from "cesium";
-// import { Math, Cartographic, Cartesian3, createWorldTerrainAsync } from "cesium";
 import { useDraggable } from "@dnd-kit/core";
 import { CSS } from "@dnd-kit/utilities";
 import useLocalStorage from "use-local-storage";
-import { defaultPipView, defaultPipView2 } from "../hooks/useMapState";
+import { defaultPipView } from "../hooks/useMapState";
 import { cn } from "@/lib/utils";
 
-const PipInitializer = ({ isPip2 }: { isPip2: boolean }) => {
+const PipInitializer = () => {
   const { viewer } = useCesium();
-  const { pipViewerRef, pipViewer2Ref } = useContext(CameraContext);
-  const pipRef = isPip2 ? pipViewer2Ref : pipViewerRef;
-  const pipId = isPip2 ? "pip-2-cam-init" : "pip-cam-init";
+  const { pipViewerRef } = useContext(CameraContext);
+  const pipRef = pipViewerRef;
+  const pipId = "pip-cam-init";
 
-  const defaultView = isPip2 ? defaultPipView2 : defaultPipView;
+  const defaultView = defaultPipView;
   const [init, setInit] = useLocalStorage(pipId, defaultView);
 
   useEffect(() => {
@@ -73,33 +72,18 @@ const PipInitializer = ({ isPip2 }: { isPip2: boolean }) => {
         console.log("e", e);
       }
     };
-
-    // return () => {
-    //   if (viewer && viewer.camera && viewer.camera.changed) {
-    //     viewer.camera.changed.removeEventListener(onMove);
-    //   }
-    // };
   }, [viewer, setInit]);
 
   return null;
 };
 
-const PipMap = ({
-  children,
-  pipState,
-  isPip2,
-}: {
-  children?: ReactNode | ReactNode[];
-  pipState?: IWidget;
-  isPip2: boolean;
-}) => {
+const PipMap = ({ children, pipState }: { children?: ReactNode | ReactNode[]; pipState?: IWidget }) => {
   if (!pipState) return;
-  const pipId = isPip2 ? "pip-2" : "pip";
+  const pipId = "pip";
   const { attributes, listeners, setNodeRef, transform } = useDraggable({
     id: pipId,
   });
   const contextOptions = useMemo(() => ({ webgl: { alpha: true } }), []);
-  // const terrainProvider = createWorldTerrainAsync();
   return (
     <div
       style={{
@@ -109,10 +93,7 @@ const PipMap = ({
         aspectRatio: pipState.aspect,
         transform: CSS.Translate.toString(transform),
       }}
-      className={cn(
-        "group absolute rounded border overflow-hidden",
-        isPip2 ? "border-(--pip-2-border)" : "border-(--pip-border)",
-      )}
+      className={cn("group absolute rounded border overflow-hidden", "border-(--pip-border)")}
       ref={setNodeRef}
     >
       <div className="z-999 w-full h-full relative pointer-events-none">
@@ -143,7 +124,7 @@ const PipMap = ({
           selectionIndicator={false}
           infoBox={false}
         >
-          <PipInitializer isPip2={isPip2} />
+          <PipInitializer />
           {children}
         </Viewer>
       </div>

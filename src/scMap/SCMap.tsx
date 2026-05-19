@@ -1,18 +1,18 @@
-import MainMap from "../map/MainMap";
-import ContextMenu from "@/contextMenu/ContextMenu";
-import Vessels from "../map/vessels/Vessels";
-import Overlay from "./ui/Overlay";
-import Layers from "@/map/Layers";
 import { useRef } from "react";
+import Layers from "@/map/Layers";
+import MainMap from "@/map/MainMap";
+import Vessels from "@/map/vessels/Vessels";
 import useMapState from "@/map/hooks/useMapState";
 import { CameraContext } from "@/map/types";
+import ContextMenu from "@/contextMenu/ContextMenu";
+import Overlay from "./ui/Overlay";
 
 const SCMap = () => {
   const containerRef = useRef<HTMLDivElement | null>(null);
-  const { mainViewerRef, overviewViewerRef, pipViewerRef, pipViewer2Ref } = useMapState();
+  const { mainViewerRef, overviewViewerRef, pipViewerRef } = useMapState();
   const mapWrapperStyles = "relative w-full h-[calc(100%-23rem)] md:h-[calc(100%-12rem)] xl:h-[calc(100%-17rem)]";
   return (
-    <CameraContext.Provider value={{ containerRef, mainViewerRef, overviewViewerRef, pipViewerRef, pipViewer2Ref }}>
+    <CameraContext.Provider value={{ containerRef, mainViewerRef, overviewViewerRef, pipViewerRef }}>
       <div className="relative h-full w-full cursor-pointer">
         <div className={mapWrapperStyles}>
           <MainMap>

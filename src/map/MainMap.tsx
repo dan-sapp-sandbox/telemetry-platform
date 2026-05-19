@@ -1,13 +1,14 @@
 import { useContext, useEffect, useMemo, type ReactNode } from "react";
 import { Viewer, useCesium } from "resium";
 import { CameraContext } from "./types";
-import { Viewer as CesiumViewer, Cartesian3, ScreenSpaceEventType, Color, createWorldTerrainAsync } from "cesium";
+import { Viewer as CesiumViewer, Cartesian3, ScreenSpaceEventType, Color } from "cesium";
 import useLocalStorage from "use-local-storage";
 import DrawController from "./DrawController";
 import { useDispatch, useSelector } from "react-redux";
 import { setSelectedVessel, type vesselState } from "@/store/slices/vesselSlice";
 import { setActivePanel } from "@/store/slices/actionPalletSlice";
 import { setSelectedEntity, type drawState } from "@/store/slices/drawSlice";
+import { defaultMainView } from "./hooks/useMapState";
 
 const RegisterMainViewer = () => {
   const { viewer } = useCesium();
@@ -25,14 +26,7 @@ const InitialCamera = () => {
   const dispatch = useDispatch();
   const { vessels } = useSelector((state: { vessels: vesselState }) => state.vessels);
   const { entities } = useSelector((state: { draw: drawState }) => state.draw);
-  const [init] = useLocalStorage("main-cam-init-v7", {
-    lat: 27.2,
-    lon: 51.1,
-    height: 1_500_000,
-    heading: 0,
-    pitch: -Math.PI / 2,
-    roll: 0,
-  });
+  const [init] = useLocalStorage("main-cam-init", defaultMainView);
   const { viewer } = useCesium();
 
   useEffect(() => {
@@ -104,12 +98,12 @@ const InitialCamera = () => {
 
 const MainMap = ({ children }: { children?: ReactNode | ReactNode[] }) => {
   const contextOptions = useMemo(() => ({ webgl: { alpha: true } }), []);
-  const terrainProvider = createWorldTerrainAsync();
+  // const terrainProvider = createWorldTerrainAsync();
 
   return (
     <Viewer
       full
-      terrainProvider={terrainProvider}
+      // terrainProvider={terrainProvider}
       contextOptions={contextOptions}
       baseLayerPicker={false}
       baseLayer={false}
