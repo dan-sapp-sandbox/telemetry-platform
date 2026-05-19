@@ -18,8 +18,7 @@ import CommandBar from "@/commandBar/CommandBar";
 
 const MapApp = () => {
   const { theme, setTheme } = useTheme();
-  const { handleDragStart, handleDragEnd, showOverviewMap, showPipMap, showPipMap2, widgetLayout, containerRef } =
-    useWidgetLayout();
+  const { handleDragStart, handleDragEnd, showOverviewMap, showPipMap, widgetLayout, containerRef } = useWidgetLayout();
   const { mainViewerRef, overviewViewerRef, pipViewerRef } = useMapState();
   // const {sendPrompt, Labels} = useMapUtils();
   const sensors = useSensors(
