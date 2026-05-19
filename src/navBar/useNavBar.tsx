@@ -1,11 +1,7 @@
 import { useState, type JSX, type Dispatch, type SetStateAction } from "react";
-import IntroPanel from "@/panels/intro/IntroPanel";
 import SettingsPanel from "@/panels/settings/SettingsPanel";
 import GuidePanel from "@/panels/guides/GuidePanel";
-import DrawPanel from "@/panels/drawing/DrawPanel";
 import ReportBuilderPanel from "@/panels/reportBuilder/ReportBuilderPanel";
-import VesselPanel from "@/panels/vessels/VesselPanel";
-import AircraftPanel from "@/panels/aircraft/AircraftPanel";
 import { cn } from "@/lib/utils";
 
 type panelType = "intro" | "settings" | "guide" | "draw" | "report-builder" | "vessels" | "aircraft";
@@ -55,20 +51,12 @@ const useNavBar = (): INavBarState => {
 
   const getActivePanel = () => {
     switch (panel) {
-      case "intro":
-        return <IntroPanel openGuide={() => setPanel("guide")} />;
       case "settings":
         return <SettingsPanel />;
       case "guide":
         return <GuidePanel />;
-      case "draw":
-        return <DrawPanel />;
       case "report-builder":
         return <ReportBuilderPanel />;
-      case "vessels":
-        return <VesselPanel />;
-      case "aircraft":
-        return <AircraftPanel />;
       default:
         return null;
     }

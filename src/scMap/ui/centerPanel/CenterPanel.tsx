@@ -1,5 +1,5 @@
 import { cn } from "@/lib/utils";
-import AITab from "./AITab";
+import AITab from "./aITab/AiTab";
 import DetailsTab from "./detailsTab/DetailsTab";
 import AboutTab from "./aboutTab/AboutTab";
 import useCenterPanel from "./useCenterPanel";
