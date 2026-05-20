@@ -1,5 +1,5 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import type { Route, RoutedVessel, Vessel } from "../slices/vesselSlice";
+import type { Route, RoutedVessel } from "../slices/vesselSlice";
 
 export interface VesselBounds {
   west: number;
