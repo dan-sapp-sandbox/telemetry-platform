@@ -1,5 +1,5 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import type { Vessel } from "../slices/vesselSlice";
+import type { Route, RoutedVessel, Vessel } from "../slices/vesselSlice";
 
 export interface VesselBounds {
   west: number;
@@ -24,22 +24,18 @@ export const api = createApi({
     // baseUrl: "http://127.0.0.1:8000/api/",
   }),
   endpoints: (builder) => ({
-    getVessels: builder.query<Vessel[], VesselBounds>({
-      async queryFn(bounds, _api, _extraOptions, fetchWithBQ) {
-        const result = await fetchWithBQ({
-          url: "vessels/get-vessels",
-          params: bounds,
-        });
+    getVessels: builder.query<RoutedVessel[], void>({
+      query: () => "vessels/get-vessels",
+    }),
 
-        if (result.error) {
-          return {
-            error: result.error,
-          };
-        }
-
-        return {
-          data: result.data as Vessel[],
-        };
+    getRoutes: builder.query<Route[], void>({
+      query: () => "vessels/get-routes",
+      transformResponse: (response: any[]): Route[] => {
+        return response.map((r) => ({
+          id: r.id,
+          name: r.name,
+          points: r.points, // already [{lat, lon}] from backend
+        }));
       },
     }),
     sendCommandPrompt: builder.mutation<CommandResponse, CommandRequest>({
@@ -52,4 +48,4 @@ export const api = createApi({
   }),
 });
 
-export const { useGetVesselsQuery, useSendCommandPromptMutation } = api;
+export const { useGetVesselsQuery, useGetRoutesQuery, useSendCommandPromptMutation } = api;

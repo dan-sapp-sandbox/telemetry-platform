@@ -1,6 +1,5 @@
-import { memo, useMemo } from "react";
+import { memo, useRef, useMemo, useEffect } from "react";
 import {
-  Cartesian3,
   VerticalOrigin,
   LabelStyle,
   Color,
@@ -8,78 +7,99 @@ import {
   Cartesian2,
   NearFarScalar,
   DistanceDisplayCondition,
-  Math as CesiumMath,
+  CallbackProperty,
+  Cartesian3,
 } from "cesium";
 import { Entity } from "resium";
-import type { Vessel } from "@/store/slices/vesselSlice";
+import { getPositionAlongRoute, type SimulatedVessel } from "./useVessels";
 
 interface Props {
-  vessel: Vessel;
+  vessel: SimulatedVessel;
   showVesselNames: boolean;
   isSelected: boolean;
 }
 
 const shipSvg = `
-<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32">
-  <polygon points="16,0 32,32 16,24 0,32" fill="white"/>
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64">
+  <!-- hull -->
+  <path d="M32 2 L54 58 L32 48 L10 58 Z" fill="white"/>
+
+  <!-- rear notch (cut-out) -->
+  <path d="M26 52 L32 60 L38 52 L32 54 Z" fill="none"/>
+</svg>
+`;
+
+const selectedShipSvg = `
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64">
+  <!-- hull -->
+  <path d="M32 2 L54 58 L32 48 L10 58 Z" fill="#00d492"/>
+
+  <!-- rear notch (cut-out) -->
+  <path d="M26 52 L32 60 L38 52 L32 54 Z" fill="none"/>
 </svg>
 `;
 
 const shipIcon = `data:image/svg+xml;charset=utf-8,${encodeURIComponent(shipSvg)}`;
-
-const selectedShipSvg = `
-<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32">
-  <polygon points="16,0 32,32 16,24 0,32" fill="#00d492"/>
-</svg>
-`;
-
 const selectedShipIcon = `data:image/svg+xml;charset=utf-8,${encodeURIComponent(selectedShipSvg)}`;
 
 const VesselEntity = ({ vessel, showVesselNames, isSelected }: Props) => {
-  const position = useMemo(() => {
-    const { lat, lon } = vessel;
-    return Cartesian3.fromDegrees(lon, lat);
-  }, [vessel.lat, vessel.lon]);
+  const trailRef = useRef<Cartesian3[]>([]);
+  const { position, heading } = useMemo(() => {
+    const now = performance.now();
 
-  return showVesselNames || isSelected ? (
+    const elapsedSeconds = vessel.startOffsetSeconds + now / 1000;
+
+    const distance = vessel.routeOffsetMeters + elapsedSeconds * vessel.speedMps;
+
+    const wrappedDistance = distance % vessel.route.totalDistance;
+
+    return getPositionAlongRoute(vessel.route, wrappedDistance);
+  }, [vessel]);
+
+  useEffect(() => {
+    trailRef.current.push(position);
+
+    if (trailRef.current.length > 1000) {
+      trailRef.current.shift();
+    }
+  }, [position]);
+
+  return (
     <Entity
-      position={position}
+      position={new CallbackProperty(() => position, false) as any}
       billboard={{
         image: isSelected ? selectedShipIcon : shipIcon,
-        scale: isSelected ? 0.5 : 0.25,
-        rotation: CesiumMath.toRadians(vessel.heading),
-        verticalOrigin: VerticalOrigin.BOTTOM,
+        scale: isSelected ? 0.5 : 0.3,
+        rotation: new CallbackProperty(() => heading, false) as any,
+        verticalOrigin: VerticalOrigin.CENTER,
+        pixelOffset: new Cartesian2(0, 0),
         disableDepthTestDistance: Number.POSITIVE_INFINITY,
       }}
-      label={{
-        text: vessel.name,
-        font: "5px sans-serif",
-        style: LabelStyle.FILL_AND_OUTLINE,
-        fillColor: Color.WHITE,
-        outlineColor: Color.BLACK,
-        outlineWidth: 2,
-        verticalOrigin: VerticalOrigin.BOTTOM,
-        horizontalOrigin: HorizontalOrigin.CENTER,
-        pixelOffset: new Cartesian2(0, isSelected ? -24 : -16),
-        disableDepthTestDistance: Number.POSITIVE_INFINITY,
-        scaleByDistance: new NearFarScalar(1000, 4, 5000000, 2),
-        distanceDisplayCondition: new DistanceDisplayCondition(0, 5000000),
+      polyline={{
+        positions: new CallbackProperty(() => {
+          return trailRef.current.slice(0, trailRef.current.length - 10);
+        }, false),
+        width: 2,
+        material: Color.CYAN.withAlpha(0.4),
       }}
-      properties={{
-        entityType: "vessel",
-        id: vessel.id,
-      }}
-    />
-  ) : (
-    <Entity
-      position={position}
-      billboard={{
-        image: shipIcon,
-        scale: 0.25,
-        rotation: CesiumMath.toRadians(vessel.heading),
-        verticalOrigin: VerticalOrigin.BOTTOM,
-        disableDepthTestDistance: Number.POSITIVE_INFINITY,
-      }}
+      label={
+        showVesselNames || isSelected
+          ? {
+              text: vessel.name,
+              font: "5px sans-serif",
+              style: LabelStyle.FILL_AND_OUTLINE,
+              fillColor: Color.WHITE,
+              outlineColor: Color.BLACK,
+              outlineWidth: 2,
+              verticalOrigin: VerticalOrigin.BOTTOM,
+              horizontalOrigin: HorizontalOrigin.CENTER,
+              pixelOffset: new Cartesian2(0, isSelected ? -24 : -16),
+              disableDepthTestDistance: Number.POSITIVE_INFINITY,
+              scaleByDistance: new NearFarScalar(1000, 4, 5000000, 2),
+              distanceDisplayCondition: new DistanceDisplayCondition(0, 5000000),
+            }
+          : undefined
+      }
       properties={{
         entityType: "vessel",
         id: vessel.id,
