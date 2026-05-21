@@ -3,11 +3,11 @@ import { cn } from "@/lib/utils";
 import { backButtonStyles, backIconStyles } from "../utils";
 import useLayersPallet from "./useLayersPallet";
 
-export const wrapperStyles = cn(["group flex flex-col items-center justify-center gap-px"]);
+export const wrapperStyles = cn(["group flex flex-col items-center justify-center gap-px", "w-16 md:w-18 xl:w-20 "]);
 export const buttonStyles = cn([
   "bg-cover bg-center bg-no-repeat rounded-xl",
   "border border-emerald-400/10 group-hover:border-emerald-400/40",
-  "w-12 h-12 md:w-16 md:h-16 xl:w-20 xl:h-20 p-0",
+  "w-14 h-12 md:w-16 md:h-16 xl:w-18 xl:h-18 p-0",
 ]);
 export const buttonTextStyles = "text-(--text)/70 text-xs lg:text-sm group-hover:text-emerald-400/70";
 

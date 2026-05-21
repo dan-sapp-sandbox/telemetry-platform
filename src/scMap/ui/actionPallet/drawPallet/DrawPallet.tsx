@@ -1,8 +1,16 @@
 import { Slash, Hexagon, Dot, ArrowBigLeft } from "lucide-react";
-import { backButtonStyles, backIconStyles } from "../utils";
+import { backButtonStyles, backIconStyles, iconStyles } from "../utils";
 import useDrawPallet from "./useDrawPallet";
 import { cn } from "@/lib/utils";
-import { buttonStyles, iconStyles, buttonTextStyles } from "../utils";
+
+export const wrapperStyles = cn(["group flex flex-col items-center justify-center gap-px", "w-16 md:w-18 xl:w-22 "]);
+export const buttonStyles = cn([
+  "flex justify-center items-center rounded-xl",
+  // "border border-emerald-400/10 group-hover:border-emerald-400/40",
+  "bg-slate-700/60 border border-emerald-400/10 hover:bg-slate-700/90 group-hover:border-emerald-400/40",
+  "w-14 h-12 md:w-16 md:h-16 xl:w-20 xl:h-20 p-0",
+]);
+export const buttonTextStyles = "text-(--text)/70 text-xs lg:text-sm group-hover:text-emerald-400/70";
 
 const DrawPallet = ({ goBack }: { goBack: () => void }) => {
   const { handleChangeDrawMode, drawMode } = useDrawPallet();
@@ -16,30 +24,36 @@ const DrawPallet = ({ goBack }: { goBack: () => void }) => {
           <ArrowBigLeft className={backIconStyles} />
         </button>
       </div>
-      <div className="flex justify-between">
-        <button
-          className={cn([buttonStyles, drawMode === "point" ? "bg-emerald-400/35" : ""])}
-          onClick={() => handleChangeDrawMode("point")}
-        >
-          <Dot className={iconStyles} />
+      <div className="flex gap-3">
+        <div className={wrapperStyles}>
+          <button
+            className={cn([buttonStyles, drawMode === "point" ? "bg-emerald-400/35" : ""])}
+            onClick={() => handleChangeDrawMode("point")}
+          >
+            <Dot className={iconStyles} />
+          </button>
           <span className={buttonTextStyles}>Point</span>
-        </button>
-        <button
-          className={cn([buttonStyles, drawMode === "polyline" ? "bg-emerald-400/35" : ""])}
-          onClick={() => handleChangeDrawMode("polyline")}
-        >
-          <Slash className={iconStyles} />
+        </div>
+        <div className={wrapperStyles}>
+          <button
+            className={cn([buttonStyles, drawMode === "polyline" ? "bg-emerald-400/35" : ""])}
+            onClick={() => handleChangeDrawMode("polyline")}
+          >
+            <Slash className={iconStyles} />
+          </button>
           <span className={buttonTextStyles}>Line</span>
-        </button>
-        <button
-          className={cn([buttonStyles, drawMode === "polygon" ? "bg-emerald-400/35" : ""])}
-          onClick={() => handleChangeDrawMode("polygon")}
-        >
-          <Hexagon className={iconStyles} />
+        </div>
+        <div className={wrapperStyles}>
+          <button
+            className={cn([buttonStyles, drawMode === "polygon" ? "bg-emerald-400/35" : ""])}
+            onClick={() => handleChangeDrawMode("polygon")}
+          >
+            <Hexagon className={iconStyles} />
+          </button>
           <span className={buttonTextStyles}>Polygon</span>
-        </button>
+        </div>
       </div>
-      <div className="self-end text-sm text-(--text)/70">(double click to end drawing)</div>
+      <div className="self-end text-xs md:text-sm text-(--text)/70">(double click to finish drawing)</div>
     </div>
   );
 };
