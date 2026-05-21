@@ -27,7 +27,7 @@ const VesselsPallet = ({ goBack }: { goBack: () => void }) => {
       </div>
       <div className="flex items-center gap-6 cursor-pointer" onClick={handleToggleShowVesselNames}>
         <Switch checked={showVesselNames} onCheckedChange={handleToggleShowVesselNames} />
-        <span className="text-xs md:text-sm text-(--text)/80 font-bold">Show Vessel Names</span>
+        <span className="text-xs md:text-sm text-(--text)/80 font-bold">Show Names</span>
       </div>
       {/* <div className="flex items-center gap-6 cursor-pointer" onClick={handleToggleShowVesselPaths}>
         <Switch checked={showVesselPaths} onCheckedChange={handleToggleShowVesselPaths} />

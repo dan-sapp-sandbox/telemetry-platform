@@ -27,7 +27,7 @@ const AircraftPallet = ({ goBack }: { goBack: () => void }) => {
       </div>
       <div className="flex items-center gap-6 cursor-pointer" onClick={handleToggleShowAircraftNames}>
         <Switch checked={showAircraftNames} onCheckedChange={handleToggleShowAircraftNames} />
-        <span className="text-xs md:text-sm text-(--text)/80 font-bold">Show Aircraft Names</span>
+        <span className="text-xs md:text-sm text-(--text)/80 font-bold">Show Names</span>
       </div>
       {/* <div className="flex items-center gap-6 cursor-pointer" onClick={handleToggleShowAircraftPaths}>
         <Switch checked={showAircraftPaths} onCheckedChange={handleToggleShowAircraftPaths} />
