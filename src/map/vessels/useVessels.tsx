@@ -200,30 +200,6 @@ const useVessels = (): IVesselState => {
     };
   }, [mainViewerRef.current]);
 
-  const simulatedVessels: SimulatedVessel[] = useMemo(() => {
-    return routedVessels
-      .map((vessel) => {
-        const route = processedRoutes[vessel.routeId];
-
-        if (!route || route.totalDistance <= 0) {
-          return null;
-        }
-
-        const elapsedSeconds = vessel.startOffsetSeconds + simulationTimeRef.current / 1000;
-        const distanceTraveled = vessel.routeOffsetMeters + elapsedSeconds * vessel.speedMps;
-        const wrappedDistance = distanceTraveled % route.totalDistance;
-        const { heading, position } = getPositionAlongRoute(route, wrappedDistance);
-
-        return {
-          ...vessel,
-          route,
-          position,
-          heading,
-        };
-      })
-      .filter((v): v is SimulatedVessel => v !== null);
-  }, [routedVessels, processedRoutes]);
-
   useEffect(() => {
     if (!bounds) return;
 
