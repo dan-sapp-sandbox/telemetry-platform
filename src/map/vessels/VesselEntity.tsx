@@ -61,8 +61,8 @@ const VesselEntity = ({ vessel, showVesselNames, isSelected }: Props) => {
       position={new CallbackProperty(() => motionProperty.getValue().position, false) as any}
       billboard={{
         image: isSelected ? selectedShipIcon : shipIcon,
-        scale: isSelected ? 0.5 : 0.3,
-        scaleByDistance: new NearFarScalar(800_000, 1, 9_000_000, 0.001),
+        scale: isSelected ? 0.4 : 0.07,
+        scaleByDistance: new NearFarScalar(700_000, 1.9, 9_000_000, 0.01),
         rotation: new CallbackProperty(() => motionProperty.getValue().heading, false) as any,
         verticalOrigin: VerticalOrigin.CENTER,
         pixelOffset: new Cartesian2(0, 0),
