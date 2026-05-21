@@ -10,7 +10,7 @@ const DetailsTab = () => {
     case "draw":
       return <DrawDetails />;
     default:
-      return <div className="text-(--text)/80 p-3">Choose a Topic from the Action Pallet</div>;
+      return <div className="text-sm md:text-base text-(--text)/80 p-3">Choose a Topic from the Action Pallet</div>;
   }
 };
 
