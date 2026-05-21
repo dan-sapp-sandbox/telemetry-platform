@@ -11,11 +11,7 @@ import App from "./App.tsx";
 const rootRoute = createRootRoute({
   component: () => {
     useTheme();
-    return (
-      <div className="h-screen w-screen">
-        <Outlet />
-      </div>
-    );
+    return <Outlet />;
   },
 });
 
