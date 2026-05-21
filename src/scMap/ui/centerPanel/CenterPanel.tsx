@@ -9,7 +9,7 @@ const TabButton = ({ active, label, onClick }: { active: boolean; label: string;
     <button
       onClick={onClick}
       className={cn([
-        "relative w-20 px-1 py-1 text-sm hover:text-(--text) transition",
+        "relative w-20 px-1 py-1 text-xs md:text-sm hover:text-(--text) transition",
         active ? "text-(--text)" : "text-(--text)/80 ",
       ])}
     >

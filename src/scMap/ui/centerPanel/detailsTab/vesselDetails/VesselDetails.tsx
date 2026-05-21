@@ -25,7 +25,7 @@ const VesselDetails = () => {
             <div
               key={vessel.id}
               className={cn([
-                "cursor-pointer px-4 py-1 transition-colors text-sm text-(--text)/80 hover:bg-blue-400/30",
+                "cursor-pointer px-4 py-1.5 md:py-1 transition-colors text-xs md:text-sm text-(--text)/80 hover:bg-blue-400/30",
                 getBackgroundStyles(),
               ])}
               onClick={() => handleSetSelectedVessel(vessel)}
@@ -39,7 +39,7 @@ const VesselDetails = () => {
       {selectedVessel ? (
         <div className="flex flex-col flex-1 p-4 text-(--text)/80 gap-6">
           <div className="flex flex-col gap-2">
-            <div className="">Name: {selectedVessel.name}</div>
+            <div className="">{selectedVessel.name}</div>
             <div>{selectedVessel.routeName}</div>
           </div>
           {/* <button
