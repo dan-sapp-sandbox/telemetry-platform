@@ -59,7 +59,7 @@ const VesselEntity = ({ vessel, showVesselNames, isSelected }: Props) => {
   useEffect(() => {
     trailRef.current.push(position);
 
-    if (trailRef.current.length > 1000) {
+    if (trailRef.current.length > 20) {
       trailRef.current.shift();
     }
   }, [position]);
@@ -70,18 +70,19 @@ const VesselEntity = ({ vessel, showVesselNames, isSelected }: Props) => {
       billboard={{
         image: isSelected ? selectedShipIcon : shipIcon,
         scale: isSelected ? 0.5 : 0.3,
+        scaleByDistance: new NearFarScalar(400_000, 1.5, 3_000_000, 0.01),
         rotation: new CallbackProperty(() => heading, false) as any,
         verticalOrigin: VerticalOrigin.CENTER,
         pixelOffset: new Cartesian2(0, 0),
         disableDepthTestDistance: Number.POSITIVE_INFINITY,
       }}
-      polyline={{
-        positions: new CallbackProperty(() => {
-          return trailRef.current.slice(0, trailRef.current.length - 10);
-        }, false),
-        width: 2,
-        material: Color.CYAN.withAlpha(0.4),
-      }}
+      // polyline={{
+      //   positions: new CallbackProperty(() => {
+      //     return trailRef.current.slice(0, trailRef.current.length - 12);
+      //   }, false),
+      //   width: 3,
+      //   material: Color.CYAN.withAlpha(0.15),
+      // }}
       label={
         showVesselNames || isSelected
           ? {

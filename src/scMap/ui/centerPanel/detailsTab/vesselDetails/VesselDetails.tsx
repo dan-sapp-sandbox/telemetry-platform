@@ -42,6 +42,7 @@ const VesselDetails = () => {
           <div className="flex flex-col gap-2">
             <div className="">Name: {selectedVessel.name}</div>
             <div className="capitalize">Type: {selectedVessel.type}</div>
+            <div>Source and Destination or Route Name</div>
           </div>
           <button
             className={cn([
