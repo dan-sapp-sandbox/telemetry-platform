@@ -24,7 +24,7 @@ const DrawPallet = ({ goBack }: { goBack: () => void }) => {
           <ArrowBigLeft className={backIconStyles} />
         </button>
       </div>
-      <div className="flex gap-3">
+      <div className="flex gap-1 md:gap-3">
         <div className={wrapperStyles}>
           <button
             className={cn([buttonStyles, drawMode === "point" ? "bg-emerald-400/35" : ""])}
@@ -53,7 +53,7 @@ const DrawPallet = ({ goBack }: { goBack: () => void }) => {
           <span className={buttonTextStyles}>Polygon</span>
         </div>
       </div>
-      <div className="self-end text-xs md:text-sm text-(--text)/70">(double click to finish drawing)</div>
+      <div className="self-end text-xs md:text-sm text-(--text)/70">(double click to finish)</div>
     </div>
   );
 };
