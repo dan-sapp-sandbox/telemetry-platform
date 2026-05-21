@@ -193,10 +193,10 @@ const useVessels = (): IVesselState => {
 
     updateBounds();
 
-    mainViewerRef.current?.camera.moveEnd.addEventListener(updateBounds);
+    mainViewerRef.current?.camera.changed.addEventListener(updateBounds);
 
     return () => {
-      mainViewerRef.current?.camera.moveEnd.removeEventListener(updateBounds);
+      mainViewerRef.current?.camera.changed.removeEventListener(updateBounds);
     };
   }, [mainViewerRef.current]);
 

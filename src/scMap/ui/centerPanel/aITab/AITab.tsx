@@ -1,7 +1,8 @@
+import { CheckCircle } from "lucide-react";
 import useAITab from "./useAITab";
 
 const AITab = () => {
-  const { handleSendCommandPrompt, prompt, setPrompt, isLoading } = useAITab();
+  const { handleSendCommandPrompt, prompt, setPrompt, isLoading, toolActions } = useAITab();
 
   const onSend = () => {
     if (!prompt.trim()) return;
@@ -16,12 +17,12 @@ const AITab = () => {
 
   return (
     <div className="flex flex-col h-full gap-3 p-3">
-      <div className="text-sm text-zinc-400">Command Interface</div>
+      <div className="text-sm text-(--text)/80">Command Interface</div>
 
       <div className="w-full flex gap-2">
         <input
           className="flex-1 h-10 px-3 rounded-lg bg-zinc-800/60 border border-white/10 outline-none text-(--text)"
-          placeholder="vessels in the strait of hormuz at noon"
+          placeholder="vessels in the strait of hormuz"
           value={prompt}
           onChange={(e) => setPrompt(e.target.value)}
           onKeyDown={onKeyDown}
@@ -34,6 +35,14 @@ const AITab = () => {
         >
           {isLoading ? "Thinking..." : "Send"}
         </button>
+      </div>
+      <div className="w-full px-2">
+        {toolActions.map((action) => (
+          <div key={action} className="text-(--text)/60 text-sm flex items-center gap-1">
+            <CheckCircle className="text-(--text)/80 size-4" />
+            {action}
+          </div>
+        ))}
       </div>
     </div>
   );
