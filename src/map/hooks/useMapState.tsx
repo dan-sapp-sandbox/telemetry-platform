@@ -96,8 +96,12 @@ const useMapState = (): IMapState => {
         });
       };
 
-      main.camera.moveEnd.addEventListener(sync);
-      sync();
+      try {
+        main.camera.moveEnd.addEventListener(sync);
+        sync();
+      } catch (e) {
+        console.log("e", e);
+      }
 
       cleanup = () => {
         main.camera.moveEnd.removeEventListener(sync);

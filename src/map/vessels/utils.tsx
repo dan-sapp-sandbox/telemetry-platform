@@ -1,7 +1,8 @@
 import { type VesselBounds } from "@/store/services/api";
 import { Math as CesiumMath, Viewer, Cartesian2, Cartographic } from "cesium";
 
-export const getBounds = (viewer: Viewer): VesselBounds | null => {
+export const getBounds = (viewer: Viewer | null): VesselBounds | null => {
+  if (!viewer) return null;
   const scene = viewer.scene;
   const camera = viewer.camera;
   const ellipsoid = scene.globe.ellipsoid;

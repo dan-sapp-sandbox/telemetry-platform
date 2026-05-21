@@ -1,4 +1,4 @@
-import { memo, useRef, useMemo, useEffect } from "react";
+import { memo, useMemo } from "react";
 import {
   VerticalOrigin,
   LabelStyle,
@@ -8,7 +8,6 @@ import {
   NearFarScalar,
   DistanceDisplayCondition,
   CallbackProperty,
-  Cartesian3,
 } from "cesium";
 import { Entity } from "resium";
 import { getPositionAlongRoute, type SimulatedVessel } from "./useVessels";
@@ -43,46 +42,32 @@ const shipIcon = `data:image/svg+xml;charset=utf-8,${encodeURIComponent(shipSvg)
 const selectedShipIcon = `data:image/svg+xml;charset=utf-8,${encodeURIComponent(selectedShipSvg)}`;
 
 const VesselEntity = ({ vessel, showVesselNames, isSelected }: Props) => {
-  const trailRef = useRef<Cartesian3[]>([]);
-  const { position, heading } = useMemo(() => {
-    const now = performance.now();
+  const motionProperty = useMemo(() => {
+    return new CallbackProperty(() => {
+      const now = performance.now();
 
-    const elapsedSeconds = vessel.startOffsetSeconds + now / 1000;
+      const elapsedSeconds = vessel.startOffsetSeconds + now / 1000;
 
-    const distance = vessel.routeOffsetMeters + elapsedSeconds * vessel.speedMps;
+      const distance = vessel.routeOffsetMeters + elapsedSeconds * vessel.speedMps;
 
-    const wrappedDistance = distance % vessel.route.totalDistance;
+      const wrappedDistance = distance % vessel.route.totalDistance;
 
-    return getPositionAlongRoute(vessel.route, wrappedDistance);
+      return getPositionAlongRoute(vessel.route, wrappedDistance);
+    }, false);
   }, [vessel]);
-
-  useEffect(() => {
-    trailRef.current.push(position);
-
-    if (trailRef.current.length > 20) {
-      trailRef.current.shift();
-    }
-  }, [position]);
 
   return (
     <Entity
-      position={new CallbackProperty(() => position, false) as any}
+      position={new CallbackProperty(() => motionProperty.getValue().position, false) as any}
       billboard={{
         image: isSelected ? selectedShipIcon : shipIcon,
         scale: isSelected ? 0.5 : 0.3,
-        scaleByDistance: new NearFarScalar(1_000_000, 1, 9_000_000, 0.1),
-        rotation: new CallbackProperty(() => heading, false) as any,
+        scaleByDistance: new NearFarScalar(800_000, 1, 9_000_000, 0.001),
+        rotation: new CallbackProperty(() => motionProperty.getValue().heading, false) as any,
         verticalOrigin: VerticalOrigin.CENTER,
         pixelOffset: new Cartesian2(0, 0),
         disableDepthTestDistance: Number.POSITIVE_INFINITY,
       }}
-      // polyline={{
-      //   positions: new CallbackProperty(() => {
-      //     return trailRef.current.slice(0, trailRef.current.length - 12);
-      //   }, false),
-      //   width: 3,
-      //   material: Color.CYAN.withAlpha(0.15),
-      // }}
       label={
         showVesselNames || isSelected
           ? {

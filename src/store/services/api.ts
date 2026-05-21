@@ -1,5 +1,5 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import type { Route, RoutedVessel } from "../slices/vesselSlice";
+import type { Route } from "../slices/vesselSlice";
 
 export interface VesselBounds {
   west: number;
@@ -7,6 +7,15 @@ export interface VesselBounds {
   east: number;
   north: number;
 }
+
+export type Vessel = {
+  id: string;
+  name: string;
+  routeId: string;
+  speedMps: number;
+  startOffsetSeconds: number;
+  routeOffsetMeters: number;
+};
 
 export interface CommandResponse {
   action: string | null;
@@ -24,7 +33,7 @@ export const api = createApi({
     // baseUrl: "http://127.0.0.1:8000/api/",
   }),
   endpoints: (builder) => ({
-    getVessels: builder.query<RoutedVessel[], void>({
+    getVessels: builder.query<Vessel[], void>({
       query: () => "vessels/get-vessels",
     }),
 

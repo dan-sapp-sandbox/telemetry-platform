@@ -1,10 +1,9 @@
-import { Locate } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
 import useVesselDetails from "./useVesselDetails";
 
 const VesselDetails = () => {
-  const { vessels, selectedVessel, handleSetSelectedVessel, flyToVessel } = useVesselDetails();
+  const { vessels, selectedVessel, handleSetSelectedVessel } = useVesselDetails();
   return (
     <div className="flex h-full">
       <div className="flex flex-col w-1/3 overflow-y-auto scrollbar-hide">
@@ -41,10 +40,9 @@ const VesselDetails = () => {
         <div className="flex flex-col flex-1 p-4 text-(--text)/80 gap-6">
           <div className="flex flex-col gap-2">
             <div className="">Name: {selectedVessel.name}</div>
-            <div className="capitalize">Type: {selectedVessel.type}</div>
-            <div>Source and Destination or Route Name</div>
+            <div>{selectedVessel.routeName}</div>
           </div>
-          <button
+          {/* <button
             className={cn([
               "w-fit flex items-center gap-2 cursor-pointer",
               "bg-zinc-600/80 hover-bg-blue-800/50 hover:text-emerald-400/50 p-2 hover:border-emerald-400/30",
@@ -53,7 +51,7 @@ const VesselDetails = () => {
           >
             <Locate className="size-5" />
             <span className="text-sm">Center Map on Vessel</span>
-          </button>
+          </button> */}
         </div>
       ) : (
         <div className="flex-col flex-1 p-4 gap-2 text-(--text)/80">

@@ -1,4 +1,4 @@
-import { useState, useContext, useEffect, useMemo, type JSX } from "react";
+import { useState, useContext, useEffect, useMemo, useRef, type JSX } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Cartographic, EllipsoidGeodesic, Math as CesiumMath, Cartesian3 } from "cesium";
 import VesselEntity from "./VesselEntity";
@@ -36,11 +36,6 @@ type RoutePositionResult = {
   position: Cartesian3;
   heading: number;
 };
-
-export interface IVesselState {
-  vesselEntities: JSX.Element[];
-  showVessels: boolean;
-}
 
 export function processRoute(route: Route): ProcessedRoute {
   let cumulativeDistance = 0;
@@ -141,48 +136,41 @@ export function getPositionAlongRoute(route: ProcessedRoute, distanceMeters: num
   };
 }
 
+export interface IVesselState {
+  vesselEntities: JSX.Element[];
+  showVessels: boolean;
+}
+
 const useVessels = (): IVesselState => {
+  const [visibleVessels, setVisibleVesselsState] = useState<SimulatedVessel[]>([]);
   const dispatch = useDispatch();
+  const simulationTimeRef = useRef(0);
   const { showVessels, showVesselNames, selectedVessel } = useSelector(
     (state: { vessels: vesselState }) => state.vessels,
   );
 
   const { mainViewerRef } = useContext(CameraContext);
 
-  const viewer = mainViewerRef.current;
-
   const [bounds, setBounds] = useState<VesselBounds | null>(null);
 
-  const [simulationTime, setSimulationTime] = useState(0);
-
   const { data: routedVessels = [] } = useGetVesselsQuery(undefined, {
-    skip: !viewer,
+    skip: !mainViewerRef.current,
   });
 
   const { data: routes = [] } = useGetRoutesQuery(undefined, {
-    skip: !viewer,
+    skip: !mainViewerRef.current,
   });
 
   useEffect(() => {
-    if (!routedVessels.length) return;
-
-    dispatch(setVessels(routedVessels));
-  }, [dispatch, routedVessels]);
-
-  useEffect(() => {
     let frameId: number;
-
     const start = performance.now();
 
     const tick = () => {
-      const elapsedMs = performance.now() - start;
-
-      setSimulationTime(elapsedMs);
-
+      simulationTimeRef.current = performance.now() - start;
       frameId = requestAnimationFrame(tick);
     };
 
-    frameId = requestAnimationFrame(tick);
+    tick();
 
     return () => {
       cancelAnimationFrame(frameId);
@@ -197,20 +185,20 @@ const useVessels = (): IVesselState => {
   }, [routes]);
 
   useEffect(() => {
-    if (!viewer) return;
+    if (!mainViewerRef.current) return;
 
     const updateBounds = () => {
-      setBounds(getBounds(viewer));
+      setBounds(getBounds(mainViewerRef.current));
     };
 
     updateBounds();
 
-    viewer.camera.moveEnd.addEventListener(updateBounds);
+    mainViewerRef.current?.camera.moveEnd.addEventListener(updateBounds);
 
     return () => {
-      viewer.camera.moveEnd.removeEventListener(updateBounds);
+      mainViewerRef.current?.camera.moveEnd.removeEventListener(updateBounds);
     };
-  }, [viewer]);
+  }, [mainViewerRef.current]);
 
   const simulatedVessels: SimulatedVessel[] = useMemo(() => {
     return routedVessels
@@ -221,12 +209,9 @@ const useVessels = (): IVesselState => {
           return null;
         }
 
-        const elapsedSeconds = vessel.startOffsetSeconds + simulationTime / 1000;
-
+        const elapsedSeconds = vessel.startOffsetSeconds + simulationTimeRef.current / 1000;
         const distanceTraveled = vessel.routeOffsetMeters + elapsedSeconds * vessel.speedMps;
-
         const wrappedDistance = distanceTraveled % route.totalDistance;
-
         const { heading, position } = getPositionAlongRoute(route, wrappedDistance);
 
         return {
@@ -237,26 +222,62 @@ const useVessels = (): IVesselState => {
         };
       })
       .filter((v): v is SimulatedVessel => v !== null);
-  }, [routedVessels, processedRoutes, simulationTime]);
-
-  const visibleVessels = useMemo(() => {
-    if (!bounds) return [];
-
-    return simulatedVessels.filter((vessel) => {
-      const carto = Cartographic.fromCartesian(vessel.position);
-
-      const lon = CesiumMath.toDegrees(carto.longitude);
-      const lat = CesiumMath.toDegrees(carto.latitude);
-
-      return lon >= bounds.west && lon <= bounds.east && lat >= bounds.south && lat <= bounds.north;
-    });
-  }, [simulatedVessels, bounds]);
+  }, [routedVessels, processedRoutes]);
 
   useEffect(() => {
-    if (!visibleVessels.length) return;
+    if (!bounds) return;
 
-    dispatch(setVessels(visibleVessels));
-  }, [dispatch, visibleVessels]);
+    const updateVisibleVessels = () => {
+      const now = performance.now();
+
+      const nextVisible = routedVessels
+        .map((vessel) => {
+          const route = processedRoutes[vessel.routeId];
+
+          if (!route || route.totalDistance <= 0) {
+            return null;
+          }
+
+          const elapsedSeconds = vessel.startOffsetSeconds + now / 1000;
+          const distanceTraveled = vessel.routeOffsetMeters + elapsedSeconds * vessel.speedMps;
+          const wrappedDistance = distanceTraveled % route.totalDistance;
+          const { heading, position } = getPositionAlongRoute(route, wrappedDistance);
+          const carto = Cartographic.fromCartesian(position);
+          const lon = CesiumMath.toDegrees(carto.longitude);
+          const lat = CesiumMath.toDegrees(carto.latitude);
+          const visible = lon >= bounds.west && lon <= bounds.east && lat >= bounds.south && lat <= bounds.north;
+          if (!visible) return null;
+
+          return {
+            ...vessel,
+            route,
+            position,
+            heading,
+          };
+        })
+        .filter((v): v is SimulatedVessel => v !== null);
+
+      setVisibleVesselsState(nextVisible);
+    };
+
+    updateVisibleVessels();
+
+    const interval = setInterval(updateVisibleVessels, 500);
+
+    return () => clearInterval(interval);
+  }, [bounds, routedVessels, processedRoutes]);
+
+  const serializedVisibleVessels = useMemo(() => {
+    return visibleVessels.map((vessel) => ({
+      id: vessel.id,
+      name: vessel.name,
+      routeName: vessel.route.name,
+    }));
+  }, [visibleVessels.map((v) => v.id).join(",")]);
+
+  useEffect(() => {
+    dispatch(setVessels(serializedVisibleVessels));
+  }, [dispatch, serializedVisibleVessels]);
 
   const vesselEntities = useMemo(() => {
     return visibleVessels.map((vessel) => {
