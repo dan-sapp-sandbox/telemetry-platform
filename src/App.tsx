@@ -1,11 +1,8 @@
-// import MapApp from "./map/MapApp";
 import SCMap from "./scMap/SCMap";
-// TODO: chatbot
 
 const App = () => {
   return (
-    <div className="h-screen w-screen overflow-hidden flex">
-      {/* <MapApp /> */}
+    <div className="h-dvh w-screen overflow-hidden flex">
       <SCMap />
     </div>
   );
