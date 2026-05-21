@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { renameEntity, deleteEntity, setSelectedEntity } from "@/store/slices/drawSlice";
 import type { DrawEntity, drawState, Position } from "@/store/slices/drawSlice";
 import { CameraContext } from "@/map/types";
-import { BoundingSphere, Cartesian3, Cartographic, Math as CesiumMath } from "cesium";
+import { BoundingSphere, Cartesian3, Cartographic } from "cesium";
 
 interface IDrawDetails {
   handleRenameEntity: (entity: DrawEntity, newName: string) => void;
