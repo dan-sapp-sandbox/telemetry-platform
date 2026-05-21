@@ -238,22 +238,32 @@ const useVessels = (): IVesselState => {
 
     updateVisibleVessels();
 
-    const interval = setInterval(updateVisibleVessels, 500);
+    const interval = setInterval(updateVisibleVessels, 400);
 
     return () => clearInterval(interval);
   }, [bounds, routedVessels, processedRoutes]);
 
-  const serializedVisibleVessels = useMemo(() => {
-    return visibleVessels.map((vessel) => ({
-      id: vessel.id,
-      name: vessel.name,
-      routeName: vessel.route.name,
-    }));
-  }, [visibleVessels.map((v) => v.id).join(",")]);
+  const previousIdsRef = useRef("");
 
   useEffect(() => {
-    dispatch(setVessels(serializedVisibleVessels));
-  }, [dispatch, serializedVisibleVessels]);
+    const ids = visibleVessels.map((v) => v.id).join(",");
+
+    if (ids === previousIdsRef.current) {
+      return;
+    }
+
+    previousIdsRef.current = ids;
+
+    dispatch(
+      setVessels(
+        visibleVessels.map((vessel) => ({
+          id: vessel.id,
+          name: vessel.name,
+          routeName: vessel.route.name,
+        })),
+      ),
+    );
+  }, [dispatch, visibleVessels]);
 
   const vesselEntities = useMemo(() => {
     return visibleVessels.map((vessel) => {

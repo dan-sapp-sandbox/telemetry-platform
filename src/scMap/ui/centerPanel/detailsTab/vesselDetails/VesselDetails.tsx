@@ -1,12 +1,13 @@
 import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
 import useVesselDetails from "./useVesselDetails";
+import { X } from "lucide-react";
 
 const VesselDetails = () => {
   const { vessels, selectedVessel, handleSetSelectedVessel } = useVesselDetails();
   return (
     <div className="flex h-full">
-      <div className="flex flex-col w-1/3 overflow-y-auto scrollbar-hide">
+      <div className="flex flex-col w-[45%] overflow-y-auto scrollbar-hide">
         {vessels.map((vessel, index) => {
           const getBackgroundStyles = () => {
             if (index % 2 === 0) {
@@ -37,8 +38,12 @@ const VesselDetails = () => {
       </div>
       <Separator orientation="vertical" />
       {selectedVessel ? (
-        <div className="flex flex-col flex-1 p-4 text-(--text)/80 gap-6">
+        <div className="flex flex-col flex-1 p-4 text-sm md:text-base text-(--text)/80 gap-6">
           <div className="flex flex-col gap-2">
+            <div className="flex justify-between">
+              <div className="underline">Selected</div>
+              <X className="size-4 md:size-6" onClick={() => handleSetSelectedVessel(null)} />
+            </div>
             <div className="">{selectedVessel.name}</div>
             <div>{selectedVessel.routeName}</div>
           </div>
