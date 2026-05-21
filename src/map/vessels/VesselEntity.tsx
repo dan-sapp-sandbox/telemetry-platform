@@ -70,7 +70,7 @@ const VesselEntity = ({ vessel, showVesselNames, isSelected }: Props) => {
       billboard={{
         image: isSelected ? selectedShipIcon : shipIcon,
         scale: isSelected ? 0.5 : 0.3,
-        scaleByDistance: new NearFarScalar(400_000, 1.5, 3_000_000, 0.01),
+        scaleByDistance: new NearFarScalar(1_000_000, 1, 9_000_000, 0.1),
         rotation: new CallbackProperty(() => heading, false) as any,
         verticalOrigin: VerticalOrigin.CENTER,
         pixelOffset: new Cartesian2(0, 0),

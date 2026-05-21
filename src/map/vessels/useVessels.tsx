@@ -252,6 +252,12 @@ const useVessels = (): IVesselState => {
     });
   }, [simulatedVessels, bounds]);
 
+  useEffect(() => {
+    if (!visibleVessels.length) return;
+
+    dispatch(setVessels(visibleVessels));
+  }, [dispatch, visibleVessels]);
+
   const vesselEntities = useMemo(() => {
     return visibleVessels.map((vessel) => {
       const isSelected = selectedVessel?.id === vessel.id;
