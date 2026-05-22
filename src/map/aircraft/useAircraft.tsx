@@ -1,34 +1,34 @@
 import { useState, useContext, useEffect, useMemo, useRef, type JSX } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Cartographic, Math as CesiumMath } from "cesium";
-import VesselEntity from "./VesselEntity";
-import { CameraContext, type ProcessedRoute, type SimulatedVessel } from "@/map/types";
+import AircraftEntity from "./AircraftEntity";
+import { CameraContext, type ProcessedRoute, type SimulatedAircraft } from "@/map/types";
 import { getBounds, processRoute, getPositionAlongRoute } from "@/map/utils";
-import { useGetRoutesQuery, useGetVesselsQuery, type IBounds } from "@/store/services/api";
-import { setVessels, type vesselState } from "@/store/slices/vesselSlice";
+import { useGetAirRoutesQuery, useGetAircraftQuery, type IBounds } from "@/store/services/api";
+import { setAircraft, type aircraftState } from "@/store/slices/aircraftSlice";
 
-export interface IVesselState {
-  vesselEntities: JSX.Element[];
-  showVessels: boolean;
+export interface IAircraftState {
+  aircraftEntities: JSX.Element[];
+  showAircraft: boolean;
 }
 
-const useVessels = (): IVesselState => {
-  const [visibleVessels, setVisibleVesselsState] = useState<SimulatedVessel[]>([]);
+const useAircraft = (): IAircraftState => {
+  const [visibleAircraft, setVisibleAircraftState] = useState<SimulatedAircraft[]>([]);
   const dispatch = useDispatch();
   const simulationTimeRef = useRef(0);
-  const { showVessels, showVesselNames, selectedVessel } = useSelector(
-    (state: { vessels: vesselState }) => state.vessels,
+  const { showAircraft, showAircraftNames, selectedAircraft } = useSelector(
+    (state: { aircraft: aircraftState }) => state.aircraft,
   );
 
   const { mainViewerRef } = useContext(CameraContext);
 
   const [bounds, setBounds] = useState<IBounds | null>(null);
 
-  const { data: routedVessels = [] } = useGetVesselsQuery(undefined, {
+  const { data: routedAircraft = [] } = useGetAircraftQuery(undefined, {
     skip: !mainViewerRef.current,
   });
 
-  const { data: routes = [] } = useGetRoutesQuery(undefined, {
+  const { data: routes = [] } = useGetAirRoutesQuery(undefined, {
     skip: !mainViewerRef.current,
   });
 
@@ -74,19 +74,19 @@ const useVessels = (): IVesselState => {
   useEffect(() => {
     if (!bounds) return;
 
-    const updateVisibleVessels = () => {
+    const updateVisibleAircraft = () => {
       const now = performance.now();
 
-      const nextVisible = routedVessels
-        .map((vessel) => {
-          const route = processedRoutes[vessel.routeId];
+      const nextVisible = routedAircraft
+        .map((aircraft) => {
+          const route = processedRoutes[aircraft.routeId];
 
           if (!route || route.totalDistance <= 0) {
             return null;
           }
 
-          const elapsedSeconds = vessel.startOffsetSeconds + now / 1000;
-          const distanceTraveled = vessel.routeOffsetMeters + elapsedSeconds * vessel.speedMps;
+          const elapsedSeconds = aircraft.startOffsetSeconds + now / 1000;
+          const distanceTraveled = aircraft.routeOffsetMeters + elapsedSeconds * aircraft.speedMps;
           const wrappedDistance = distanceTraveled % route.totalDistance;
           const { heading, position } = getPositionAlongRoute(route, wrappedDistance);
           const carto = Cartographic.fromCartesian(position);
@@ -96,28 +96,28 @@ const useVessels = (): IVesselState => {
           if (!visible) return null;
 
           return {
-            ...vessel,
+            ...aircraft,
             route,
             position,
             heading,
           };
         })
-        .filter((v): v is SimulatedVessel => v !== null);
+        .filter((v): v is SimulatedAircraft => v !== null);
 
-      setVisibleVesselsState(nextVisible);
+      setVisibleAircraftState(nextVisible);
     };
 
-    updateVisibleVessels();
+    updateVisibleAircraft();
 
-    const interval = setInterval(updateVisibleVessels, 400);
+    const interval = setInterval(updateVisibleAircraft, 400);
 
     return () => clearInterval(interval);
-  }, [bounds, routedVessels, processedRoutes]);
+  }, [bounds, routedAircraft, processedRoutes]);
 
   const previousIdsRef = useRef("");
 
   useEffect(() => {
-    const ids = visibleVessels.map((v) => v.id).join(",");
+    const ids = visibleAircraft.map((v) => v.id).join(",");
 
     if (ids === previousIdsRef.current) {
       return;
@@ -126,28 +126,34 @@ const useVessels = (): IVesselState => {
     previousIdsRef.current = ids;
 
     dispatch(
-      setVessels(
-        visibleVessels.map((vessel) => ({
-          id: vessel.id,
-          name: vessel.name,
-          routeName: vessel.route.name,
+      setAircraft(
+        visibleAircraft.map((aircraft) => ({
+          id: aircraft.id,
+          name: aircraft.name,
+          routeName: aircraft.route.name,
         })),
       ),
     );
-  }, [dispatch, visibleVessels]);
+  }, [dispatch, visibleAircraft]);
 
-  const vesselEntities = useMemo(() => {
-    return visibleVessels.map((vessel) => {
-      const isSelected = selectedVessel?.id === vessel.id;
-
-      return <VesselEntity key={vessel.id} vessel={vessel} showVesselNames={showVesselNames} isSelected={isSelected} />;
+  const aircraftEntities = useMemo(() => {
+    return visibleAircraft.map((aircraft) => {
+      const isSelected = selectedAircraft?.id === aircraft.id;
+      return (
+        <AircraftEntity
+          key={aircraft.id}
+          aircraft={aircraft}
+          showAircraftNames={showAircraftNames}
+          isSelected={isSelected}
+        />
+      );
     });
-  }, [visibleVessels, showVesselNames, selectedVessel]);
+  }, [visibleAircraft, showAircraftNames, selectedAircraft]);
 
   return {
-    vesselEntities,
-    showVessels,
+    aircraftEntities,
+    showAircraft,
   };
 };
 
-export default useVessels;
+export default useAircraft;

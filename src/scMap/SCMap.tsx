@@ -2,6 +2,7 @@ import { useRef } from "react";
 import Layers from "@/map/Layers";
 import MainMap from "@/map/MainMap";
 import Vessels from "@/map/vessels/Vessels";
+import Aircraft from "@/map/aircraft/Aircraft";
 import useMapState from "@/map/hooks/useMapState";
 import { CameraContext } from "@/map/types";
 import ContextMenu from "@/contextMenu/ContextMenu";
@@ -17,6 +18,7 @@ const SCMap = () => {
         <div className={mapWrapperStyles}>
           <MainMap>
             <Vessels />
+            <Aircraft />
             <ContextMenu />
             <Layers />
           </MainMap>

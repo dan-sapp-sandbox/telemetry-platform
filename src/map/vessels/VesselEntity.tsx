@@ -10,7 +10,8 @@ import {
   CallbackProperty,
 } from "cesium";
 import { Entity } from "resium";
-import { getPositionAlongRoute, type SimulatedVessel } from "./useVessels";
+import { type SimulatedVessel } from "@/map/types";
+import { getPositionAlongRoute } from "@/map/utils";
 
 interface Props {
   vessel: SimulatedVessel;
@@ -50,7 +51,8 @@ const VesselEntity = ({ vessel, showVesselNames, isSelected }: Props) => {
 
       const distance = vessel.routeOffsetMeters + elapsedSeconds * vessel.speedMps;
 
-      const wrappedDistance = distance % vessel.route.totalDistance;
+      const wrappedDistance =
+        ((distance % vessel.route.totalDistance) + vessel.route.totalDistance) % vessel.route.totalDistance;
 
       return getPositionAlongRoute(vessel.route, wrappedDistance);
     }, false);

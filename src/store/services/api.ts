@@ -1,7 +1,7 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import type { Route } from "../slices/vesselSlice";
 
-export interface VesselBounds {
+export interface IBounds {
   west: number;
   south: number;
   east: number;
@@ -36,14 +36,26 @@ export const api = createApi({
     getVessels: builder.query<Vessel[], void>({
       query: () => "vessels/get-vessels",
     }),
-
     getRoutes: builder.query<Route[], void>({
       query: () => "vessels/get-routes",
       transformResponse: (response: any[]): Route[] => {
         return response.map((r) => ({
           id: r.id,
           name: r.name,
-          points: r.points, // already [{lat, lon}] from backend
+          points: r.points,
+        }));
+      },
+    }),
+    getAircraft: builder.query<Vessel[], void>({
+      query: () => "aircraft/get-aircraft",
+    }),
+    getAirRoutes: builder.query<Route[], void>({
+      query: () => "aircraft/get-air-routes",
+      transformResponse: (response: any[]): Route[] => {
+        return response.map((r) => ({
+          id: r.id,
+          name: r.name,
+          points: r.points,
         }));
       },
     }),
@@ -57,4 +69,10 @@ export const api = createApi({
   }),
 });
 
-export const { useGetVesselsQuery, useGetRoutesQuery, useSendCommandPromptMutation } = api;
+export const {
+  useGetVesselsQuery,
+  useGetRoutesQuery,
+  useSendCommandPromptMutation,
+  useGetAirRoutesQuery,
+  useGetAircraftQuery,
+} = api;

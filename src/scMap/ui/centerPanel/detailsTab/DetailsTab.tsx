@@ -1,5 +1,6 @@
 import useDetailsTab from "./useDetailsTab";
 import VesselDetails from "./vesselDetails/VesselDetails";
+import AircraftDetails from "./aircraftDetails/AircraftDetails";
 import DrawDetails from "./drawDetails/DrawDetails";
 
 const DetailsTab = () => {
@@ -7,6 +8,8 @@ const DetailsTab = () => {
   switch (activePanel) {
     case "vessels":
       return <VesselDetails />;
+    case "aircraft":
+      return <AircraftDetails />;
     case "draw":
       return <DrawDetails />;
     default:

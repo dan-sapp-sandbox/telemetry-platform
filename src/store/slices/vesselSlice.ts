@@ -17,7 +17,7 @@ export type Vessel = {
   type: "Cargo" | "Tanker" | "Fishing" | "Passenger";
   lat: number;
   lon: number;
-  heading: number; // radians
+  heading: number;
   speed: number;
 };
 

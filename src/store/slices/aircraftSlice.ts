@@ -1,17 +1,35 @@
 import { createSlice } from "@reduxjs/toolkit";
 
+export type RoutePoint = {
+  lat: number;
+  lon: number;
+};
+
+export type Route = {
+  id: string;
+  name: string;
+  points: RoutePoint[];
+};
+
 export type Aircraft = {
   id: string;
   name: string;
   type: "Cargo" | "Tanker" | "Fishing" | "Passenger";
   lat: number;
   lon: number;
-  heading: number; // radians
+  heading: number;
   speed: number;
 };
 
+export type RoutedAircraft = {
+  id: string;
+  name: string;
+  routeName: string;
+};
+
 export interface aircraftState {
-  aircraft: Aircraft[];
+  aircraft: RoutedAircraft[];
+  selectedAircraft: RoutedAircraft | null;
   showAircraft: boolean;
   showAircraftNames: boolean;
   showAircraftPaths: boolean;
@@ -19,7 +37,8 @@ export interface aircraftState {
 
 const initialState: aircraftState = {
   aircraft: [],
-  showAircraft: false,
+  selectedAircraft: null,
+  showAircraft: true,
   showAircraftNames: false,
   showAircraftPaths: false,
 };
@@ -29,14 +48,17 @@ const aircraftSlice = createSlice({
   initialState,
 
   reducers: {
-    addAircraft: (state, action) => {
-      state.aircraft = [...state.aircraft, action.payload];
+    setSelectedAircraft: (state, action) => {
+      state.selectedAircraft = action.payload;
+    },
+    setAircraft: (state, action) => {
+      state.aircraft = action.payload;
     },
     setShowAircraft: (state, action) => {
       state.showAircraft = action.payload;
     },
     setShowAircraftNames: (state, action) => {
-      state.showAircraft = action.payload;
+      state.showAircraftNames = action.payload;
     },
     setShowAircraftPaths: (state, action) => {
       state.showAircraftPaths = action.payload;
@@ -44,6 +66,7 @@ const aircraftSlice = createSlice({
   },
 });
 
-export const { addAircraft, setShowAircraft, setShowAircraftNames, setShowAircraftPaths } = aircraftSlice.actions;
+export const { setSelectedAircraft, setAircraft, setShowAircraft, setShowAircraftNames, setShowAircraftPaths } =
+  aircraftSlice.actions;
 
 export default aircraftSlice.reducer;

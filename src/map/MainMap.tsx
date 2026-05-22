@@ -6,6 +6,7 @@ import useLocalStorage from "use-local-storage";
 import DrawController from "./DrawController";
 import { useDispatch, useSelector } from "react-redux";
 import { setSelectedVessel, type vesselState } from "@/store/slices/vesselSlice";
+import { setSelectedAircraft, type aircraftState } from "@/store/slices/aircraftSlice";
 import { setActivePanel } from "@/store/slices/actionPalletSlice";
 import { setSelectedEntity, type drawState } from "@/store/slices/drawSlice";
 import { defaultMainView } from "./hooks/useMapState";
@@ -25,6 +26,7 @@ const RegisterMainViewer = () => {
 const InitialCamera = () => {
   const dispatch = useDispatch();
   const { vessels } = useSelector((state: { vessels: vesselState }) => state.vessels);
+  const { aircraft } = useSelector((state: { aircraft: aircraftState }) => state.aircraft);
   const { entities } = useSelector((state: { draw: drawState }) => state.draw);
   const [init] = useLocalStorage("main-cam-init", defaultMainView);
   const { viewer } = useCesium();
@@ -82,6 +84,12 @@ const InitialCamera = () => {
         if (!matchingVessel) return;
         dispatch(setSelectedVessel(matchingVessel));
         dispatch(setActivePanel("vessels"));
+      }
+      if (entityType === "aircraft") {
+        const matchingAircraft = aircraft.find((aircraft) => aircraft.id === entityId);
+        if (!matchingAircraft) return;
+        dispatch(setSelectedAircraft(matchingAircraft));
+        dispatch(setActivePanel("aircraft"));
       }
       if (entityType === "draw") {
         const matchingEntity = entities.find((vessel) => vessel.id === entityId);
