@@ -1,14 +1,21 @@
-import { useRef } from "react";
+import { useRef, useEffect } from "react";
 import Layers from "@/map/Layers";
 import MainMap from "@/map/MainMap";
 import Vessels from "@/map/vessels/Vessels";
 import Aircraft from "@/map/aircraft/Aircraft";
-import useMapState from "@/map/hooks/useMapState";
+import useMapState from "@/map/useMapState";
 import { CameraContext } from "@/map/types";
 import ContextMenu from "@/contextMenu/ContextMenu";
 import Overlay from "./ui/Overlay";
+import { clock } from "@/map/simulationEngine";
 
 const SCMap = () => {
+  useEffect(() => {
+    clock.start();
+    return () => {
+      clock.pause();
+    };
+  }, []);
   const containerRef = useRef<HTMLDivElement | null>(null);
   const { mainViewerRef, overviewViewerRef, pipViewerRef } = useMapState();
   const mapWrapperStyles = "relative w-full h-[calc(100%-21rem)] md:h-[calc(100%-12rem)] xl:h-[calc(100%-17rem)]";

@@ -5,9 +5,9 @@ import OverviewMap from "./widgets/OverviewMap";
 import PipViewRectangle from "./widgets/PipViewRectangle";
 import PipMap from "./widgets/PipMap";
 import Layers from "./Layers";
-import useMapState from "./hooks/useMapState";
+import useMapState from "./useMapState";
 import { CameraContext } from "./types";
-import useWidgetLayout from "./hooks/useWidgetLayout";
+import useWidgetLayout from "./useWidgetLayout";
 import ContextMenu from "@/contextMenu/ContextMenu";
 import Vessels from "./vessels/Vessels";
 

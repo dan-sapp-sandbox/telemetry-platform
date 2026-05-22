@@ -2,7 +2,7 @@ import { useState, useEffect, type Dispatch, type SetStateAction } from "react";
 import { useSelector } from "react-redux";
 import type { actionPallet } from "@/store/slices/actionPalletSlice";
 
-type TabId = "ai" | "details" | "about";
+type TabId = "ai" | "details" | "playback" | "about";
 
 export interface IVesselDetails {
   activeTab: TabId;

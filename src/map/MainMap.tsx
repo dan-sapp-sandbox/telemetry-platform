@@ -9,7 +9,7 @@ import { setSelectedVessel, type vesselState } from "@/store/slices/vesselSlice"
 import { setSelectedAircraft, type aircraftState } from "@/store/slices/aircraftSlice";
 import { setActivePanel } from "@/store/slices/actionPalletSlice";
 import { setSelectedEntity, type drawState } from "@/store/slices/drawSlice";
-import { defaultMainView } from "./hooks/useMapState";
+import { defaultMainView } from "./useMapState";
 
 const RegisterMainViewer = () => {
   const { viewer } = useCesium();

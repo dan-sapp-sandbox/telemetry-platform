@@ -6,6 +6,8 @@ import { CameraContext, type ProcessedRoute, type SimulatedVessel } from "@/map/
 import { getBounds, processRoute, getPositionAlongRoute } from "@/map/utils";
 import { useGetRoutesQuery, useGetVesselsQuery, type IBounds } from "@/store/services/api";
 import { setVessels, type vesselState } from "@/store/slices/vesselSlice";
+import { type PlaybackState } from "@/store/slices/playbackSlice";
+import { clock } from "@/map/simulationEngine";
 
 export interface IVesselState {
   vesselEntities: JSX.Element[];
@@ -13,16 +15,19 @@ export interface IVesselState {
 }
 
 const useVessels = (): IVesselState => {
-  const [visibleVessels, setVisibleVesselsState] = useState<SimulatedVessel[]>([]);
   const dispatch = useDispatch();
-  const simulationTimeRef = useRef(0);
+
+  const [, forceRender] = useState(0);
+
   const { showVessels, showVesselNames, selectedVessel } = useSelector(
     (state: { vessels: vesselState }) => state.vessels,
   );
 
+  const { isPlaying, speed } = useSelector((state: { playback: PlaybackState }) => state.playback);
+
   const { mainViewerRef } = useContext(CameraContext);
 
-  const [bounds, setBounds] = useState<IBounds | null>(null);
+  const boundsRef = useRef<IBounds | null>(null);
 
   const { data: routedVessels = [] } = useGetVesselsQuery(undefined, {
     skip: !mainViewerRef.current,
@@ -32,22 +37,32 @@ const useVessels = (): IVesselState => {
     skip: !mainViewerRef.current,
   });
 
+  // start render ticker
   useEffect(() => {
-    let frameId: number;
-    const start = performance.now();
+    let frame: number;
 
     const tick = () => {
-      simulationTimeRef.current = performance.now() - start;
-      frameId = requestAnimationFrame(tick);
+      forceRender((x) => x + 1);
+      frame = requestAnimationFrame(tick);
     };
 
-    tick();
+    frame = requestAnimationFrame(tick);
 
-    return () => {
-      cancelAnimationFrame(frameId);
-    };
+    return () => cancelAnimationFrame(frame);
   }, []);
 
+  // sync redux playback -> simulation clock
+  useEffect(() => {
+    if (isPlaying) {
+      clock.play();
+    } else {
+      clock.pause();
+    }
+
+    clock.setSpeed(speed);
+  }, [isPlaying, speed]);
+
+  // processed routes
   const processedRoutes = useMemo(() => {
     return routes.reduce<Record<string, ProcessedRoute>>((acc, route) => {
       acc[route.id] = processRoute(route);
@@ -55,65 +70,73 @@ const useVessels = (): IVesselState => {
     }, {});
   }, [routes]);
 
+  // camera bounds tracking
   useEffect(() => {
     if (!mainViewerRef.current) return;
 
     const updateBounds = () => {
-      setBounds(getBounds(mainViewerRef.current));
+      if (!mainViewerRef.current) return;
+
+      boundsRef.current = getBounds(mainViewerRef.current);
     };
 
     updateBounds();
 
-    mainViewerRef.current?.camera.changed.addEventListener(updateBounds);
+    const camera = mainViewerRef.current.camera;
+
+    camera.changed.addEventListener(updateBounds);
 
     return () => {
-      mainViewerRef.current?.camera.changed.removeEventListener(updateBounds);
+      camera.changed.removeEventListener(updateBounds);
     };
   }, [mainViewerRef.current]);
 
-  useEffect(() => {
-    if (!bounds) return;
+  // sample simulation clock
+  const simTimeMs = clock.getTime();
 
-    const updateVisibleVessels = () => {
-      const now = performance.now();
+  // derive visible vessels
+  const visibleVessels = useMemo(() => {
+    const bounds = boundsRef.current;
 
-      const nextVisible = routedVessels
-        .map((vessel) => {
-          const route = processedRoutes[vessel.routeId];
+    if (!bounds) return [];
 
-          if (!route || route.totalDistance <= 0) {
-            return null;
-          }
+    return routedVessels
+      .map((vessel) => {
+        const route = processedRoutes[vessel.routeId];
 
-          const elapsedSeconds = vessel.startOffsetSeconds + now / 1000;
-          const distanceTraveled = vessel.routeOffsetMeters + elapsedSeconds * vessel.speedMps;
-          const wrappedDistance = distanceTraveled % route.totalDistance;
-          const { heading, position } = getPositionAlongRoute(route, wrappedDistance);
-          const carto = Cartographic.fromCartesian(position);
-          const lon = CesiumMath.toDegrees(carto.longitude);
-          const lat = CesiumMath.toDegrees(carto.latitude);
-          const visible = lon >= bounds.west && lon <= bounds.east && lat >= bounds.south && lat <= bounds.north;
-          if (!visible) return null;
+        if (!route || route.totalDistance <= 0) {
+          return null;
+        }
 
-          return {
-            ...vessel,
-            route,
-            position,
-            heading,
-          };
-        })
-        .filter((v): v is SimulatedVessel => v !== null);
+        const elapsedSeconds = vessel.startOffsetSeconds + simTimeMs / 1000;
 
-      setVisibleVesselsState(nextVisible);
-    };
+        const distance = vessel.routeOffsetMeters + elapsedSeconds * vessel.speedMps;
 
-    updateVisibleVessels();
+        const wrapped = ((distance % route.totalDistance) + route.totalDistance) % route.totalDistance;
 
-    const interval = setInterval(updateVisibleVessels, 400);
+        const { heading, position } = getPositionAlongRoute(route, wrapped);
 
-    return () => clearInterval(interval);
-  }, [bounds, routedVessels, processedRoutes]);
+        const carto = Cartographic.fromCartesian(position);
 
+        const lon = CesiumMath.toDegrees(carto.longitude);
+
+        const lat = CesiumMath.toDegrees(carto.latitude);
+
+        const visible = lon >= bounds.west && lon <= bounds.east && lat >= bounds.south && lat <= bounds.north;
+
+        if (!visible) return null;
+
+        return {
+          ...vessel,
+          route,
+          position,
+          heading,
+        };
+      })
+      .filter((v): v is SimulatedVessel => v !== null);
+  }, [routedVessels, processedRoutes, simTimeMs]);
+
+  // sync visible vessels -> redux ui list
   const previousIdsRef = useRef("");
 
   useEffect(() => {
@@ -136,6 +159,7 @@ const useVessels = (): IVesselState => {
     );
   }, [dispatch, visibleVessels]);
 
+  // render entities
   const vesselEntities = useMemo(() => {
     return visibleVessels.map((vessel) => {
       const isSelected = selectedVessel?.id === vessel.id;

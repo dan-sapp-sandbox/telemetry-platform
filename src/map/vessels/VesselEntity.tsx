@@ -12,6 +12,7 @@ import {
 import { Entity } from "resium";
 import { type SimulatedVessel } from "@/map/types";
 import { getPositionAlongRoute } from "@/map/utils";
+import { clock } from "@/map/simulationEngine";
 
 interface Props {
   vessel: SimulatedVessel;
@@ -43,29 +44,48 @@ const shipIcon = `data:image/svg+xml;charset=utf-8,${encodeURIComponent(shipSvg)
 const selectedShipIcon = `data:image/svg+xml;charset=utf-8,${encodeURIComponent(selectedShipSvg)}`;
 
 const VesselEntity = ({ vessel, showVesselNames, isSelected }: Props) => {
-  const motionProperty = useMemo(() => {
-    return new CallbackProperty(() => {
-      const now = performance.now();
+  const positionCallback = useMemo(
+    () =>
+      new CallbackProperty(() => {
+        const t = clock.getTime();
 
-      const elapsedSeconds = vessel.startOffsetSeconds + now / 1000;
+        const elapsedSeconds = vessel.startOffsetSeconds + t / 1000;
 
-      const distance = vessel.routeOffsetMeters + elapsedSeconds * vessel.speedMps;
+        const distance = vessel.routeOffsetMeters + elapsedSeconds * vessel.speedMps;
 
-      const wrappedDistance =
-        ((distance % vessel.route.totalDistance) + vessel.route.totalDistance) % vessel.route.totalDistance;
+        const wrapped =
+          ((distance % vessel.route.totalDistance) + vessel.route.totalDistance) % vessel.route.totalDistance;
 
-      return getPositionAlongRoute(vessel.route, wrappedDistance);
-    }, false);
-  }, [vessel]);
+        return getPositionAlongRoute(vessel.route, wrapped).position;
+      }, false),
+    [vessel],
+  );
+
+  const headingCallback = useMemo(
+    () =>
+      new CallbackProperty(() => {
+        const t = clock.getTime();
+
+        const elapsedSeconds = vessel.startOffsetSeconds + t / 1000;
+
+        const distance = vessel.routeOffsetMeters + elapsedSeconds * vessel.speedMps;
+
+        const wrapped =
+          ((distance % vessel.route.totalDistance) + vessel.route.totalDistance) % vessel.route.totalDistance;
+
+        return getPositionAlongRoute(vessel.route, wrapped).heading;
+      }, false),
+    [vessel],
+  );
 
   return (
     <Entity
-      position={new CallbackProperty(() => motionProperty.getValue().position, false) as any}
+      position={positionCallback as any}
       billboard={{
         image: isSelected ? selectedShipIcon : shipIcon,
         scale: isSelected ? 0.4 : 0.07,
         scaleByDistance: new NearFarScalar(700_000, 1.9, 9_000_000, 0.01),
-        rotation: new CallbackProperty(() => motionProperty.getValue().heading, false) as any,
+        rotation: headingCallback as any,
         verticalOrigin: VerticalOrigin.CENTER,
         pixelOffset: new Cartesian2(0, 0),
         disableDepthTestDistance: Number.POSITIVE_INFINITY,

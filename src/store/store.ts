@@ -8,6 +8,7 @@ import vesselReducer from "./slices/vesselSlice";
 import aircraftReducer from "./slices/aircraftSlice";
 import widgetReducer from "./slices/widgetSlice";
 import actionPalletReducer from "./slices/actionPalletSlice";
+import playbackReducer from "./slices/playbackSlice";
 
 export const store = configureStore({
   reducer: {
@@ -18,6 +19,7 @@ export const store = configureStore({
     aircraft: aircraftReducer,
     widget: widgetReducer,
     actionPallet: actionPalletReducer,
+    playback: playbackReducer,
     [api.reducerPath]: api.reducer,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(api.middleware),

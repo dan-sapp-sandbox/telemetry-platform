@@ -7,7 +7,7 @@ import { Math, Cartographic, Cartesian3 } from "cesium";
 import { useDraggable } from "@dnd-kit/core";
 import { CSS } from "@dnd-kit/utilities";
 import useLocalStorage from "use-local-storage";
-import { defaultPipView } from "../hooks/useMapState";
+import { defaultPipView } from "../useMapState";
 import { cn } from "@/lib/utils";
 
 const PipInitializer = () => {

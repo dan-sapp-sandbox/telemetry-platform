@@ -5,7 +5,7 @@ import { Plus, Minus } from "lucide-react";
 import useLocalStorage from "use-local-storage";
 import { useContext } from "react";
 import { CameraContext } from "../types";
-import { defaultMainView, defaultPipView } from "../hooks/useMapState";
+import { defaultMainView, defaultPipView } from "../useMapState";
 
 const CameraControls = () => {
   const [_initMainView, setInitMainView] = useLocalStorage("main-cam-init", defaultMainView);

@@ -3,6 +3,7 @@ import AITab from "./aITab/AITab";
 import DetailsTab from "./detailsTab/DetailsTab";
 import AboutTab from "./aboutTab/AboutTab";
 import useCenterPanel from "./useCenterPanel";
+import PlaybackTab from "./playbackTab/PlaybackTab";
 
 const TabButton = ({ active, label, onClick }: { active: boolean; label: string; onClick: () => void }) => {
   return (
@@ -38,12 +39,14 @@ const CenterPanel = () => {
       <div className="flex items-center h-10 px-4 border-b border-zinc-400/30 bg-zinc-400/10">
         <TabButton active={activeTab === "ai"} onClick={() => setActiveTab("ai")} label="AI" />
         <TabButton active={activeTab === "details"} onClick={() => setActiveTab("details")} label="Details" />
+        <TabButton active={activeTab === "playback"} onClick={() => setActiveTab("playback")} label="Playback" />
         <TabButton active={activeTab === "about"} onClick={() => setActiveTab("about")} label="About" />
       </div>
 
       <div className="flex-1 overflow-auto">
         {activeTab === "ai" && <AITab />}
         {activeTab === "details" && <DetailsTab />}
+        {activeTab === "playback" && <PlaybackTab />}
         {activeTab === "about" && <AboutTab />}
       </div>
     </div>

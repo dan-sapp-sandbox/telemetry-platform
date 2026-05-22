@@ -6,6 +6,8 @@ import { CameraContext, type ProcessedRoute, type SimulatedAircraft } from "@/ma
 import { getBounds, processRoute, getPositionAlongRoute } from "@/map/utils";
 import { useGetAirRoutesQuery, useGetAircraftQuery, type IBounds } from "@/store/services/api";
 import { setAircraft, type aircraftState } from "@/store/slices/aircraftSlice";
+import { type PlaybackState } from "@/store/slices/playbackSlice";
+import { clock } from "@/map/simulationEngine";
 
 export interface IAircraftState {
   aircraftEntities: JSX.Element[];
@@ -13,16 +15,19 @@ export interface IAircraftState {
 }
 
 const useAircraft = (): IAircraftState => {
-  const [visibleAircraft, setVisibleAircraftState] = useState<SimulatedAircraft[]>([]);
   const dispatch = useDispatch();
-  const simulationTimeRef = useRef(0);
+
+  const [, forceRender] = useState(0);
+
   const { showAircraft, showAircraftNames, selectedAircraft } = useSelector(
     (state: { aircraft: aircraftState }) => state.aircraft,
   );
 
+  const { isPlaying, speed } = useSelector((state: { playback: PlaybackState }) => state.playback);
+
   const { mainViewerRef } = useContext(CameraContext);
 
-  const [bounds, setBounds] = useState<IBounds | null>(null);
+  const boundsRef = useRef<IBounds | null>(null);
 
   const { data: routedAircraft = [] } = useGetAircraftQuery(undefined, {
     skip: !mainViewerRef.current,
@@ -32,22 +37,32 @@ const useAircraft = (): IAircraftState => {
     skip: !mainViewerRef.current,
   });
 
+  // start render ticker
   useEffect(() => {
-    let frameId: number;
-    const start = performance.now();
+    let frame: number;
 
     const tick = () => {
-      simulationTimeRef.current = performance.now() - start;
-      frameId = requestAnimationFrame(tick);
+      forceRender((x) => x + 1);
+      frame = requestAnimationFrame(tick);
     };
 
-    tick();
+    frame = requestAnimationFrame(tick);
 
-    return () => {
-      cancelAnimationFrame(frameId);
-    };
+    return () => cancelAnimationFrame(frame);
   }, []);
 
+  // sync redux playback -> simulation clock
+  useEffect(() => {
+    if (isPlaying) {
+      clock.play();
+    } else {
+      clock.pause();
+    }
+
+    clock.setSpeed(speed);
+  }, [isPlaying, speed]);
+
+  // processed routes
   const processedRoutes = useMemo(() => {
     return routes.reduce<Record<string, ProcessedRoute>>((acc, route) => {
       acc[route.id] = processRoute(route);
@@ -55,65 +70,73 @@ const useAircraft = (): IAircraftState => {
     }, {});
   }, [routes]);
 
+  // camera bounds tracking
   useEffect(() => {
     if (!mainViewerRef.current) return;
 
     const updateBounds = () => {
-      setBounds(getBounds(mainViewerRef.current));
+      if (!mainViewerRef.current) return;
+
+      boundsRef.current = getBounds(mainViewerRef.current);
     };
 
     updateBounds();
 
-    mainViewerRef.current?.camera.changed.addEventListener(updateBounds);
+    const camera = mainViewerRef.current.camera;
+
+    camera.changed.addEventListener(updateBounds);
 
     return () => {
-      mainViewerRef.current?.camera.changed.removeEventListener(updateBounds);
+      camera.changed.removeEventListener(updateBounds);
     };
   }, [mainViewerRef.current]);
 
-  useEffect(() => {
-    if (!bounds) return;
+  // sample simulation clock
+  const simTimeMs = clock.getTime();
 
-    const updateVisibleAircraft = () => {
-      const now = performance.now();
+  // derive visible aircraft
+  const visibleAircraft = useMemo(() => {
+    const bounds = boundsRef.current;
 
-      const nextVisible = routedAircraft
-        .map((aircraft) => {
-          const route = processedRoutes[aircraft.routeId];
+    if (!bounds) return [];
 
-          if (!route || route.totalDistance <= 0) {
-            return null;
-          }
+    return routedAircraft
+      .map((aircraft) => {
+        const route = processedRoutes[aircraft.routeId];
 
-          const elapsedSeconds = aircraft.startOffsetSeconds + now / 1000;
-          const distanceTraveled = aircraft.routeOffsetMeters + elapsedSeconds * aircraft.speedMps;
-          const wrappedDistance = distanceTraveled % route.totalDistance;
-          const { heading, position } = getPositionAlongRoute(route, wrappedDistance);
-          const carto = Cartographic.fromCartesian(position);
-          const lon = CesiumMath.toDegrees(carto.longitude);
-          const lat = CesiumMath.toDegrees(carto.latitude);
-          const visible = lon >= bounds.west && lon <= bounds.east && lat >= bounds.south && lat <= bounds.north;
-          if (!visible) return null;
+        if (!route || route.totalDistance <= 0) {
+          return null;
+        }
 
-          return {
-            ...aircraft,
-            route,
-            position,
-            heading,
-          };
-        })
-        .filter((v): v is SimulatedAircraft => v !== null);
+        const elapsedSeconds = aircraft.startOffsetSeconds + simTimeMs / 1000;
 
-      setVisibleAircraftState(nextVisible);
-    };
+        const distance = aircraft.routeOffsetMeters + elapsedSeconds * aircraft.speedMps;
 
-    updateVisibleAircraft();
+        const wrapped = ((distance % route.totalDistance) + route.totalDistance) % route.totalDistance;
 
-    const interval = setInterval(updateVisibleAircraft, 400);
+        const { heading, position } = getPositionAlongRoute(route, wrapped);
 
-    return () => clearInterval(interval);
-  }, [bounds, routedAircraft, processedRoutes]);
+        const carto = Cartographic.fromCartesian(position);
 
+        const lon = CesiumMath.toDegrees(carto.longitude);
+
+        const lat = CesiumMath.toDegrees(carto.latitude);
+
+        const visible = lon >= bounds.west && lon <= bounds.east && lat >= bounds.south && lat <= bounds.north;
+
+        if (!visible) return null;
+
+        return {
+          ...aircraft,
+          route,
+          position,
+          heading,
+        };
+      })
+      .filter((v): v is SimulatedAircraft => v !== null);
+  }, [routedAircraft, processedRoutes, simTimeMs]);
+
+  // sync visible aircraft -> redux ui list
   const previousIdsRef = useRef("");
 
   useEffect(() => {
@@ -136,9 +159,11 @@ const useAircraft = (): IAircraftState => {
     );
   }, [dispatch, visibleAircraft]);
 
+  // render entities
   const aircraftEntities = useMemo(() => {
     return visibleAircraft.map((aircraft) => {
       const isSelected = selectedAircraft?.id === aircraft.id;
+
       return (
         <AircraftEntity
           key={aircraft.id}
