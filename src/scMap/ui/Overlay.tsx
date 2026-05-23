@@ -7,13 +7,13 @@ import CenterPanel from "./centerPanel/CenterPanel";
 const Overlay = () => {
   const miniMapSectionStyles = cn([
     "flex items-center bg-zinc-800/90 md:rounded-tr-2xl p-2",
-    "h-42 w-1/2 md:h-55 lg:w-55 xl:h-75 xl:w-75 gap-2",
+    "h-42 w-1/2 md:w-55 md:h-55 lg:w-55 xl:h-75 xl:w-75 gap-2",
     "border-t-1 border-r-1 border-emerald-400/30",
     // "h-42 w-42 md:h-55 lg:w-63 xl:h-75 xl:w-85 gap-2",
   ]);
   const miniMapWrapperStyles = cn([
     "relative rounded-2xl overflow-hidden border border-white/10 shadow-xl",
-    "h-38 w-full md:h-50 md:w-50 xl:h-70 xl:w-70",
+    "h-38 w-full md:h-50 md:w-50 lg:h-50 lg:w-50 xl:h-70 xl:w-70",
   ]);
   // const buttonStyles = cn([
   //   "flex items-center justify-center rounded-xl bg-blue-600/30 border border-white/10 hover:bg-blue-600/80 hover:border-cyan-400/40",

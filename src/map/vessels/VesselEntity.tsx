@@ -85,8 +85,8 @@ const VesselEntity = ({ vessel, showVesselNames, isSelected }: Props) => {
     <Entity
       model={{
         uri: "/Container Ship.glb",
-        scale: 20000,
-        minimumPixelSize: 16,
+        scale: 10000,
+        minimumPixelSize: 12,
         maximumScale: 2000000,
       }}
       position={positionCallback as any}
