@@ -67,7 +67,7 @@ const useMapState = (): IMapState => {
         const destination = Cartesian3.fromRadians(
           position.longitude,
           position.latitude,
-          Math.min(8_000_000, Math.max(position.height * 2, 3_000_000)),
+          Math.min(10_000_000, Math.max(position.height * 2, 3_000_000)),
         );
 
         overview.camera.setView({
