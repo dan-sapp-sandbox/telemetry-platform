@@ -9,9 +9,14 @@ import {
   DistanceDisplayCondition,
   CallbackProperty,
   Cartesian3,
+  Cartographic,
+  HeadingPitchRoll,
+  Transforms,
+  Math as CesiumMath,
+  Matrix4,
 } from "cesium";
 import { Entity } from "resium";
-import { createArcRoute, getPositionAlongRoute } from "@/map/utils";
+import { createArcPoints } from "@/map/utils";
 import { type SimulatedAircraft } from "@/map/types";
 import { clock } from "@/map/simulationEngine";
 
@@ -21,68 +26,54 @@ interface Props {
   isSelected: boolean;
 }
 
-const shipSvg = `
-<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64">
-  <path d="M32 2 L54 58 L32 48 L10 58 Z" fill="white"/>
-  <path d="M26 52 L32 60 L38 52 L32 54 Z" fill="none"/>
-</svg>
-`;
-
-const selectedShipSvg = `
-<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64">
-  <path d="M32 2 L54 58 L32 48 L10 58 Z" fill="#00d492"/>
-  <path d="M26 52 L32 60 L38 52 L32 54 Z" fill="none"/>
-</svg>
-`;
-
-const shipIcon = `data:image/svg+xml;charset=utf-8,${encodeURIComponent(shipSvg)}`;
-const selectedShipIcon = `data:image/svg+xml;charset=utf-8,${encodeURIComponent(selectedShipSvg)}`;
-
 const AircraftEntity = ({ aircraft, showAircraftNames, isSelected }: Props) => {
-  const start = aircraft.route.points[0];
-  const end = aircraft.route.points[1];
+  const start = Cartographic.fromDegrees(aircraft.route.points[0].lon, aircraft.route.points[0].lat);
 
-  const arcPositions = useMemo(() => createArcRoute(start, end), [start.lat, start.lon, end.lat, end.lon]);
+  const end = Cartographic.fromDegrees(aircraft.route.points[1].lon, aircraft.route.points[1].lat);
+
+  const arcPositions = useMemo(
+    () => createArcPoints(start, end, 200, 300000),
+    [
+      aircraft.route.points[0].lat,
+      aircraft.route.points[0].lon,
+      aircraft.route.points[1].lat,
+      aircraft.route.points[1].lon,
+    ],
+  );
 
   const positionProperty = useMemo(
     () =>
       new CallbackProperty(() => {
-        const t = clock.getTime();
+        const simTimeMs = clock.getTime();
 
-        const elapsedSeconds = aircraft.startOffsetSeconds + t / 1000;
+        const elapsedSeconds = aircraft.startOffsetSeconds + simTimeMs / 1000;
 
         const distance = aircraft.routeOffsetMeters + elapsedSeconds * aircraft.speedMps;
 
         const wrapped =
           ((distance % aircraft.route.totalDistance) + aircraft.route.totalDistance) % aircraft.route.totalDistance;
 
-        return getPositionAlongRoute(aircraft.route, wrapped).position;
+        const t = wrapped / aircraft.route.totalDistance;
+
+        const scaledIndex = t * (arcPositions.length - 1);
+
+        const index = Math.floor(scaledIndex);
+
+        const frac = scaledIndex - index;
+
+        const current = arcPositions[index];
+        const next = arcPositions[Math.min(index + 1, arcPositions.length - 1)];
+
+        if (!current || !next) {
+          return current;
+        }
+
+        return Cartesian3.lerp(current, next, frac, new Cartesian3());
       }, false),
-    [aircraft],
+    [aircraft, arcPositions],
   );
 
-  // const positionProperty = useMemo(
-  //   () =>
-  //     new CallbackProperty(() => {
-  //       const simTimeMs = clock.getTime();
-
-  //       const elapsedSeconds = aircraft.startOffsetSeconds + simTimeMs / 1000;
-
-  //       const distance = aircraft.routeOffsetMeters + elapsedSeconds * aircraft.speedMps;
-
-  //       const normalized =
-  //         ((distance % aircraft.route.totalDistance) + aircraft.route.totalDistance) % aircraft.route.totalDistance;
-
-  //       const t = normalized / aircraft.route.totalDistance;
-
-  //       const index = Math.floor(t * (arcPositions.length - 1));
-
-  //       return arcPositions[index];
-  //     }, false),
-  //   [aircraft, arcPositions],
-  // );
-
-  const rotationProperty = useMemo(
+  const orientationProperty = useMemo(
     () =>
       new CallbackProperty(() => {
         const simTimeMs = clock.getTime();
@@ -96,19 +87,33 @@ const AircraftEntity = ({ aircraft, showAircraftNames, isSelected }: Props) => {
 
         const t = normalized / aircraft.route.totalDistance;
 
-        const index = Math.floor(t * (arcPositions.length - 1));
+        const scaledIndex = t * (arcPositions.length - 1);
 
-        const position = arcPositions[index];
+        const index = Math.floor(scaledIndex);
 
-        const nextPosition = arcPositions[Math.min(index + 50, arcPositions.length - 1)];
+        const current = arcPositions[index];
 
-        if (!position || !nextPosition) {
-          return 0;
+        const next = arcPositions[Math.min(index + 1, arcPositions.length - 1)];
+
+        if (!current || !next) {
+          return undefined;
         }
 
-        const direction = Cartesian3.subtract(nextPosition, position, new Cartesian3());
+        const direction = Cartesian3.subtract(next, current, new Cartesian3());
 
-        return Math.atan2(direction.x, direction.y) - Math.PI / 2;
+        Cartesian3.normalize(direction, direction);
+
+        const enuTransform = Transforms.eastNorthUpToFixedFrame(current);
+
+        const inverse = Matrix4.inverseTransformation(enuTransform, new Matrix4());
+
+        const localDirection = Matrix4.multiplyByPointAsVector(inverse, direction, new Cartesian3());
+
+        const heading = Math.atan2(localDirection.x, localDirection.y);
+
+        const hpr = new HeadingPitchRoll(heading + CesiumMath.toRadians(-90), 0, 0);
+
+        return Transforms.headingPitchRollQuaternion(current, hpr);
       }, false),
     [aircraft, arcPositions],
   );
@@ -126,14 +131,11 @@ const AircraftEntity = ({ aircraft, showAircraftNames, isSelected }: Props) => {
     <>
       <Entity
         position={positionProperty as any}
-        billboard={{
-          image: isSelected ? selectedShipIcon : shipIcon,
-          scale: isSelected ? 1 : 0.5,
-          scaleByDistance: new NearFarScalar(700_000, 1.9, 9_000_000, 0.01),
-          rotation: rotationProperty as any,
-          verticalOrigin: VerticalOrigin.CENTER,
-          pixelOffset: new Cartesian2(0, 0),
-          disableDepthTestDistance: Number.POSITIVE_INFINITY,
+        orientation={orientationProperty as any}
+        model={{
+          uri: "/Airplane.glb",
+          scale: 25,
+          minimumPixelSize: 32,
         }}
         label={
           showAircraftNames || isSelected

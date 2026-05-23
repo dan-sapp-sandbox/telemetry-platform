@@ -17,6 +17,15 @@ export type Vessel = {
   routeOffsetMeters: number;
 };
 
+export type Aircraft = {
+  id: string;
+  name: string;
+  routeId: string;
+  speedMps: number;
+  startOffsetSeconds: number;
+  routeOffsetMeters: number;
+};
+
 export interface CommandResponse {
   action: string | null;
   args: Record<string, any>;
@@ -46,7 +55,7 @@ export const api = createApi({
         }));
       },
     }),
-    getAircraft: builder.query<Vessel[], void>({
+    getAircraft: builder.query<Aircraft[], void>({
       query: () => "aircraft/get-aircraft",
     }),
     getAirRoutes: builder.query<Route[], void>({

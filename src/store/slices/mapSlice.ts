@@ -18,7 +18,7 @@ export interface mapState {
 
 const initialState: mapState = {
   showOverviewMap: false,
-  showPipMap: false,
+  showPipMap: true,
   showPipMap2: false,
   layer: "satellite",
 };

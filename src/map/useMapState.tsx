@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
 import type { RefObject } from "react";
-import { Cartesian2, Cartesian3, Cartographic, Math as CesiumMath, Viewer } from "cesium";
+import { Cartesian3, Math as CesiumMath, Viewer } from "cesium";
 import type { ILayer, mapState } from "@/store/slices/mapSlice";
 import useLocalStorage from "use-local-storage";
 import { useSelector } from "react-redux";
@@ -60,31 +60,15 @@ const useMapState = (): IMapState => {
 
         if (!main || !overview) return;
 
-        const scene = main.scene;
         const camera = main.camera;
 
-        const center = new Cartesian2(scene.canvas.clientWidth / 2, scene.canvas.clientHeight / 2);
+        const position = camera.positionCartographic;
 
-        const ellipsoid = scene.globe.ellipsoid;
-
-        const cartesian = camera.pickEllipsoid(center, ellipsoid);
-
-        if (!cartesian) return;
-
-        const carto = Cartographic.fromCartesian(cartesian);
-
-        const overviewHeight = Math.min(8_000_000, Math.max(camera.positionCartographic.height * 2, 3_000_000));
-
-        const destination = Cartesian3.fromRadians(carto.longitude, carto.latitude, overviewHeight);
-
-        setInitCameraView({
-          lon: CesiumMath.toDegrees(camera.positionCartographic.longitude),
-          lat: CesiumMath.toDegrees(camera.positionCartographic.latitude),
-          height: camera.positionCartographic.height,
-          heading: 0,
-          pitch: -Math.PI / 2,
-          roll: 0,
-        });
+        const destination = Cartesian3.fromRadians(
+          position.longitude,
+          position.latitude,
+          Math.min(8_000_000, Math.max(position.height * 2, 3_000_000)),
+        );
 
         overview.camera.setView({
           destination,
@@ -93,6 +77,15 @@ const useMapState = (): IMapState => {
             pitch: -Math.PI / 2,
             roll: 0,
           },
+        });
+
+        setInitCameraView({
+          lon: CesiumMath.toDegrees(position.longitude),
+          lat: CesiumMath.toDegrees(position.latitude),
+          height: position.height,
+          heading: camera.heading,
+          pitch: camera.pitch,
+          roll: camera.roll,
         });
       };
 

@@ -8,6 +8,10 @@ import {
   NearFarScalar,
   DistanceDisplayCondition,
   CallbackProperty,
+  Cartesian3,
+  HeadingPitchRoll,
+  Transforms,
+  Matrix4,
 } from "cesium";
 import { Entity } from "resium";
 import { type SimulatedVessel } from "@/map/types";
@@ -19,29 +23,6 @@ interface Props {
   showVesselNames: boolean;
   isSelected: boolean;
 }
-
-const shipSvg = `
-<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64">
-  <!-- hull -->
-  <path d="M32 2 L54 58 L32 48 L10 58 Z" fill="white"/>
-
-  <!-- rear notch (cut-out) -->
-  <path d="M26 52 L32 60 L38 52 L32 54 Z" fill="none"/>
-</svg>
-`;
-
-const selectedShipSvg = `
-<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64">
-  <!-- hull -->
-  <path d="M32 2 L54 58 L32 48 L10 58 Z" fill="#00d492"/>
-
-  <!-- rear notch (cut-out) -->
-  <path d="M26 52 L32 60 L38 52 L32 54 Z" fill="none"/>
-</svg>
-`;
-
-const shipIcon = `data:image/svg+xml;charset=utf-8,${encodeURIComponent(shipSvg)}`;
-const selectedShipIcon = `data:image/svg+xml;charset=utf-8,${encodeURIComponent(selectedShipSvg)}`;
 
 const VesselEntity = ({ vessel, showVesselNames, isSelected }: Props) => {
   const positionCallback = useMemo(
@@ -61,7 +42,7 @@ const VesselEntity = ({ vessel, showVesselNames, isSelected }: Props) => {
     [vessel],
   );
 
-  const headingCallback = useMemo(
+  const orientationCallback = useMemo(
     () =>
       new CallbackProperty(() => {
         const t = clock.getTime();
@@ -73,23 +54,43 @@ const VesselEntity = ({ vessel, showVesselNames, isSelected }: Props) => {
         const wrapped =
           ((distance % vessel.route.totalDistance) + vessel.route.totalDistance) % vessel.route.totalDistance;
 
-        return getPositionAlongRoute(vessel.route, wrapped).heading;
+        const current = getPositionAlongRoute(vessel.route, wrapped);
+        const next = getPositionAlongRoute(vessel.route, wrapped + 100);
+
+        if (!current?.position || !next?.position) return undefined;
+
+        const position = current.position;
+
+        const velocity = Cartesian3.subtract(next.position, current.position, new Cartesian3());
+
+        if (Cartesian3.magnitudeSquared(velocity) === 0) return undefined;
+
+        const enuToFixed = Transforms.eastNorthUpToFixedFrame(position);
+        const fixedToEnu = Matrix4.inverse(enuToFixed, new Matrix4());
+
+        const localVelocity = Matrix4.multiplyByPointAsVector(fixedToEnu, velocity, new Cartesian3());
+
+        Cartesian3.normalize(localVelocity, localVelocity);
+
+        const heading = Math.atan2(localVelocity.x, localVelocity.y) - Math.PI / 2;
+
+        const hpr = new HeadingPitchRoll(heading, 0, 0);
+
+        return Transforms.headingPitchRollQuaternion(position, hpr);
       }, false),
     [vessel],
   );
 
   return (
     <Entity
-      position={positionCallback as any}
-      billboard={{
-        image: isSelected ? selectedShipIcon : shipIcon,
-        scale: isSelected ? 0.4 : 0.07,
-        scaleByDistance: new NearFarScalar(700_000, 1.9, 9_000_000, 0.01),
-        rotation: headingCallback as any,
-        verticalOrigin: VerticalOrigin.CENTER,
-        pixelOffset: new Cartesian2(0, 0),
-        disableDepthTestDistance: Number.POSITIVE_INFINITY,
+      model={{
+        uri: "/Container Ship.glb",
+        scale: 20000,
+        minimumPixelSize: 16,
+        maximumScale: 2000000,
       }}
+      position={positionCallback as any}
+      orientation={orientationCallback as any}
       label={
         showVesselNames || isSelected
           ? {

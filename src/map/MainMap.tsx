@@ -54,7 +54,7 @@ const InitialCamera = () => {
     // viewer.scene.globe.preloadSiblings = false;
     // viewer.scene.globe.preloadAncestors = false;
     // viewer.scene.globe.reprojectTextureFor3D = false;
-    viewer.scene.morphTo2D(0);
+    // viewer.scene.morphTo2D(0);
     viewer.scene.backgroundColor = Color.BLACK;
     viewer.scene.globe.baseColor = Color.BLACK;
     viewer.scene.screenSpaceCameraController.maximumZoomDistance = 9_000_000;
@@ -106,7 +106,6 @@ const InitialCamera = () => {
 
 const MainMap = ({ children }: { children?: ReactNode | ReactNode[] }) => {
   const contextOptions = useMemo(() => ({ webgl: { alpha: true } }), []);
-  // const terrainProvider = createWorldTerrainAsync();
 
   return (
     <Viewer

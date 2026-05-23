@@ -180,11 +180,28 @@ export function createArcRoute(
   for (let i = 0; i <= numPoints; i++) {
     const t = i / numPoints;
 
-    // point along earth surface
     const cartographic = geodesic.interpolateUsingFraction(t);
 
-    // smooth arc height
     const height = Math.sin(Math.PI * t) * maxHeight;
+
+    points.push(Cartesian3.fromRadians(cartographic.longitude, cartographic.latitude, height));
+  }
+
+  return points;
+}
+
+export function createArcPoints(start: Cartographic, end: Cartographic, samples = 100, arcHeight = 200000) {
+  const geodesic = new EllipsoidGeodesic(start, end);
+
+  const points: Cartesian3[] = [];
+
+  for (let i = 0; i <= samples; i++) {
+    const t = i / samples;
+
+    const cartographic = geodesic.interpolateUsingFraction(t);
+
+    // parabolic height curve
+    const height = Math.sin(Math.PI * t) * arcHeight;
 
     points.push(Cartesian3.fromRadians(cartographic.longitude, cartographic.latitude, height));
   }

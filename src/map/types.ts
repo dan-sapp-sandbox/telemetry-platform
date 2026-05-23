@@ -52,8 +52,6 @@ export interface SimulatedAircraft {
   speedMps: number;
   startOffsetSeconds: number;
   routeOffsetMeters: number;
-  position: Cartesian3;
-  heading: number;
 }
 
 export interface SimulatedVessel {

@@ -36,6 +36,7 @@ const PipInitializer = () => {
           roll: init.roll,
         },
       });
+      // viewer.scene.morphTo2D(0);
     } catch (e) {
       console.log("e", e);
     }
