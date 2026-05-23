@@ -32,7 +32,7 @@ const AircraftEntity = ({ aircraft, showAircraftNames, isSelected }: Props) => {
   const end = Cartographic.fromDegrees(aircraft.route.points[1].lon, aircraft.route.points[1].lat);
 
   const arcPositions = useMemo(
-    () => createArcPoints(start, end, 200, 300000),
+    () => createArcPoints(start, end, 200, 200000),
     [
       aircraft.route.points[0].lat,
       aircraft.route.points[0].lon,
