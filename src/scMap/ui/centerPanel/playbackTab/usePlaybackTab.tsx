@@ -5,14 +5,23 @@ const usePlaybackTab = () => {
   const dispatch = useDispatch();
   const { isPlaying, speed } = useSelector((state: { playback: PlaybackState }) => state.playback);
 
+  const speeds = [1, 10, 100, 200, 500];
+  const currentIndex = speeds.indexOf(speed);
+
   const handlePlay = () => {
     dispatch(play());
   };
   const handlePause = () => {
     dispatch(pause());
   };
-  const handleSetSpeed = (speed: number) => {
-    dispatch(setSpeed(speed));
+  const handleIncreaseSpeed = () => {
+    const nextIndex = Math.min(currentIndex + 1, speeds.length - 1);
+    dispatch(setSpeed(speeds[nextIndex]));
+  };
+
+  const handleDecreaseSpeed = () => {
+    const prevIndex = Math.max(currentIndex - 1, 0);
+    dispatch(setSpeed(speeds[prevIndex]));
   };
 
   return {
@@ -20,7 +29,8 @@ const usePlaybackTab = () => {
     speed,
     handlePlay,
     handlePause,
-    handleSetSpeed,
+    handleIncreaseSpeed,
+    handleDecreaseSpeed,
   };
 };
 
