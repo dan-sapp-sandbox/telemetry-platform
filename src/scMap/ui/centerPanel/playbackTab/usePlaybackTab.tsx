@@ -5,7 +5,7 @@ const usePlaybackTab = () => {
   const dispatch = useDispatch();
   const { isPlaying, speed } = useSelector((state: { playback: PlaybackState }) => state.playback);
 
-  const speeds = [1, 10, 100, 200, 500];
+  const speeds = [1, 10, 100, 200, 500, 1000, 2000];
   const currentIndex = speeds.indexOf(speed);
 
   const handlePlay = () => {
