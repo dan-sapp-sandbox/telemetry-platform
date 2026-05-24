@@ -83,6 +83,8 @@ const VesselEntity = ({ vessel, showVesselNames, isSelected }: Props) => {
 
   return (
     <Entity
+      id={vessel.id}
+      viewFrom={new Cartesian3(200000, 350000, 150000)}
       model={{
         uri: "/Container Ship.glb",
         scale: 10000,

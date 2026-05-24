@@ -34,7 +34,9 @@ export interface IMapState {
 }
 
 const useMapState = (): IMapState => {
-  const { showOverviewMap, showPipMap, showPipMap2, layer } = useSelector((state: { map: mapState }) => state.map);
+  const { showOverviewMap, showPipMap, showPipMap2, layer, trackedEntityId } = useSelector(
+    (state: { map: mapState }) => state.map,
+  );
 
   const containerRef = useRef<HTMLDivElement | null>(null);
   const mainViewerRef = useRef<Viewer | null>(null);
@@ -79,14 +81,16 @@ const useMapState = (): IMapState => {
           },
         });
 
-        setInitCameraView({
-          lon: CesiumMath.toDegrees(position.longitude),
-          lat: CesiumMath.toDegrees(position.latitude),
-          height: position.height,
-          heading: camera.heading,
-          pitch: camera.pitch,
-          roll: camera.roll,
-        });
+        if (!trackedEntityId) {
+          setInitCameraView({
+            lon: CesiumMath.toDegrees(position.longitude),
+            lat: CesiumMath.toDegrees(position.latitude),
+            height: position.height,
+            heading: camera.heading,
+            pitch: camera.pitch,
+            roll: camera.roll,
+          });
+        }
       };
 
       try {

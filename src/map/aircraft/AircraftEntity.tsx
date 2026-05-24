@@ -130,6 +130,8 @@ const AircraftEntity = ({ aircraft, showAircraftNames, isSelected }: Props) => {
   return (
     <>
       <Entity
+        id={aircraft.id}
+        viewFrom={new Cartesian3(200000, 350000, 150000)}
         position={positionProperty as any}
         orientation={orientationProperty as any}
         model={{

@@ -1,10 +1,17 @@
 import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
 import useAircraftDetails from "./useAircraftDetails";
-import { X } from "lucide-react";
+import { Locate, X } from "lucide-react";
 
 const AircraftDetails = () => {
-  const { aircraft, selectedAircraft, handleSetSelectedAircraft } = useAircraftDetails();
+  const {
+    aircraft,
+    selectedAircraft,
+    handleSetSelectedAircraft,
+    trackedEntityId,
+    trackSelectedAircraft,
+    untrackSelectedAircraft,
+  } = useAircraftDetails();
   return (
     <div className="flex h-full">
       <div className="flex flex-col w-[45%] overflow-y-auto scrollbar-hide">
@@ -46,6 +53,13 @@ const AircraftDetails = () => {
             </div>
             <div className="">{selectedAircraft.name}</div>
             <div>{selectedAircraft.routeName}</div>
+            <div
+              className="flex items-center gap-2 cursor-pointer hover:text-(--text-hover)"
+              onClick={trackedEntityId === selectedAircraft.id ? untrackSelectedAircraft : trackSelectedAircraft}
+            >
+              <Locate className="size-4" />
+              {trackedEntityId === selectedAircraft.id ? "Stop Tracking" : "Track"}
+            </div>
           </div>
         </div>
       ) : (

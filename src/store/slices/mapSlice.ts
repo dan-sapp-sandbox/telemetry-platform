@@ -14,6 +14,7 @@ export interface mapState {
   showPipMap: boolean;
   showPipMap2: boolean;
   layer: ILayer;
+  trackedEntityId: string | null;
 }
 
 const initialState: mapState = {
@@ -21,6 +22,7 @@ const initialState: mapState = {
   showPipMap: true,
   showPipMap2: false,
   layer: "satellite",
+  trackedEntityId: null,
 };
 
 const mapSlice = createSlice({
@@ -40,10 +42,14 @@ const mapSlice = createSlice({
     setLayer: (state, action) => {
       state.layer = action.payload;
     },
+    setTrackedEntityId: (state, action) => {
+      state.trackedEntityId = action.payload;
+    },
     resetToDefault: () => initialState,
   },
 });
 
-export const { setShowOverviewMap, setShowPipMap, setShowPipMap2, setLayer, resetToDefault } = mapSlice.actions;
+export const { setTrackedEntityId, setShowOverviewMap, setShowPipMap, setShowPipMap2, setLayer, resetToDefault } =
+  mapSlice.actions;
 
 export default mapSlice.reducer;

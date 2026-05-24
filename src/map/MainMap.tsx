@@ -10,6 +10,7 @@ import { setSelectedAircraft, type aircraftState } from "@/store/slices/aircraft
 import { setActivePanel } from "@/store/slices/actionPalletSlice";
 import { setSelectedEntity, type drawState } from "@/store/slices/drawSlice";
 import { defaultMainView } from "./useMapState";
+import type { mapState } from "@/store/slices/mapSlice";
 
 const RegisterMainViewer = () => {
   const { viewer } = useCesium();
@@ -25,6 +26,7 @@ const RegisterMainViewer = () => {
 
 const InitialCamera = () => {
   const dispatch = useDispatch();
+  const { trackedEntityId } = useSelector((state: { map: mapState }) => state.map);
   const { vessels } = useSelector((state: { vessels: vesselState }) => state.vessels);
   const { aircraft } = useSelector((state: { aircraft: aircraftState }) => state.aircraft);
   const { entities } = useSelector((state: { draw: drawState }) => state.draw);
@@ -60,6 +62,37 @@ const InitialCamera = () => {
     viewer.scene.screenSpaceCameraController.maximumZoomDistance = 9_000_000;
     viewer.cesiumWidget.screenSpaceEventHandler.removeInputAction(ScreenSpaceEventType.LEFT_DOUBLE_CLICK);
   }, [viewer]);
+
+  useEffect(() => {
+    if (!viewer) return;
+
+    if (!trackedEntityId) {
+      viewer.trackedEntity = undefined;
+      return;
+    }
+
+    let frame: number;
+
+    const tryTrack = () => {
+      if (!viewer || viewer.isDestroyed()) return;
+
+      const entity =
+        viewer.entities.getById(trackedEntityId) ?? viewer.dataSources.get(0)?.entities.getById(trackedEntityId);
+
+      if (entity) {
+        viewer.trackedEntity = entity;
+        return;
+      }
+
+      frame = requestAnimationFrame(tryTrack);
+    };
+
+    tryTrack();
+
+    return () => {
+      cancelAnimationFrame(frame);
+    };
+  }, [viewer, trackedEntityId]);
 
   useEffect(() => {
     if (!viewer) return;
