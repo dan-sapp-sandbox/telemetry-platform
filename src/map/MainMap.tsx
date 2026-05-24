@@ -110,7 +110,6 @@ const MainMap = ({ children }: { children?: ReactNode | ReactNode[] }) => {
   return (
     <Viewer
       full
-      // terrainProvider={terrainProvider}
       contextOptions={contextOptions}
       baseLayerPicker={false}
       baseLayer={false}
