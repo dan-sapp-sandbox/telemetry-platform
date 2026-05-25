@@ -30,7 +30,6 @@ const AircraftEntity = ({ aircraft, showAircraftNames, isSelected }: Props) => {
   const orientation = useMemo(() => {
     if (!position) return undefined;
 
-    // fallback if missing heading
     const headingDeg = aircraft.heading_deg ?? 0;
 
     const hpr = new HeadingPitchRoll(CesiumMath.toRadians(headingDeg - 90), 0, 0);
@@ -57,14 +56,16 @@ const AircraftEntity = ({ aircraft, showAircraftNames, isSelected }: Props) => {
   return (
     <Entity
       id={aircraft.icao}
-      viewFrom={new Cartesian3(20000, 35000, 30000)}
+      viewFrom={new Cartesian3(0, -35000, 50000)}
       position={position}
       orientation={orientation}
       model={{
         uri: "/Airplane.glb",
-        scale: 5,
-        minimumPixelSize: 7,
-        maximumScale: 1000,
+        scale: 3,
+        minimumPixelSize: 6,
+        maximumScale: 800,
+        silhouetteColor: isSelected ? Color.RED : undefined,
+        silhouetteSize: isSelected ? 2 : undefined,
       }}
       label={label}
       properties={{

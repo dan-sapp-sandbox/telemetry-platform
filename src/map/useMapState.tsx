@@ -7,17 +7,17 @@ import { useSelector } from "react-redux";
 
 export const defaultMainView = {
   heading: 0,
-  height: 9_000_000,
-  lat: 27.75,
-  lon: 53.37,
+  height: 300_000,
+  lat: 40.5,
+  lon: 15.5,
   pitch: -Math.PI / 2,
   roll: 0,
 };
 export const defaultPipView = {
-  height: 7999.999999999899,
-  lat: 29.240000000000006,
-  lon: 50.314,
-  heading: 6.283185307179581,
+  height: 8000,
+  lat: 30,
+  lon: 50,
+  heading: 0,
   pitch: -Math.PI / 2,
   roll: 0,
 };
