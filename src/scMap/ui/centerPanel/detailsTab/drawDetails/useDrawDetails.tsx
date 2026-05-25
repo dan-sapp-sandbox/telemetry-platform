@@ -19,29 +19,6 @@ const useDrawDetails = (): IDrawDetails => {
   const dispatch = useDispatch();
   const { entities, selectedEntity } = useSelector((state: { draw: drawState }) => state.draw);
 
-  const makeRoute = () => {
-    if (!entities.length) return null;
-    const positions = entities.flatMap((p) => {
-      return p.positions.map((pos) => {
-        const deserialized = deserializePosition(pos);
-        const cart = Cartesian3.fromElements(deserialized.x, deserialized.y, deserialized.z);
-        const geo = Cartographic.fromCartesian(cart);
-
-        return {
-          lat: CesiumMath.toDegrees(geo.latitude),
-          lon: CesiumMath.toDegrees(geo.longitude),
-        };
-      });
-    });
-    return positions;
-    return `(
-      'hormuz',
-      'Kharg Island → Oman',
-      '${positions.toString()}'::jsonb
-    )`;
-  };
-  console.log("makeRoute", makeRoute());
-
   const { mainViewerRef } = useContext(CameraContext);
   const main = mainViewerRef.current;
 

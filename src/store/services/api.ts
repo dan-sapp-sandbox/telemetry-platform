@@ -18,12 +18,27 @@ export type Vessel = {
 };
 
 export type Aircraft = {
-  id: string;
-  name: string;
-  routeId: string;
-  speedMps: number;
-  startOffsetSeconds: number;
-  routeOffsetMeters: number;
+  icao: string;
+  callsign: string | null;
+  origin_country: string;
+
+  lon: number;
+  lat: number;
+
+  altitude_m: number | null;
+  geo_altitude_m: number | null;
+
+  velocity_mps: number | null;
+  heading_deg: number | null;
+  vertical_rate: number | null;
+
+  on_ground: boolean;
+  spi: boolean;
+  position_source: number;
+
+  squawk: string | null;
+
+  snapshot_time: number;
 };
 
 export interface CommandResponse {
@@ -55,18 +70,16 @@ export const api = createApi({
         }));
       },
     }),
-    getAircraft: builder.query<Aircraft[], void>({
-      query: () => "aircraft/get-aircraft",
-    }),
-    getAirRoutes: builder.query<Route[], void>({
-      query: () => "aircraft/get-air-routes",
-      transformResponse: (response: any[]): Route[] => {
-        return response.map((r) => ({
-          id: r.id,
-          name: r.name,
-          points: r.points,
-        }));
-      },
+    getAircraft: builder.query<Aircraft[], IBounds>({
+      query: (bounds) => ({
+        url: "aircraft/get-aircraft",
+        params: {
+          lon_min: bounds.west,
+          lon_max: bounds.east,
+          lat_min: bounds.south,
+          lat_max: bounds.north,
+        },
+      }),
     }),
     sendCommandPrompt: builder.mutation<CommandResponse, CommandRequest>({
       query: (body) => ({

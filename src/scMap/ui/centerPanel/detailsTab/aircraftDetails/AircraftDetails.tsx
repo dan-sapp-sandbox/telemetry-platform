@@ -18,12 +18,12 @@ const AircraftDetails = () => {
         {aircraft.map((entry, index) => {
           const getBackgroundStyles = () => {
             if (index % 2 === 0) {
-              if (selectedAircraft?.id === entry.id) {
+              if (selectedAircraft?.icao === entry.icao) {
                 return "bg-blue-400/20";
               }
               return "bg-zinc-800/50";
             } else {
-              if (selectedAircraft?.id === entry.id) {
+              if (selectedAircraft?.icao === entry.icao) {
                 return "bg-blue-400/20";
               }
               return "bg-zinc-700/50";
@@ -31,14 +31,14 @@ const AircraftDetails = () => {
           };
           return (
             <div
-              key={entry.id}
+              key={entry.icao}
               className={cn([
                 "cursor-pointer px-4 py-1.5 md:py-1 transition-colors text-xs md:text-sm text-(--text)/80 hover:bg-blue-400/30",
                 getBackgroundStyles(),
               ])}
               onClick={() => handleSetSelectedAircraft(entry)}
             >
-              {entry.name}
+              {entry.callsign}
             </div>
           );
         })}
@@ -51,14 +51,13 @@ const AircraftDetails = () => {
               <div className="underline">Selected</div>
               <X className="size-4 md:size-6" onClick={() => handleSetSelectedAircraft(null)} />
             </div>
-            <div className="">{selectedAircraft.name}</div>
-            <div>{selectedAircraft.routeName}</div>
+            <div className="">{selectedAircraft.callsign}</div>
             <div
               className="flex items-center gap-2 cursor-pointer hover:text-(--text-hover)"
-              onClick={trackedEntityId === selectedAircraft.id ? untrackSelectedAircraft : trackSelectedAircraft}
+              onClick={trackedEntityId === selectedAircraft.icao ? untrackSelectedAircraft : trackSelectedAircraft}
             >
               <Locate className="size-4" />
-              {trackedEntityId === selectedAircraft.id ? "Stop Tracking" : "Track"}
+              {trackedEntityId === selectedAircraft.icao ? "Stop Tracking" : "Track"}
             </div>
           </div>
         </div>

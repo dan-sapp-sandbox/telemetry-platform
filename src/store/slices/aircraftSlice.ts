@@ -1,35 +1,9 @@
 import { createSlice } from "@reduxjs/toolkit";
-
-export type RoutePoint = {
-  lat: number;
-  lon: number;
-};
-
-export type Route = {
-  id: string;
-  name: string;
-  points: RoutePoint[];
-};
-
-export type Aircraft = {
-  id: string;
-  name: string;
-  type: "Cargo" | "Tanker" | "Fishing" | "Passenger";
-  lat: number;
-  lon: number;
-  heading: number;
-  speed: number;
-};
-
-export type RoutedAircraft = {
-  id: string;
-  name: string;
-  routeName: string;
-};
+import type { Aircraft } from "../services/api";
 
 export interface aircraftState {
-  aircraft: RoutedAircraft[];
-  selectedAircraft: RoutedAircraft | null;
+  aircraft: Aircraft[];
+  selectedAircraft: Aircraft | null;
   showAircraft: boolean;
   showAircraftNames: boolean;
   showAircraftPaths: boolean;
@@ -51,9 +25,6 @@ const aircraftSlice = createSlice({
     setSelectedAircraft: (state, action) => {
       state.selectedAircraft = action.payload;
     },
-    setAircraft: (state, action) => {
-      state.aircraft = action.payload;
-    },
     setShowAircraft: (state, action) => {
       state.showAircraft = action.payload;
     },
@@ -66,7 +37,7 @@ const aircraftSlice = createSlice({
   },
 });
 
-export const { setSelectedAircraft, setAircraft, setShowAircraft, setShowAircraftNames, setShowAircraftPaths } =
+export const { setSelectedAircraft, setShowAircraft, setShowAircraftNames, setShowAircraftPaths } =
   aircraftSlice.actions;
 
 export default aircraftSlice.reducer;

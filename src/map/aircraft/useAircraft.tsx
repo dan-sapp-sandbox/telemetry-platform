@@ -1,12 +1,16 @@
-import { useState, useContext, useEffect, useMemo, useRef, type JSX } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useState, useContext, useEffect, useMemo, type JSX } from "react";
+
+import { useSelector } from "react-redux";
+
 import AircraftEntity from "./AircraftEntity";
-import { CameraContext, type ProcessedRoute } from "@/map/types";
-import { processRoute } from "@/map/utils";
-import { useGetAirRoutesQuery, useGetAircraftQuery } from "@/store/services/api";
-import { setAircraft, type aircraftState } from "@/store/slices/aircraftSlice";
+
+import { CameraContext } from "@/map/types";
+import { type aircraftState } from "@/store/slices/aircraftSlice";
 import { type PlaybackState } from "@/store/slices/playbackSlice";
+
 import { clock } from "@/map/simulationEngine";
+import { useGetAircraftQuery } from "@/store/services/api";
+import { getBounds } from "@/map/utils";
 
 export interface IAircraftState {
   aircraftEntities: JSX.Element[];
@@ -14,8 +18,6 @@ export interface IAircraftState {
 }
 
 const useAircraft = (): IAircraftState => {
-  const dispatch = useDispatch();
-
   const [, forceRender] = useState(0);
 
   const { showAircraft, showAircraftNames, selectedAircraft } = useSelector(
@@ -26,12 +28,21 @@ const useAircraft = (): IAircraftState => {
 
   const { mainViewerRef } = useContext(CameraContext);
 
-  const { data: routedAircraft = [] } = useGetAircraftQuery(undefined, {
-    skip: !mainViewerRef.current,
-  });
+  const bounds = getBounds(mainViewerRef.current);
 
-  const { data: routes = [] } = useGetAirRoutesQuery(undefined, {
-    skip: !mainViewerRef.current,
+  const stableBounds = useMemo(() => {
+    if (!bounds) return null;
+
+    return {
+      west: bounds.west,
+      south: bounds.south,
+      east: bounds.east,
+      north: bounds.north,
+    };
+  }, [bounds]);
+
+  const { data: aircraft = [] } = useGetAircraftQuery(stableBounds!, {
+    skip: !stableBounds || !mainViewerRef.current,
   });
 
   useEffect(() => {
@@ -57,50 +68,13 @@ const useAircraft = (): IAircraftState => {
     clock.setSpeed(speed);
   }, [isPlaying, speed]);
 
-  const processedRoutes = useMemo(() => {
-    return routes.reduce<Record<string, ProcessedRoute>>((acc, route) => {
-      acc[route.id] = processRoute(route);
-      return acc;
-    }, {});
-  }, [routes]);
-
-  const previousIdsRef = useRef("");
-
-  useEffect(() => {
-    const ids = routedAircraft.map((v) => v.id).join(",");
-
-    if (ids === previousIdsRef.current) return;
-
-    previousIdsRef.current = ids;
-
-    dispatch(
-      setAircraft(
-        routedAircraft.map((aircraft) => ({
-          id: aircraft.id,
-          name: aircraft.name,
-          routeName: routes.find((r) => r.id === aircraft.routeId)?.name,
-        })),
-      ),
-    );
-  }, [dispatch, routedAircraft, routes]);
-
   const aircraftEntities = useMemo(() => {
-    return routedAircraft.flatMap((aircraft) => {
-      const route = processedRoutes[aircraft.routeId];
-      if (!route) return [];
+    return aircraft.map((a) => {
+      const isSelected = selectedAircraft?.icao === a.icao;
 
-      const isSelected = selectedAircraft?.id === aircraft.id;
-
-      return (
-        <AircraftEntity
-          key={aircraft.id}
-          aircraft={{ ...aircraft, route }}
-          showAircraftNames={showAircraftNames}
-          isSelected={isSelected}
-        />
-      );
+      return <AircraftEntity key={a.icao} aircraft={a} showAircraftNames={showAircraftNames} isSelected={isSelected} />;
     });
-  }, [routedAircraft, processedRoutes, showAircraftNames, selectedAircraft]);
+  }, [aircraft, showAircraftNames, selectedAircraft]);
 
   return {
     aircraftEntities,

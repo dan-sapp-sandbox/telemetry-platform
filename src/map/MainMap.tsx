@@ -1,4 +1,4 @@
-import { useContext, useEffect, useMemo, type ReactNode } from "react";
+import { useContext, useEffect, useMemo, useRef, type ReactNode } from "react";
 import { Viewer, useCesium } from "resium";
 import { CameraContext } from "./types";
 import { Viewer as CesiumViewer, Cartesian3, ScreenSpaceEventType, Color } from "cesium";
@@ -6,11 +6,13 @@ import useLocalStorage from "use-local-storage";
 import DrawController from "./DrawController";
 import { useDispatch, useSelector } from "react-redux";
 import { setSelectedVessel, type vesselState } from "@/store/slices/vesselSlice";
-import { setSelectedAircraft, type aircraftState } from "@/store/slices/aircraftSlice";
+import { setSelectedAircraft } from "@/store/slices/aircraftSlice";
 import { setActivePanel } from "@/store/slices/actionPalletSlice";
 import { setSelectedEntity, type drawState } from "@/store/slices/drawSlice";
 import { defaultMainView } from "./useMapState";
 import type { mapState } from "@/store/slices/mapSlice";
+import { getBounds } from "./utils";
+import { useGetAircraftQuery } from "@/store/services/api";
 
 const RegisterMainViewer = () => {
   const { viewer } = useCesium();
@@ -28,10 +30,29 @@ const InitialCamera = () => {
   const dispatch = useDispatch();
   const { trackedEntityId } = useSelector((state: { map: mapState }) => state.map);
   const { vessels } = useSelector((state: { vessels: vesselState }) => state.vessels);
-  const { aircraft } = useSelector((state: { aircraft: aircraftState }) => state.aircraft);
   const { entities } = useSelector((state: { draw: drawState }) => state.draw);
   const [init] = useLocalStorage("main-cam-init", defaultMainView);
   const { viewer } = useCesium();
+
+  const bounds = viewer && getBounds(viewer);
+  const stableBounds = useMemo(() => {
+    if (!bounds) return null;
+
+    return {
+      west: bounds.west,
+      south: bounds.south,
+      east: bounds.east,
+      north: bounds.north,
+    };
+  }, [bounds]);
+
+  const { data: aircraft = [] } = useGetAircraftQuery(stableBounds!, {
+    skip: !stableBounds || !viewer,
+  });
+  const aircraftRef = useRef(aircraft);
+  useEffect(() => {
+    aircraftRef.current = aircraft;
+  }, [aircraft]);
 
   useEffect(() => {
     if (!viewer) return;
@@ -102,15 +123,16 @@ const InitialCamera = () => {
       if (!vessels) return;
       const picked = viewer.scene.pick(event.position);
       const entity = picked?.id;
+
       if (!entity) {
         viewer.selectedEntity = undefined;
         return;
       }
       // intercept logic
-      if (entity.properties?.type?.getValue() === "blocked") {
+      if (entity.properties?.type === "blocked") {
         return; // ignore selection
       }
-      const entityId = entity.properties.id.getValue();
+      const entityId = entity.properties.icao.getValue();
       const entityType = entity.properties.entityType.getValue();
       if (entityType === "vessel") {
         const matchingVessel = vessels.find((vessel) => vessel.id === entityId);
@@ -119,7 +141,7 @@ const InitialCamera = () => {
         dispatch(setActivePanel("vessels"));
       }
       if (entityType === "aircraft") {
-        const matchingAircraft = aircraft.find((aircraft) => aircraft.id === entityId);
+        const matchingAircraft = aircraftRef.current.find((a) => a.icao === entityId);
         if (!matchingAircraft) return;
         dispatch(setSelectedAircraft(matchingAircraft));
         dispatch(setActivePanel("aircraft"));
