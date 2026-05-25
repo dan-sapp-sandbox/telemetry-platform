@@ -1,16 +1,18 @@
 import { useEffect, useMemo, useRef } from "react";
 import { useCesium } from "resium";
-import { OpenStreetMapImageryProvider, IonImageryProvider, UrlTemplateImageryProvider } from "cesium";
+import { OpenStreetMapImageryProvider, IonImageryProvider, UrlTemplateImageryProvider, ImageryLayer } from "cesium";
 import { useSelector } from "react-redux";
 import { type mapState } from "@/store/slices/mapSlice";
 
 const TILE_BASE_URL = "https://vtumnamsiwcnmoysyqzi.supabase.co/storage/v1/object/public/tiles";
 
 const Layers = () => {
-  const { layer } = useSelector((state: { map: mapState }) => state.map);
+  const { layer, dataLayer } = useSelector((state: { map: mapState }) => state.map);
 
   const { viewer } = useCesium();
   const satelliteRef = useRef<Promise<IonImageryProvider> | null>(null);
+  const baseLayerRef = useRef<ImageryLayer | null>(null);
+  const populationLayerRef = useRef<ImageryLayer | null>(null);
 
   const providers = useMemo(
     () => ({
@@ -54,61 +56,90 @@ const Layers = () => {
 
     let cancelled = false;
 
-    const applyLayers = async () => {
-      let baseProvider;
+    const applyBaseLayer = async () => {
+      let provider;
 
       switch (layer) {
         case "satellite":
-        case "population-density":
-          baseProvider = await satelliteRef.current!;
+          provider = await satelliteRef.current!;
           break;
 
         case "esriSat":
-          baseProvider = providers.esriSat;
+          provider = providers.esriSat;
           break;
 
         case "carto-light":
-          baseProvider = providers["carto-light"];
+          provider = providers["carto-light"];
           break;
 
         case "carto-dark":
-          baseProvider = providers["carto-dark"];
+          provider = providers["carto-dark"];
           break;
 
         case "carto-voyager":
-          baseProvider = providers["carto-voyager"];
+          provider = providers["carto-voyager"];
           break;
 
         case "osm":
         default:
-          baseProvider = providers.osm;
+          provider = providers.osm;
       }
 
       if (cancelled) return;
 
       const layers = viewer.imageryLayers;
 
-      // Remove old AFTER new provider exists
-      layers.removeAll();
-
-      const baseLayer = layers.addImageryProvider(baseProvider);
-      baseLayer.alpha = 1.0;
-
-      if (layer === "population-density") {
-        baseLayer.alpha = 0.5;
-        const overlay = layers.addImageryProvider(providers.populationDensity);
-        overlay.alpha = 0.8;
+      if (baseLayerRef.current) {
+        layers.remove(baseLayerRef.current);
       }
+
+      const newLayer = layers.addImageryProvider(provider, 0);
+
+      newLayer.alpha = 1.0;
+
+      baseLayerRef.current = newLayer;
 
       viewer.scene.requestRender();
     };
 
-    applyLayers();
+    applyBaseLayer();
 
     return () => {
       cancelled = true;
     };
   }, [viewer, layer, providers]);
+
+  useEffect(() => {
+    if (!viewer) return;
+
+    const layers = viewer.imageryLayers;
+
+    // remove old overlay
+    if (populationLayerRef.current) {
+      layers.remove(populationLayerRef.current);
+      populationLayerRef.current = null;
+    }
+
+    // reset base alpha
+    if (baseLayerRef.current) {
+      baseLayerRef.current.alpha = 1.0;
+    }
+
+    // add overlay if enabled
+    if (dataLayer === "population-density") {
+      if (baseLayerRef.current) {
+        baseLayerRef.current.alpha = 0.75;
+      }
+
+      const overlay = layers.addImageryProvider(providers.populationDensity);
+
+      overlay.alpha = 0.8;
+
+      populationLayerRef.current = overlay;
+    }
+
+    viewer.scene.requestRender();
+  }, [viewer, dataLayer, providers]);
 
   return null;
 };
