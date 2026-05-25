@@ -91,10 +91,4 @@ export const api = createApi({
   }),
 });
 
-export const {
-  useGetVesselsQuery,
-  useGetRoutesQuery,
-  useSendCommandPromptMutation,
-  useGetAirRoutesQuery,
-  useGetAircraftQuery,
-} = api;
+export const { useGetVesselsQuery, useGetRoutesQuery, useSendCommandPromptMutation, useGetAircraftQuery } = api;
