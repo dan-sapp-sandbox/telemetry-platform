@@ -134,21 +134,23 @@ const InitialCamera = () => {
       if (entity.properties?.type === "blocked") {
         return; // ignore selection
       }
-      const entityId = entity.properties.icao.getValue();
       const entityType = entity.properties.entityType.getValue();
       if (entityType === "vessel") {
+        const entityId = entity.properties.id.getValue();
         const matchingVessel = vessels.find((vessel) => vessel.id === entityId);
         if (!matchingVessel) return;
         dispatch(setSelectedVessel(matchingVessel));
         dispatch(setActivePanel("vessels"));
       }
       if (entityType === "aircraft") {
+        const entityId = entity.properties.icao.getValue();
         const matchingAircraft = aircraftRef.current.find((a) => a.icao === entityId);
         if (!matchingAircraft) return;
         dispatch(setSelectedAircraft(matchingAircraft));
         dispatch(setActivePanel("aircraft"));
       }
       if (entityType === "draw") {
+        const entityId = entity.properties.id.getValue();
         const matchingEntity = entities.find((vessel) => vessel.id === entityId);
         if (!matchingEntity) return;
         dispatch(setSelectedEntity(matchingEntity));

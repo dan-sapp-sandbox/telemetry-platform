@@ -1,6 +1,6 @@
-import { ArrowBigLeft, Plane, Ship } from "lucide-react";
+import { Plane, Ship } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { backButtonStyles, backIconStyles, iconStyles } from "../utils";
+import { iconStyles } from "../utils";
 import useLayersPallet from "./useLayersPallet";
 
 export const wrapperStyles = cn(["group flex flex-col items-center justify-center gap-px", "w-16 md:w-18 xl:w-20 "]);
@@ -11,20 +11,13 @@ export const buttonStyles = cn([
 ]);
 export const buttonTextStyles = "text-(--text)/70 text-xs lg:text-sm group-hover:text-emerald-400/70";
 
-const LayersPallet = ({ goBack }: { goBack: () => void }) => {
+const LayersPallet = () => {
   const { layer, handleChangeLayer, dataLayer, handleChangeDataLayer } = useLayersPallet();
   return (
-    <div className="flex flex-col">
-      <div className="flex justify-between">
-        <div className="w-10" />
-        <div className="text-(--text)/80 text-sm md:text-base"></div>
-        <button className={backButtonStyles} onClick={goBack}>
-          <ArrowBigLeft className={backIconStyles} />
-        </button>
-      </div>
-      <div className="flex flex-col gap-1">
+    <div className="flex flex-col gap-3">
+      <div className="flex flex-col gap-2">
         <div className="w-full text-center text-(--text)/80 text-sm lg:text-base">Base Layer</div>
-        <div className="flex gap-3">
+        <div className="flex gap-2">
           <div className={wrapperStyles}>
             <button
               className={cn([
@@ -58,9 +51,9 @@ const LayersPallet = ({ goBack }: { goBack: () => void }) => {
           </div>
         </div>
       </div>
-      <div className="flex flex-col gap-1">
+      <div className="flex flex-col gap-2">
         <div className="w-full text-center text-(--text)/80 text-sm lg:text-base">Data Layer</div>
-        <div className="flex gap-3">
+        <div className="flex gap-2">
           <div className={wrapperStyles}>
             <button
               className={cn([

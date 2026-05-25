@@ -1,10 +1,12 @@
-import useActionPallet from "./useActionPallet";
+import LayersPallet from "./layersPallet/LayersPallet";
 import { palletWrapperStyles } from "./utils";
 
 const ActionPallet = () => {
-  const { getActivePanel } = useActionPallet();
-
-  return <div className={palletWrapperStyles}>{getActivePanel()}</div>;
+  return (
+    <div className={palletWrapperStyles}>
+      <LayersPallet />
+    </div>
+  );
 };
 
 export default ActionPallet;

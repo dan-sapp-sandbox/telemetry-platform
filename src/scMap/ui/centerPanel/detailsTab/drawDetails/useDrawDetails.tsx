@@ -11,7 +11,7 @@ interface IDrawDetails {
   entities: DrawEntity[];
   flyToDrawEntity: (entity: DrawEntity) => void;
   selectedEntity: DrawEntity | null;
-  handleSetSelectedEntity: (entity: DrawEntity) => void;
+  handleSetSelectedEntity: (entity: DrawEntity | null) => void;
 }
 const deserializePosition = (position: Position) => new Cartesian3(position.x, position.y, position.z);
 
@@ -54,7 +54,7 @@ const useDrawDetails = (): IDrawDetails => {
     });
   };
 
-  const handleSetSelectedEntity = (entity: DrawEntity) => {
+  const handleSetSelectedEntity = (entity: DrawEntity | null) => {
     dispatch(setSelectedEntity(entity));
   };
 
@@ -66,7 +66,7 @@ const useDrawDetails = (): IDrawDetails => {
   };
   const handleDeleteEntity = (entity: DrawEntity) => {
     dispatch(deleteEntity({ id: entity.id }));
-    setSelectedEntity(null);
+    dispatch(setSelectedEntity(null));
   };
 
   return {

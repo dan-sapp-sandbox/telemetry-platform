@@ -1,5 +1,5 @@
 import { useSelector, useDispatch } from "react-redux";
-import { renameEntity, deleteEntity, setDrawMode } from "@/store/slices/drawSlice";
+import { renameEntity, deleteEntity, setDrawMode, setSelectedEntity } from "@/store/slices/drawSlice";
 import type { DrawEntity, drawState, IDrawMode, Position } from "@/store/slices/drawSlice";
 import { useContext } from "react";
 import { CameraContext } from "@/map/types";
@@ -15,7 +15,7 @@ interface IDrawPanelState {
 }
 const deserializePosition = (position: Position) => new Cartesian3(position.x, position.y, position.z);
 
-const useDrawPallet = (): IDrawPanelState => {
+const useDrawTab = (): IDrawPanelState => {
   const dispatch = useDispatch();
   const { drawMode, entities } = useSelector((state: { draw: drawState }) => state.draw);
 
@@ -69,6 +69,7 @@ const useDrawPallet = (): IDrawPanelState => {
   };
   const handleDeleteEntity = (id: string) => {
     dispatch(deleteEntity({ id }));
+    dispatch(setSelectedEntity(null));
   };
 
   return {
@@ -81,4 +82,4 @@ const useDrawPallet = (): IDrawPanelState => {
   };
 };
 
-export default useDrawPallet;
+export default useDrawTab;

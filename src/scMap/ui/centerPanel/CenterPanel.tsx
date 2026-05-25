@@ -4,14 +4,15 @@ import DetailsTab from "./detailsTab/DetailsTab";
 import AboutTab from "./aboutTab/AboutTab";
 import useCenterPanel from "./useCenterPanel";
 import PlaybackTab from "./playbackTab/PlaybackTab";
+import DrawTab from "./drawTab/DrawTab";
 
 const TabButton = ({ active, label, onClick }: { active: boolean; label: string; onClick: () => void }) => {
   return (
     <button
       onClick={onClick}
       className={cn([
-        "relative w-20 px-1 py-1 text-xs md:text-sm hover:text-(--text) transition",
-        active ? "text-(--text)" : "text-(--text)/80 ",
+        "relative w-25 px-1 py-1 text-xs md:text-sm hover:text-(--text) transition",
+        active ? "text-(--text)" : "text-(--text)/70 ",
       ])}
     >
       <span>{label}</span>
@@ -40,6 +41,7 @@ const CenterPanel = () => {
         <TabButton active={activeTab === "ai"} onClick={() => setActiveTab("ai")} label="AI" />
         <TabButton active={activeTab === "details"} onClick={() => setActiveTab("details")} label="Details" />
         <TabButton active={activeTab === "playback"} onClick={() => setActiveTab("playback")} label="Playback" />
+        <TabButton active={activeTab === "draw"} onClick={() => setActiveTab("draw")} label="Draw" />
         <TabButton active={activeTab === "about"} onClick={() => setActiveTab("about")} label="About" />
       </div>
 
@@ -47,6 +49,7 @@ const CenterPanel = () => {
         {activeTab === "ai" && <AITab />}
         {activeTab === "details" && <DetailsTab />}
         {activeTab === "playback" && <PlaybackTab />}
+        {activeTab === "draw" && <DrawTab />}
         {activeTab === "about" && <AboutTab />}
       </div>
     </div>
