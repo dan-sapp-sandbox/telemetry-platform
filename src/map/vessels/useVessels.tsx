@@ -9,6 +9,7 @@ import { useGetRoutesQuery, useGetVesselsQuery } from "@/store/services/api";
 import { setVessels, type vesselState } from "@/store/slices/vesselSlice";
 import { type PlaybackState } from "@/store/slices/playbackSlice";
 import { clock } from "@/map/simulationEngine";
+import type { mapState } from "@/store/slices/mapSlice";
 
 export interface IVesselState {
   vesselEntities: JSX.Element[];
@@ -19,9 +20,10 @@ const useVessels = (): IVesselState => {
   const dispatch = useDispatch();
   const [, forceRender] = useState(0);
 
-  const { showVessels, showVesselNames, selectedVessel } = useSelector(
-    (state: { vessels: vesselState }) => state.vessels,
-  );
+  const { selectedVessel } = useSelector((state: { vessels: vesselState }) => state.vessels);
+  const { dataLayer } = useSelector((state: { map: mapState }) => state.map);
+
+  const showVessels = dataLayer === "vessels";
 
   const { isPlaying, speed } = useSelector((state: { playback: PlaybackState }) => state.playback);
 
@@ -124,9 +126,9 @@ const useVessels = (): IVesselState => {
     return visibleVessels.map((vessel) => {
       const isSelected = selectedVessel?.id === vessel.id;
 
-      return <VesselEntity key={vessel.id} vessel={vessel} showVesselNames={showVesselNames} isSelected={isSelected} />;
+      return <VesselEntity key={vessel.id} vessel={vessel} isSelected={isSelected} />;
     });
-  }, [visibleVessels, showVesselNames, selectedVessel]);
+  }, [visibleVessels, selectedVessel]);
 
   return {
     vesselEntities,

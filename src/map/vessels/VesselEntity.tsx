@@ -20,11 +20,10 @@ import { clock } from "@/map/simulationEngine";
 
 interface Props {
   vessel: SimulatedVessel;
-  showVesselNames: boolean;
   isSelected: boolean;
 }
 
-const VesselEntity = ({ vessel, showVesselNames, isSelected }: Props) => {
+const VesselEntity = ({ vessel, isSelected }: Props) => {
   const positionCallback = useMemo(
     () =>
       new CallbackProperty(() => {
@@ -94,7 +93,7 @@ const VesselEntity = ({ vessel, showVesselNames, isSelected }: Props) => {
       position={positionCallback as any}
       orientation={orientationCallback as any}
       label={
-        showVesselNames || isSelected
+        isSelected
           ? {
               text: vessel.name,
               font: "5px sans-serif",

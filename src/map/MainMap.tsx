@@ -1,7 +1,7 @@
 import { useContext, useEffect, useMemo, useRef, type ReactNode } from "react";
 import { Viewer, useCesium } from "resium";
 import { CameraContext } from "./types";
-import { Viewer as CesiumViewer, Cartesian3, ScreenSpaceEventType, Color } from "cesium";
+import { Viewer as CesiumViewer, Cartesian3, ScreenSpaceEventType, Color, SunLight } from "cesium";
 import useLocalStorage from "use-local-storage";
 import DrawController from "./DrawController";
 import { useDispatch, useSelector } from "react-redux";
@@ -73,6 +73,8 @@ const InitialCamera = () => {
 
     // viewer.resolutionScale = Math.min(window.devicePixelRatio, 1.5);
     viewer.resolutionScale = 1.0;
+    viewer.scene.light = new SunLight();
+    viewer.scene.globe.enableLighting = false;
     // viewer.scene.globe.maximumScreenSpaceError = 5;
     // viewer.scene.globe.preloadSiblings = false;
     // viewer.scene.globe.preloadAncestors = false;

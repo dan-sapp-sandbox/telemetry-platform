@@ -1,19 +1,15 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-export type ILayer =
-  | "esriSat"
-  | "osm"
-  | "satellite"
-  | "carto-light"
-  | "carto-dark"
-  | "carto-voyager"
-  | "population-density";
+export type ILayer = "esriSat" | "osm" | "satellite" | "carto-light" | "carto-dark" | "carto-voyager";
+
+export type IDataLayer = "vessels" | "aircraft" | "population-density";
 
 export interface mapState {
   showOverviewMap: boolean;
   showPipMap: boolean;
   showPipMap2: boolean;
   layer: ILayer;
+  dataLayer: IDataLayer | null;
   trackedEntityId: string | null;
 }
 
@@ -22,6 +18,7 @@ const initialState: mapState = {
   showPipMap: true,
   showPipMap2: false,
   layer: "satellite",
+  dataLayer: null,
   trackedEntityId: null,
 };
 
@@ -42,6 +39,9 @@ const mapSlice = createSlice({
     setLayer: (state, action) => {
       state.layer = action.payload;
     },
+    setDataLayer: (state, action) => {
+      state.dataLayer = action.payload;
+    },
     setTrackedEntityId: (state, action) => {
       state.trackedEntityId = action.payload;
     },
@@ -49,7 +49,14 @@ const mapSlice = createSlice({
   },
 });
 
-export const { setTrackedEntityId, setShowOverviewMap, setShowPipMap, setShowPipMap2, setLayer, resetToDefault } =
-  mapSlice.actions;
+export const {
+  setTrackedEntityId,
+  setShowOverviewMap,
+  setShowPipMap,
+  setShowPipMap2,
+  setLayer,
+  setDataLayer,
+  resetToDefault,
+} = mapSlice.actions;
 
 export default mapSlice.reducer;

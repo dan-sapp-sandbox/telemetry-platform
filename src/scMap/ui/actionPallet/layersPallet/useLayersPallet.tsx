@@ -1,22 +1,29 @@
 import { useSelector, useDispatch } from "react-redux";
-import { setLayer, type ILayer, type mapState } from "@/store/slices/mapSlice";
+import { setLayer, setDataLayer, type IDataLayer, type ILayer, type mapState } from "@/store/slices/mapSlice";
 
-export interface IVesselPallet {
+export interface ILayersPallet {
   layer: ILayer;
   handleChangeLayer: (newLayer: ILayer) => void;
+  dataLayer: IDataLayer | null;
+  handleChangeDataLayer: (newDataLayer: IDataLayer) => void;
 }
 
-const useLayersPallet = (): IVesselPallet => {
+const useLayersPallet = (): ILayersPallet => {
   const dispatch = useDispatch();
-  const { layer } = useSelector((state: { map: mapState }) => state.map);
+  const { layer, dataLayer } = useSelector((state: { map: mapState }) => state.map);
 
   const handleChangeLayer = (newLayer: ILayer) => {
     dispatch(setLayer(newLayer));
   };
+  const handleChangeDataLayer = (newDataLayer: IDataLayer) => {
+    dispatch(setDataLayer(dataLayer === newDataLayer ? null : newDataLayer));
+  };
 
   return {
     handleChangeLayer,
+    handleChangeDataLayer,
     layer,
+    dataLayer,
   };
 };
 

@@ -16,11 +16,10 @@ import { type Aircraft } from "@/store/services/api";
 
 interface Props {
   aircraft: Aircraft;
-  showAircraftNames: boolean;
   isSelected: boolean;
 }
 
-const AircraftEntity = ({ aircraft, showAircraftNames, isSelected }: Props) => {
+const AircraftEntity = ({ aircraft, isSelected }: Props) => {
   const position = useMemo(() => {
     if (!aircraft.lon || !aircraft.lat) return undefined;
 
@@ -37,21 +36,20 @@ const AircraftEntity = ({ aircraft, showAircraftNames, isSelected }: Props) => {
     return Transforms.headingPitchRollQuaternion(position, hpr);
   }, [position, aircraft.heading_deg]);
 
-  const label =
-    showAircraftNames || isSelected
-      ? {
-          text: aircraft.callsign ?? aircraft.icao,
-          font: "12px sans-serif",
-          style: LabelStyle.FILL_AND_OUTLINE,
-          fillColor: Color.WHITE,
-          outlineColor: Color.BLACK,
-          outlineWidth: 2,
-          verticalOrigin: VerticalOrigin.BOTTOM,
-          horizontalOrigin: HorizontalOrigin.CENTER,
-          pixelOffset: new Cartesian2(0, isSelected ? -24 : -16),
-          distanceDisplayCondition: new DistanceDisplayCondition(0, 5_000_000),
-        }
-      : undefined;
+  const label = isSelected
+    ? {
+        text: aircraft.callsign ?? aircraft.icao,
+        font: "12px sans-serif",
+        style: LabelStyle.FILL_AND_OUTLINE,
+        fillColor: Color.WHITE,
+        outlineColor: Color.BLACK,
+        outlineWidth: 2,
+        verticalOrigin: VerticalOrigin.BOTTOM,
+        horizontalOrigin: HorizontalOrigin.CENTER,
+        pixelOffset: new Cartesian2(0, isSelected ? -24 : -16),
+        distanceDisplayCondition: new DistanceDisplayCondition(0, 5_000_000),
+      }
+    : undefined;
 
   return (
     <Entity

@@ -5,6 +5,7 @@ import { useSelector } from "react-redux";
 import AircraftEntity from "./AircraftEntity";
 
 import { CameraContext } from "@/map/types";
+import { type mapState } from "@/store/slices/mapSlice";
 import { type aircraftState } from "@/store/slices/aircraftSlice";
 import { type PlaybackState } from "@/store/slices/playbackSlice";
 
@@ -20,9 +21,10 @@ export interface IAircraftState {
 const useAircraft = (): IAircraftState => {
   const [, forceRender] = useState(0);
 
-  const { showAircraft, showAircraftNames, selectedAircraft } = useSelector(
-    (state: { aircraft: aircraftState }) => state.aircraft,
-  );
+  const { selectedAircraft } = useSelector((state: { aircraft: aircraftState }) => state.aircraft);
+  const { dataLayer } = useSelector((state: { map: mapState }) => state.map);
+
+  const showAircraft = dataLayer === "aircraft";
 
   const { isPlaying, speed } = useSelector((state: { playback: PlaybackState }) => state.playback);
 
@@ -72,9 +74,9 @@ const useAircraft = (): IAircraftState => {
     return aircraft.map((a) => {
       const isSelected = selectedAircraft?.icao === a.icao;
 
-      return <AircraftEntity key={a.icao} aircraft={a} showAircraftNames={showAircraftNames} isSelected={isSelected} />;
+      return <AircraftEntity key={a.icao} aircraft={a} isSelected={isSelected} />;
     });
-  }, [aircraft, showAircraftNames, selectedAircraft]);
+  }, [aircraft, selectedAircraft]);
 
   return {
     aircraftEntities,

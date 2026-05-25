@@ -1,28 +1,29 @@
-import { ArrowBigLeft } from "lucide-react";
+import { ArrowBigLeft, Plane, Ship } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { backButtonStyles, backIconStyles } from "../utils";
+import { backButtonStyles, backIconStyles, iconStyles } from "../utils";
 import useLayersPallet from "./useLayersPallet";
 
 export const wrapperStyles = cn(["group flex flex-col items-center justify-center gap-px", "w-16 md:w-18 xl:w-20 "]);
 export const buttonStyles = cn([
   "bg-cover bg-center bg-no-repeat rounded-xl",
   "border border-emerald-400/10 group-hover:border-emerald-400/40",
-  "w-14 h-12 md:w-16 md:h-16 xl:w-18 xl:h-18 p-0",
+  "w-10 h-10 md:w-12 md:h-12 xl:w-16 xl:h-16 p-0",
 ]);
 export const buttonTextStyles = "text-(--text)/70 text-xs lg:text-sm group-hover:text-emerald-400/70";
 
 const LayersPallet = ({ goBack }: { goBack: () => void }) => {
-  const { layer, handleChangeLayer } = useLayersPallet();
+  const { layer, handleChangeLayer, dataLayer, handleChangeDataLayer } = useLayersPallet();
   return (
-    <div className="flex flex-col gap-1 lg:gap-4 xl:gap-6">
+    <div className="flex flex-col">
       <div className="flex justify-between">
         <div className="w-10" />
-        <div className="text-(--text)/80 text-sm md:text-base">Layers</div>
+        <div className="text-(--text)/80 text-sm md:text-base"></div>
         <button className={backButtonStyles} onClick={goBack}>
           <ArrowBigLeft className={backIconStyles} />
         </button>
       </div>
-      <div className="flex flex-col items-center md:flex-row gap-1 md:gap-3">
+      <div className="flex flex-col gap-1">
+        <div className="w-full text-center text-(--text)/80 text-sm lg:text-base">Base Layer</div>
         <div className="flex gap-3">
           <div className={wrapperStyles}>
             <button
@@ -44,8 +45,6 @@ const LayersPallet = ({ goBack }: { goBack: () => void }) => {
             ></button>
             <span className={cn([buttonTextStyles, layer === "satellite" ? "text-emerald-400/80" : ""])}>OSM</span>
           </div>
-        </div>
-        <div className="flex gap-3">
           <div className={wrapperStyles}>
             <button
               className={cn([
@@ -57,16 +56,47 @@ const LayersPallet = ({ goBack }: { goBack: () => void }) => {
             ></button>
             <span className={cn([buttonTextStyles, layer === "esriSat" ? "text-emerald-400/80" : ""])}>ESRI</span>
           </div>
+        </div>
+      </div>
+      <div className="flex flex-col gap-1">
+        <div className="w-full text-center text-(--text)/80 text-sm lg:text-base">Data Layer</div>
+        <div className="flex gap-3">
+          <div className={wrapperStyles}>
+            <button
+              className={cn([
+                buttonStyles,
+                "flex justify-center items-center",
+                dataLayer === "vessels" ? "border-emerald-400/80" : "",
+              ])}
+              onClick={() => handleChangeDataLayer("vessels")}
+            >
+              <Ship className={cn([iconStyles])} />
+            </button>
+            <span className={cn([buttonTextStyles, dataLayer === "vessels" ? "text-emerald-400/80" : ""])}>AIS</span>
+          </div>
+          <div className={wrapperStyles}>
+            <button
+              className={cn([
+                buttonStyles,
+                "flex justify-center items-center",
+                dataLayer === "aircraft" ? "border-emerald-400/80" : "",
+              ])}
+              onClick={() => handleChangeDataLayer("aircraft")}
+            >
+              <Plane className={cn([iconStyles])} />
+            </button>
+            <span className={cn([buttonTextStyles, dataLayer === "aircraft" ? "text-emerald-400/80" : ""])}>ADS-B</span>
+          </div>
           <div className={wrapperStyles}>
             <button
               className={cn([
                 buttonStyles,
                 "bg-[url('/population-btn.png')]",
-                layer === "population-density" ? "border-emerald-400/80" : "",
+                dataLayer === "population-density" ? "text-emerald-400/80" : "",
               ])}
-              onClick={() => handleChangeLayer("population-density")}
+              onClick={() => handleChangeDataLayer("population-density")}
             ></button>
-            <span className={cn([buttonTextStyles, layer === "population-density" ? "text-emerald-400/80" : ""])}>
+            <span className={cn([buttonTextStyles, dataLayer === "population-density" ? "text-emerald-400/80" : ""])}>
               Population
             </span>
           </div>
