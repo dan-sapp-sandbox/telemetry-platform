@@ -7,7 +7,7 @@ export const wrapperStyles = cn(["group flex flex-col items-center justify-cente
 export const buttonStyles = cn([
   "bg-cover bg-center bg-no-repeat rounded-xl",
   "border border-emerald-400/10 group-hover:border-emerald-400/40",
-  "w-9 h-9 md:w-11 md:h-11 lg:w-14 lg:h-14 xl:w-16 xl:h-16 p-0",
+  "w-9 h-9 md:w-11 md:h-11 lg:w-12 lg:h-12 xl:w-16 xl:h-16 p-0",
 ]);
 export const buttonTextStyles = "text-(--text)/70 text-xs lg:text-sm group-hover:text-emerald-400/70";
 
