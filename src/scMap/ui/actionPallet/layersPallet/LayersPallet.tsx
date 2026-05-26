@@ -14,10 +14,10 @@ export const buttonTextStyles = "text-(--text)/70 text-xs lg:text-sm group-hover
 const LayersPallet = () => {
   const { layer, handleChangeLayer, dataLayer, handleChangeDataLayer } = useLayersPallet();
   return (
-    <div className="flex flex-col gap-3">
+    <div className="flex flex-col md:gap-1 lg:gap-3">
       <div className="flex flex-col gap-2">
         <div className="w-full text-center text-(--text)/80 text-sm lg:text-base">Base Layer</div>
-        <div className="flex gap-2">
+        <div className="flex md:gap-2">
           <div className={wrapperStyles}>
             <button
               className={cn([
@@ -51,9 +51,9 @@ const LayersPallet = () => {
           </div>
         </div>
       </div>
-      <div className="flex flex-col gap-2">
+      <div className="flex flex-col md:gap-2">
         <div className="w-full text-center text-(--text)/80 text-sm lg:text-base">Data Layer</div>
-        <div className="flex gap-2">
+        <div className="flex md:gap-2">
           <div className={wrapperStyles}>
             <button
               className={cn([
