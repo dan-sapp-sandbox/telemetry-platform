@@ -10,7 +10,7 @@ const DetailsTab = () => {
     case "aircraft":
       return <AircraftDetails />;
     default:
-      return <div className="text-sm md:text-base text-(--text)/80 p-3">Choose a Topic from the Action Pallet</div>;
+      return null;
   }
 };
 
