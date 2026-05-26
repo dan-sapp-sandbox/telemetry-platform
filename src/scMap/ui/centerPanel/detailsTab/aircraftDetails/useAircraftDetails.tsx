@@ -3,10 +3,10 @@ import { type aircraftState, setSelectedAircraft } from "@/store/slices/aircraft
 
 import { setTrackedEntityId, type mapState } from "@/store/slices/mapSlice";
 
-import { useGetAircraftQuery, type Aircraft } from "@/store/services/api";
-import { useContext, useMemo } from "react";
-import { CameraContext } from "@/map/types";
-import { getBounds } from "@/map/utils";
+import { type Aircraft } from "@/store/services/api";
+// import { useContext, useMemo } from "react";
+// import { CameraContext } from "@/map/types";
+// import { getBounds } from "@/map/utils";
 
 export interface IAircraftDetails {
   aircraft: Aircraft[];
@@ -24,23 +24,24 @@ const useAircraftDetails = (): IAircraftDetails => {
 
   const { selectedAircraft } = useSelector((state: { aircraft: aircraftState }) => state.aircraft);
 
-  const { mainViewerRef } = useContext(CameraContext);
-  const bounds = getBounds(mainViewerRef.current);
+  // const { mainViewerRef } = useContext(CameraContext);
+  // const bounds = getBounds(mainViewerRef.current);
 
-  const stableBounds = useMemo(() => {
-    if (!bounds) return null;
+  // const stableBounds = useMemo(() => {
+  //   if (!bounds) return null;
 
-    return {
-      west: bounds.west,
-      south: bounds.south,
-      east: bounds.east,
-      north: bounds.north,
-    };
-  }, [bounds]);
+  //   return {
+  //     west: bounds.west,
+  //     south: bounds.south,
+  //     east: bounds.east,
+  //     north: bounds.north,
+  //   };
+  // }, [bounds]);
 
-  const { data: aircraft = [] } = useGetAircraftQuery(stableBounds!, {
-    skip: !stableBounds || !mainViewerRef.current,
-  });
+  const aircraft: any = [];
+  // const { data: aircraft = [] } = useGetAircraftQuery(stableBounds!, {
+  //   skip: !stableBounds || !mainViewerRef.current,
+  // });
 
   const handleSetSelectedAircraft = (aircraft: Aircraft | null) => {
     dispatch(setSelectedAircraft(aircraft));

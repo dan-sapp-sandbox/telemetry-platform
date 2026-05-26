@@ -1,4 +1,4 @@
-import { useContext, useEffect, useMemo, useRef, type ReactNode } from "react";
+import { useContext, useEffect, useMemo, type ReactNode } from "react";
 import { Viewer, useCesium } from "resium";
 import { CameraContext } from "./types";
 import { Viewer as CesiumViewer, Cartesian3, ScreenSpaceEventType, Color, SunLight } from "cesium";
@@ -11,8 +11,8 @@ import { setActivePanel } from "@/store/slices/actionPalletSlice";
 import { setSelectedEntity, type drawState } from "@/store/slices/drawSlice";
 import { defaultMainView } from "./useMapState";
 import type { mapState } from "@/store/slices/mapSlice";
-import { getBounds } from "./utils";
-import { useGetAircraftQuery } from "@/store/services/api";
+// import { getBounds } from "./utils";
+// import { useGetAircraftQuery } from "@/store/services/api";
 
 const RegisterMainViewer = () => {
   const { viewer } = useCesium();
@@ -34,25 +34,26 @@ const InitialCamera = () => {
   const [init] = useLocalStorage("main-cam-init", defaultMainView);
   const { viewer } = useCesium();
 
-  const bounds = viewer && getBounds(viewer);
-  const stableBounds = useMemo(() => {
-    if (!bounds) return null;
+  // const bounds = viewer && getBounds(viewer);
+  // const stableBounds = useMemo(() => {
+  //   if (!bounds) return null;
 
-    return {
-      west: bounds.west,
-      south: bounds.south,
-      east: bounds.east,
-      north: bounds.north,
-    };
-  }, [bounds]);
+  //   return {
+  //     west: bounds.west,
+  //     south: bounds.south,
+  //     east: bounds.east,
+  //     north: bounds.north,
+  //   };
+  // }, [bounds]);
 
-  const { data: aircraft = [] } = useGetAircraftQuery(stableBounds!, {
-    skip: !stableBounds || !viewer,
-  });
-  const aircraftRef = useRef(aircraft);
-  useEffect(() => {
-    aircraftRef.current = aircraft;
-  }, [aircraft]);
+  const aircraft: any = [];
+  // const { data: aircraft = [] } = useGetAircraftQuery(stableBounds!, {
+  //   skip: !stableBounds || !viewer,
+  // });
+  // const aircraftRef = useRef(aircraft);
+  // useEffect(() => {
+  //   aircraftRef.current = aircraft;
+  // }, [aircraft]);
 
   useEffect(() => {
     if (!viewer) return;
@@ -144,7 +145,7 @@ const InitialCamera = () => {
       }
       if (entityType === "aircraft") {
         const entityId = entity.properties.icao.getValue();
-        const matchingAircraft = aircraftRef.current.find((a) => a.icao === entityId);
+        const matchingAircraft = aircraft.find((a: any) => a.icao === entityId);
         if (!matchingAircraft) return;
         dispatch(setSelectedAircraft(matchingAircraft));
         dispatch(setActivePanel("aircraft"));

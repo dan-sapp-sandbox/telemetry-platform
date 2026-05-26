@@ -1,4 +1,4 @@
-import { memo, useMemo } from "react";
+import { memo, useMemo, useRef, useEffect } from "react";
 import {
   VerticalOrigin,
   LabelStyle,
@@ -10,6 +10,7 @@ import {
   HeadingPitchRoll,
   Transforms,
   Math as CesiumMath,
+  CallbackProperty,
 } from "cesium";
 import { Entity } from "resium";
 import { type Aircraft } from "@/store/services/api";
@@ -20,48 +21,87 @@ interface Props {
 }
 
 const AircraftEntity = ({ aircraft, isSelected }: Props) => {
-  const position = useMemo(() => {
-    if (!aircraft.lon || !aircraft.lat) return undefined;
+  const stateRef = useRef(aircraft);
 
-    return Cartesian3.fromDegrees(aircraft.lon, aircraft.lat, aircraft.altitude_m ?? 0);
-  }, [aircraft.lon, aircraft.lat, aircraft.altitude_m]);
+  useEffect(() => {
+    stateRef.current = aircraft;
+  }, [aircraft]);
+
+  const lastUpdateRef = useRef(Date.now() / 1000);
+
+  useEffect(() => {
+    lastUpdateRef.current = Date.now() / 1000;
+  }, [aircraft.snapshot_time]);
+
+  const position = useMemo(() => {
+    return new CallbackProperty(() => {
+      const s = stateRef.current;
+
+      if (!s?.lon || !s?.lat) return undefined;
+
+      const now = Date.now() / 1000;
+
+      const dt = now - lastUpdateRef.current;
+
+      const speed = s.velocity_mps ?? 0;
+      const heading = CesiumMath.toRadians(s.heading_deg ?? 0);
+
+      const distance = speed * dt;
+
+      const metersPerDegLat = 111_320;
+      const metersPerDegLon = 111_320 * Math.cos(CesiumMath.toRadians(s.lat));
+
+      const dLat = (Math.cos(heading) * distance) / metersPerDegLat;
+      const dLon = (Math.sin(heading) * distance) / metersPerDegLon;
+
+      return Cartesian3.fromDegrees(s.lon + dLon, s.lat + dLat, s.altitude_m ?? 0);
+    }, false);
+  }, []);
 
   const orientation = useMemo(() => {
-    if (!position) return undefined;
+    return new CallbackProperty(() => {
+      const s = stateRef.current;
 
-    const headingDeg = aircraft.heading_deg ?? 0;
+      const hpr = new HeadingPitchRoll(CesiumMath.toRadians((s.heading_deg ?? 0) - 90), 0, 0);
 
-    const hpr = new HeadingPitchRoll(CesiumMath.toRadians(headingDeg - 90), 0, 0);
+      const pos = Cartesian3.fromDegrees(s.lon, s.lat, s.altitude_m ?? 0);
 
-    return Transforms.headingPitchRollQuaternion(position, hpr);
-  }, [position, aircraft.heading_deg]);
+      return Transforms.headingPitchRollQuaternion(pos, hpr);
+    }, false);
+  }, []);
 
-  const label = isSelected
-    ? {
-        text: aircraft.callsign ?? aircraft.icao,
-        font: "12px sans-serif",
-        style: LabelStyle.FILL_AND_OUTLINE,
-        fillColor: Color.WHITE,
-        outlineColor: Color.BLACK,
-        outlineWidth: 2,
-        verticalOrigin: VerticalOrigin.BOTTOM,
-        horizontalOrigin: HorizontalOrigin.CENTER,
-        pixelOffset: new Cartesian2(0, isSelected ? -24 : -16),
-        distanceDisplayCondition: new DistanceDisplayCondition(0, 5_000_000),
-      }
-    : undefined;
+  const label = useMemo(() => {
+    if (!isSelected) return undefined;
+
+    return {
+      text: aircraft.callsign ?? aircraft.icao,
+      font: "12px sans-serif",
+      style: LabelStyle.FILL_AND_OUTLINE,
+      fillColor: Color.WHITE,
+      outlineColor: Color.BLACK,
+      outlineWidth: 2,
+      verticalOrigin: VerticalOrigin.BOTTOM,
+      horizontalOrigin: HorizontalOrigin.CENTER,
+      pixelOffset: new Cartesian2(0, -24),
+      distanceDisplayCondition: new DistanceDisplayCondition(0, 5_000_000),
+    };
+  }, [isSelected, aircraft.callsign, aircraft.icao]);
+
+  if (!aircraft.lon || !aircraft.lat) {
+    return null;
+  }
 
   return (
     <Entity
       id={aircraft.icao}
       viewFrom={new Cartesian3(0, -35000, 50000)}
-      position={position}
+      position={position as any}
       orientation={orientation}
       model={{
         uri: "/Airplane.glb",
-        scale: 3,
+        scale: 1,
         minimumPixelSize: 6,
-        maximumScale: 800,
+        maximumScale: 500,
         silhouetteColor: isSelected ? Color.RED : undefined,
         silhouetteSize: isSelected ? 2 : undefined,
       }}
