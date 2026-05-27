@@ -99,9 +99,9 @@ const AircraftEntity = ({ aircraft, isSelected }: Props) => {
       orientation={orientation}
       model={{
         uri: "/Airplane.glb",
-        scale: 5,
+        scale: 4,
         minimumPixelSize: 26,
-        maximumScale: 5500,
+        maximumScale: 5000,
         silhouetteColor: isSelected ? Color.RED : undefined,
         silhouetteSize: isSelected ? 2 : undefined,
       }}
