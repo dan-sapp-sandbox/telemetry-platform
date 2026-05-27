@@ -36,7 +36,7 @@ const LayersPallet = () => {
               className={cn([buttonStyles, "bg-[url('/osm-btn.png')]", layer === "osm" ? "border-emerald-400/80" : ""])}
               onClick={() => handleChangeLayer("osm")}
             ></button>
-            <span className={cn([buttonTextStyles, layer === "satellite" ? "text-emerald-400/80" : ""])}>OSM</span>
+            <span className={cn([buttonTextStyles, layer === "osm" ? "text-emerald-400/80" : ""])}>OSM</span>
           </div>
           <div className={wrapperStyles}>
             <button
