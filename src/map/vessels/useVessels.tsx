@@ -1,53 +1,33 @@
-import { useState, useContext, useEffect, useMemo, useRef, type JSX } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { Cartesian3 } from "cesium";
-
+import { useEffect, useMemo, useRef, useState, type JSX, useContext } from "react";
+import { useSelector } from "react-redux";
 import VesselEntity from "./VesselEntity";
-import { CameraContext, type ProcessedRoute, type SimulatedVessel } from "@/map/types";
-import { processRoute, getPositionAlongRoute } from "@/map/utils";
-import { useGetRoutesQuery, useGetVesselsQuery } from "@/store/services/api";
-import { setVessels, type vesselState } from "@/store/slices/vesselSlice";
 import { type PlaybackState } from "@/store/slices/playbackSlice";
-import { clock } from "@/map/simulationEngine";
 import type { mapState } from "@/store/slices/mapSlice";
+import { clock } from "@/map/simulationEngine";
+import type { AISVessel } from "@/store/services/api";
+import { CameraContext } from "@/map/types";
+import { getBounds } from "@/map/utils";
 
 export interface IVesselState {
   vesselEntities: JSX.Element[];
   showVessels: boolean;
 }
 
+// const AIS_WS_URL = "ws://127.0.0.1:8000/api/vessels/ws/ais";
+const AIS_WS_URL = "https://sandbox-api-nifl.onrender.com/api/vessels/ws/ais";
+
 const useVessels = (): IVesselState => {
-  const dispatch = useDispatch();
-  const [, forceRender] = useState(0);
+  const socketRef = useRef<WebSocket | null>(null);
 
-  const { selectedVessel } = useSelector((state: { vessels: vesselState }) => state.vessels);
+  const { selectedVessel } = useSelector((state: { vessels: any }) => state.vessels);
   const { dataLayer } = useSelector((state: { map: mapState }) => state.map);
-
-  const showVessels = dataLayer === "vessels";
-
   const { isPlaying, speed } = useSelector((state: { playback: PlaybackState }) => state.playback);
 
   const { mainViewerRef } = useContext(CameraContext);
 
-  const { data: routedVessels = [] } = useGetVesselsQuery(undefined, {
-    skip: !mainViewerRef.current,
-  });
+  const [vessels, setVessels] = useState<AISVessel[]>([]);
 
-  const { data: routes = [] } = useGetRoutesQuery(undefined, {
-    skip: !mainViewerRef.current,
-  });
-
-  useEffect(() => {
-    let frame: number;
-
-    const tick = () => {
-      forceRender((x) => x + 1);
-      frame = requestAnimationFrame(tick);
-    };
-
-    frame = requestAnimationFrame(tick);
-    return () => cancelAnimationFrame(frame);
-  }, []);
+  const showVessels = dataLayer === "vessels";
 
   useEffect(() => {
     if (isPlaying) clock.play();
@@ -56,79 +36,109 @@ const useVessels = (): IVesselState => {
     clock.setSpeed(speed);
   }, [isPlaying, speed]);
 
-  const processedRoutes = useMemo(() => {
-    return routes.reduce<Record<string, ProcessedRoute>>((acc, route) => {
-      acc[route.id] = processRoute(route);
-      return acc;
-    }, {});
-  }, [routes]);
+  useEffect(() => {
+    if (!showVessels) return;
 
-  const simTimeMs = clock.getTime();
+    const socket = new WebSocket(AIS_WS_URL);
+    socketRef.current = socket;
 
-  const visibleVessels = useMemo(() => {
-    const viewer = mainViewerRef.current;
-    if (!viewer) return [];
+    socket.onopen = () => {
+      console.log("AIS websocket connected");
 
-    const camera = viewer.camera;
+      const viewer = mainViewerRef.current;
+      if (!viewer) return;
 
-    return routedVessels
-      .map((vessel) => {
-        const route = processedRoutes[vessel.routeId];
-        if (!route || route.totalDistance <= 0) return null;
+      const bounds = getBounds(viewer);
+      if (bounds && socket.readyState === WebSocket.OPEN) {
+        socket.send(JSON.stringify(bounds));
+      }
+    };
 
-        const elapsedSeconds = vessel.startOffsetSeconds + simTimeMs / 1000;
+    socket.onmessage = async (event) => {
+      try {
+        let text: string;
 
-        const distance = vessel.routeOffsetMeters + elapsedSeconds * vessel.speedMps;
+        if (typeof event.data === "string") {
+          text = event.data;
+        } else if (event.data instanceof Blob) {
+          text = await event.data.text();
+        } else if (event.data instanceof ArrayBuffer) {
+          text = new TextDecoder().decode(event.data);
+        } else {
+          return;
+        }
 
-        const wrapped = ((distance % route.totalDistance) + route.totalDistance) % route.totalDistance;
+        const data = JSON.parse(text);
 
-        const { heading, position } = getPositionAlongRoute(route, wrapped);
+        if (Array.isArray(data)) {
+          setVessels(data);
+        }
+      } catch (err) {
+        console.error("AIS parse error:", err);
+      }
+    };
 
-        const distanceToCamera = Cartesian3.distance(camera.positionWC, position);
+    socket.onerror = (err) => {
+      console.error("AIS websocket error:", err);
+    };
 
-        const visible = distanceToCamera < camera.frustum.far && camera.frustum.near < distanceToCamera;
+    socket.onclose = () => {
+      console.log("AIS websocket closed");
+    };
 
-        if (!visible) return null;
-
-        return {
-          ...vessel,
-          route,
-          position,
-          heading,
-        };
-      })
-      .filter((v): v is SimulatedVessel => v !== null);
-  }, [routedVessels, processedRoutes, simTimeMs, mainViewerRef.current]);
-
-  // sync redux UI list
-  const previousIdsRef = useRef("");
+    return () => {
+      socket.close();
+      socketRef.current = null;
+    };
+  }, [showVessels, mainViewerRef]);
 
   useEffect(() => {
-    const ids = visibleVessels.map((v) => v.id).join(",");
+    if (!showVessels) return;
+    if (!mainViewerRef.current) return;
 
-    if (ids === previousIdsRef.current) return;
+    const viewer = mainViewerRef.current;
+    const socket = socketRef.current;
 
-    previousIdsRef.current = ids;
+    if (!socket) return;
 
-    dispatch(
-      setVessels(
-        visibleVessels.map((vessel) => ({
-          id: vessel.id,
-          name: vessel.name,
-          routeName: vessel.route.name,
-        })),
-      ),
-    );
-  }, [dispatch, visibleVessels]);
+    let timeout: number | null = null;
 
-  // render entities
+    const sendBounds = () => {
+      const s = socketRef.current;
+      if (!s || s.readyState !== WebSocket.OPEN) return;
+
+      const bounds = getBounds(viewer);
+      if (!bounds) return;
+
+      s.send(JSON.stringify(bounds));
+    };
+
+    const debounced = () => {
+      if (timeout) window.clearTimeout(timeout);
+
+      timeout = window.setTimeout(() => {
+        sendBounds();
+      }, 150);
+    };
+
+    viewer.camera.moveEnd.addEventListener(debounced);
+    viewer.camera.changed.addEventListener(debounced);
+
+    return () => {
+      viewer.camera.moveEnd.removeEventListener(debounced);
+      viewer.camera.changed.removeEventListener(debounced);
+
+      if (timeout) window.clearTimeout(timeout);
+    };
+  }, [showVessels, mainViewerRef]);
+
   const vesselEntities = useMemo(() => {
-    return visibleVessels.map((vessel) => {
-      const isSelected = selectedVessel?.id === vessel.id;
+    return vessels.map((vessel) => {
+      const isSelected = selectedVessel?.mmsi === vessel.mmsi;
 
-      return <VesselEntity key={vessel.id} vessel={vessel} isSelected={isSelected} />;
+      return <VesselEntity key={vessel.mmsi} vessel={vessel as any} isSelected={isSelected} />;
     });
-  }, [visibleVessels, selectedVessel]);
+  }, [vessels, selectedVessel]);
 
   return {
     vesselEntities,

@@ -36,21 +36,6 @@ const useAircraft = (): IAircraftState => {
 
   const { mainViewerRef } = useContext(CameraContext);
 
-  // useEffect(() => {
-  //   if (!showAircraft) return;
-
-  //   let frame: number;
-
-  //   const tick = () => {
-  //     forceRender((x) => x + 1);
-  //     frame = requestAnimationFrame(tick);
-  //   };
-
-  //   frame = requestAnimationFrame(tick);
-
-  //   return () => cancelAnimationFrame(frame);
-  // }, [showAircraft]);
-
   useEffect(() => {
     if (isPlaying) clock.play();
     else clock.pause();

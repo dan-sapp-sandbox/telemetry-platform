@@ -1,5 +1,4 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import type { Route } from "../slices/vesselSlice";
 
 export interface IBounds {
   west: number;
@@ -8,14 +7,23 @@ export interface IBounds {
   north: number;
 }
 
-export type Vessel = {
-  id: string;
-  name: string;
-  routeId: string;
-  speedMps: number;
-  startOffsetSeconds: number;
-  routeOffsetMeters: number;
-};
+export interface AISVessel {
+  mmsi: number;
+
+  ship_name: string | null;
+
+  lon: number;
+  lat: number;
+
+  sog: number | null;
+  cog: number | null;
+  heading: number | null;
+
+  nav_status: number | null;
+  rot: number | null;
+
+  timestamp_ms: number;
+}
 
 export type Aircraft = {
   icao: string;
@@ -57,30 +65,6 @@ export const api = createApi({
     // baseUrl: "http://127.0.0.1:8000/api/",
   }),
   endpoints: (builder) => ({
-    getVessels: builder.query<Vessel[], void>({
-      query: () => "vessels/get-vessels",
-    }),
-    getRoutes: builder.query<Route[], void>({
-      query: () => "vessels/get-routes",
-      transformResponse: (response: any[]): Route[] => {
-        return response.map((r) => ({
-          id: r.id,
-          name: r.name,
-          points: r.points,
-        }));
-      },
-    }),
-    getAircraft: builder.query<Aircraft[], IBounds>({
-      query: (bounds) => ({
-        url: "aircraft/get-aircraft",
-        params: {
-          lon_min: bounds.west,
-          lon_max: bounds.east,
-          lat_min: bounds.south,
-          lat_max: bounds.north,
-        },
-      }),
-    }),
     sendCommandPrompt: builder.mutation<CommandResponse, CommandRequest>({
       query: (body) => ({
         url: "ai/commands",
@@ -91,4 +75,4 @@ export const api = createApi({
   }),
 });
 
-export const { useGetVesselsQuery, useGetRoutesQuery, useSendCommandPromptMutation, useGetAircraftQuery } = api;
+export const { useSendCommandPromptMutation } = api;

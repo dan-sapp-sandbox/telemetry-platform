@@ -1,118 +1,121 @@
-import { memo, useMemo } from "react";
+import { memo, useMemo, useRef, useEffect } from "react";
 import {
   VerticalOrigin,
   LabelStyle,
   Color,
   HorizontalOrigin,
   Cartesian2,
-  NearFarScalar,
   DistanceDisplayCondition,
-  CallbackProperty,
   Cartesian3,
   HeadingPitchRoll,
   Transforms,
-  Matrix4,
+  Math as CesiumMath,
+  CallbackProperty,
 } from "cesium";
 import { Entity } from "resium";
-import { type SimulatedVessel } from "@/map/types";
-import { getPositionAlongRoute } from "@/map/utils";
-import { clock } from "@/map/simulationEngine";
+import type { AISVessel } from "@/store/services/api";
 
 interface Props {
-  vessel: SimulatedVessel;
+  vessel: AISVessel;
   isSelected: boolean;
 }
 
 const VesselEntity = ({ vessel, isSelected }: Props) => {
-  const positionCallback = useMemo(
-    () =>
-      new CallbackProperty(() => {
-        const t = clock.getTime();
+  const stateRef = useRef(vessel);
 
-        const elapsedSeconds = vessel.startOffsetSeconds + t / 1000;
+  useEffect(() => {
+    stateRef.current = vessel;
+  }, [vessel]);
 
-        const distance = vessel.routeOffsetMeters + elapsedSeconds * vessel.speedMps;
+  const lastUpdateRef = useRef(Date.now() / 1000);
 
-        const wrapped =
-          ((distance % vessel.route.totalDistance) + vessel.route.totalDistance) % vessel.route.totalDistance;
+  useEffect(() => {
+    lastUpdateRef.current = Date.now() / 1000;
+  }, [vessel.timestamp_ms]);
 
-        return getPositionAlongRoute(vessel.route, wrapped).position;
-      }, false),
-    [vessel],
-  );
+  const position = useMemo(() => {
+    return new CallbackProperty(() => {
+      const s = stateRef.current;
 
-  const orientationCallback = useMemo(
-    () =>
-      new CallbackProperty(() => {
-        const t = clock.getTime();
+      if (!s?.lon || !s?.lat) return undefined;
 
-        const elapsedSeconds = vessel.startOffsetSeconds + t / 1000;
+      const now = Date.now();
 
-        const distance = vessel.routeOffsetMeters + elapsedSeconds * vessel.speedMps;
+      const lastUpdateSec = s.timestamp_ms / 1000;
 
-        const wrapped =
-          ((distance % vessel.route.totalDistance) + vessel.route.totalDistance) % vessel.route.totalDistance;
+      const dt = now / 1000 - lastUpdateSec;
 
-        const current = getPositionAlongRoute(vessel.route, wrapped);
-        const next = getPositionAlongRoute(vessel.route, wrapped + 100);
+      const KNOTS_TO_MPS = 0.514444;
+      const speedMps = (s.sog ?? 0) * KNOTS_TO_MPS;
 
-        if (!current?.position || !next?.position) return undefined;
+      const headingDeg = s.cog ?? s.heading ?? 0;
+      const heading = CesiumMath.toRadians(headingDeg);
 
-        const position = current.position;
+      const distance = speedMps * dt;
 
-        const velocity = Cartesian3.subtract(next.position, current.position, new Cartesian3());
+      const metersPerDegLat = 111_320;
+      const metersPerDegLon = 111_320 * Math.cos(CesiumMath.toRadians(s.lat));
 
-        if (Cartesian3.magnitudeSquared(velocity) === 0) return undefined;
+      const dLat = (Math.cos(heading) * distance) / metersPerDegLat;
+      const dLon = (Math.sin(heading) * distance) / metersPerDegLon;
 
-        const enuToFixed = Transforms.eastNorthUpToFixedFrame(position);
-        const fixedToEnu = Matrix4.inverse(enuToFixed, new Matrix4());
+      return Cartesian3.fromDegrees(s.lon + dLon, s.lat + dLat, 0);
+    }, false);
+  }, []);
 
-        const localVelocity = Matrix4.multiplyByPointAsVector(fixedToEnu, velocity, new Cartesian3());
+  const orientation = useMemo(() => {
+    return new CallbackProperty(() => {
+      const s = stateRef.current;
 
-        Cartesian3.normalize(localVelocity, localVelocity);
+      const headingDeg = s.cog ?? s.heading ?? 0;
 
-        const heading = Math.atan2(localVelocity.x, localVelocity.y) - Math.PI / 2;
+      const hpr = new HeadingPitchRoll(CesiumMath.toRadians(headingDeg - 90), 0, 0);
 
-        const hpr = new HeadingPitchRoll(heading, 0, 0);
+      const pos = Cartesian3.fromDegrees(s.lon, s.lat, 0);
 
-        return Transforms.headingPitchRollQuaternion(position, hpr);
-      }, false),
-    [vessel],
-  );
+      return Transforms.headingPitchRollQuaternion(pos, hpr);
+    }, false);
+  }, []);
+
+  const label = useMemo(() => {
+    if (!isSelected) return undefined;
+
+    return {
+      text: vessel.ship_name ?? vessel.mmsi.toString(),
+      font: "12px sans-serif",
+      style: LabelStyle.FILL_AND_OUTLINE,
+      fillColor: Color.WHITE,
+      outlineColor: Color.BLACK,
+      outlineWidth: 2,
+      verticalOrigin: VerticalOrigin.BOTTOM,
+      horizontalOrigin: HorizontalOrigin.CENTER,
+      pixelOffset: new Cartesian2(0, -24),
+      distanceDisplayCondition: new DistanceDisplayCondition(0, 5_000_000),
+    };
+  }, [isSelected, vessel.ship_name, vessel.mmsi]);
+
+  if (!vessel.lon || !vessel.lat) {
+    return null;
+  }
 
   return (
     <Entity
-      id={vessel.id}
-      viewFrom={new Cartesian3(200000, 350000, 150000)}
+      id={vessel.mmsi.toString()}
+      position={position as any}
+      orientation={orientation}
       model={{
         uri: "/Container Ship.glb",
-        scale: 10000,
-        minimumPixelSize: 12,
-        maximumScale: 2000000,
+        scale: 1000,
+        minimumPixelSize: 32,
+        maximumScale: 100_000,
+        silhouetteColor: isSelected ? Color.YELLOW : undefined,
+        silhouetteSize: isSelected ? 2 : undefined,
       }}
-      position={positionCallback as any}
-      orientation={orientationCallback as any}
-      label={
-        isSelected
-          ? {
-              text: vessel.name,
-              font: "5px sans-serif",
-              style: LabelStyle.FILL_AND_OUTLINE,
-              fillColor: Color.WHITE,
-              outlineColor: Color.BLACK,
-              outlineWidth: 2,
-              verticalOrigin: VerticalOrigin.BOTTOM,
-              horizontalOrigin: HorizontalOrigin.CENTER,
-              pixelOffset: new Cartesian2(0, isSelected ? -24 : -16),
-              disableDepthTestDistance: Number.POSITIVE_INFINITY,
-              scaleByDistance: new NearFarScalar(1000, 4, 5000000, 2),
-              distanceDisplayCondition: new DistanceDisplayCondition(0, 5000000),
-            }
-          : undefined
-      }
+      label={label}
+      viewFrom={new Cartesian3(0, -50000, 25000)}
       properties={{
         entityType: "vessel",
-        id: vessel.id,
+        mmsi: vessel.mmsi,
       }}
     />
   );
