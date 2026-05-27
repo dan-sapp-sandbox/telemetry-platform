@@ -106,7 +106,7 @@ const VesselEntity = ({ vessel, isSelected }: Props) => {
       model={{
         uri: "/Container Ship.glb",
         scale: 1000,
-        minimumPixelSize: 32,
+        minimumPixelSize: 26,
         maximumScale: 100_000,
         silhouetteColor: isSelected ? Color.YELLOW : undefined,
         silhouetteSize: isSelected ? 2 : undefined,
