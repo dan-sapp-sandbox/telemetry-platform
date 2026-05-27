@@ -29,8 +29,29 @@ const AircraftEntity = ({ aircraft, isSelected }: Props) => {
 
   const lastUpdateRef = useRef(Date.now() / 1000);
 
+  const extrapolatedDtRef = useRef(0);
+
+  const previousSnapshotTimeRef = useRef<number | null>(null);
+
   useEffect(() => {
-    lastUpdateRef.current = Date.now() / 1000;
+    const now = Date.now() / 1000;
+
+    const prevSnapshot = previousSnapshotTimeRef.current;
+
+    if (prevSnapshot != null) {
+      const snapshotDelta = aircraft.snapshot_time - prevSnapshot;
+
+      const receiveDelta = now - lastUpdateRef.current;
+
+      extrapolatedDtRef.current += receiveDelta - snapshotDelta;
+
+      if (extrapolatedDtRef.current < 0) {
+        extrapolatedDtRef.current = 0;
+      }
+    }
+
+    previousSnapshotTimeRef.current = aircraft.snapshot_time;
+    lastUpdateRef.current = now;
   }, [aircraft.snapshot_time]);
 
   const position = useMemo(() => {
@@ -41,7 +62,9 @@ const AircraftEntity = ({ aircraft, isSelected }: Props) => {
 
       const now = Date.now() / 1000;
 
-      const dt = now - lastUpdateRef.current;
+      const liveDt = now - lastUpdateRef.current;
+
+      const dt = liveDt + extrapolatedDtRef.current;
 
       const speed = s.velocity_mps ?? 0;
       const heading = CesiumMath.toRadians(s.heading_deg ?? 0);
@@ -99,9 +122,9 @@ const AircraftEntity = ({ aircraft, isSelected }: Props) => {
       orientation={orientation}
       model={{
         uri: "/Airplane.glb",
-        scale: 2.5,
+        scale: 2,
         minimumPixelSize: 26,
-        maximumScale: 100,
+        maximumScale: 80,
         silhouetteColor: isSelected ? Color.RED : undefined,
         silhouetteSize: isSelected ? 2 : undefined,
       }}
