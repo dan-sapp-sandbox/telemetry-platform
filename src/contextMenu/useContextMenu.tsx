@@ -175,23 +175,11 @@ const useContextMenu = (): IContextMenu => {
       }
     });
 
-    // Export combined screenshot
     const dataUrl = combinedCanvas.toDataURL("image/png");
-
-    if (isDownload) {
-      const link = document.createElement("a");
-      link.href = dataUrl;
-      link.download = "combined-maps.png";
-      link.click();
-    } else {
-      dispatch(
-        addSectionToReport({
-          id: crypto.randomUUID(),
-          type: "image",
-          imageUrl: dataUrl,
-        }),
-      );
-    }
+    const link = document.createElement("a");
+    link.href = dataUrl;
+    link.download = "combined-maps.png";
+    link.click();
     hideContextMenu();
   };
 

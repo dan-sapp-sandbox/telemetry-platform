@@ -1,12 +1,12 @@
 import { useState, useContext, useEffect, useMemo, useRef, type JSX } from "react";
 
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 import AircraftEntity from "./AircraftEntity";
 
 import { CameraContext } from "@/map/types";
 import { type mapState } from "@/store/slices/mapSlice";
-import { type aircraftState } from "@/store/slices/aircraftSlice";
+import { setGlobalAircraft, type aircraftState } from "@/store/slices/aircraftSlice";
 import { type PlaybackState } from "@/store/slices/playbackSlice";
 
 import { clock } from "@/map/simulationEngine";
@@ -18,11 +18,10 @@ export interface IAircraftState {
   showAircraft: boolean;
 }
 
-// const WS_URL = "ws://localhost:8000/api/aircraft/ws/aircraft";
 const WS_URL = "https://sandbox-api-nifl.onrender.com/api/aircraft/ws/aircraft";
 
 const useAircraft = (): IAircraftState => {
-  // const [, forceRender] = useState(0);
+  const dispatch = useDispatch();
   const [aircraft, setAircraft] = useState<Aircraft[]>([]);
   const socketRef = useRef<WebSocket | null>(null);
 
@@ -46,6 +45,7 @@ const useAircraft = (): IAircraftState => {
   useEffect(() => {
     if (!showAircraft) {
       setAircraft([]);
+      dispatch(setGlobalAircraft([]));
     }
   }, [showAircraft]);
 
@@ -80,6 +80,7 @@ const useAircraft = (): IAircraftState => {
       try {
         const data = JSON.parse(event.data);
         setAircraft(data);
+        dispatch(setGlobalAircraft(data));
       } catch (err) {
         console.error("WS parse error:", err);
       }

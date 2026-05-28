@@ -18,12 +18,12 @@ const VesselDetails = () => {
         {vessels.map((vessel, index) => {
           const getBackgroundStyles = () => {
             if (index % 2 === 0) {
-              if (selectedVessel?.id === vessel.id) {
+              if (selectedVessel?.mmsi === vessel.mmsi) {
                 return "bg-blue-400/20";
               }
               return "bg-zinc-800/50";
             } else {
-              if (selectedVessel?.id === vessel.id) {
+              if (selectedVessel?.mmsi === vessel.mmsi) {
                 return "bg-blue-400/20";
               }
               return "bg-zinc-700/50";
@@ -31,14 +31,14 @@ const VesselDetails = () => {
           };
           return (
             <div
-              key={vessel.id}
+              key={vessel.mmsi}
               className={cn([
                 "cursor-pointer px-4 py-1.5 md:py-1 transition-colors text-xs md:text-sm text-(--text)/80 hover:bg-blue-400/30",
                 getBackgroundStyles(),
               ])}
               onClick={() => handleSetSelectedVessel(vessel)}
             >
-              {vessel.name}
+              {vessel.ship_name}
             </div>
           );
         })}
@@ -51,26 +51,15 @@ const VesselDetails = () => {
               <div className="underline">Selected</div>
               <X className="size-4 md:size-6" onClick={() => handleSetSelectedVessel(null)} />
             </div>
-            <div className="">{selectedVessel.name}</div>
-            <div>{selectedVessel.routeName}</div>
+            <div className="">{selectedVessel.ship_name}</div>
             <div
               className="flex items-center gap-2 cursor-pointer hover:text-(--text-hover)"
-              onClick={trackedEntityId === selectedVessel.id ? untrackSelectedVessel : trackSelectedVessel}
+              onClick={trackedEntityId === selectedVessel.mmsi.toString() ? untrackSelectedVessel : trackSelectedVessel}
             >
               <Locate className="size-4" />
-              {trackedEntityId === selectedVessel.id ? "Stop Tracking" : "Track"}
+              {trackedEntityId === selectedVessel.mmsi.toString() ? "Stop Tracking" : "Track"}
             </div>
           </div>
-          {/* <button
-            className={cn([
-              "w-fit flex items-center gap-2 cursor-pointer",
-              "bg-zinc-600/80 hover-bg-blue-800/50 hover:text-emerald-400/50 p-2 hover:border-emerald-400/30",
-            ])}
-            onClick={() => flyToVessel(selectedVessel)}
-          >
-            <Locate className="size-5" />
-            <span className="text-sm">Center Map on Vessel</span>
-          </button> */}
         </div>
       ) : (
         <div className="flex-col flex-1 p-4 gap-2 text-(--text)/80">

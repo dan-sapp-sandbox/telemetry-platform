@@ -16,12 +16,15 @@ const aircraftSlice = createSlice({
   initialState,
 
   reducers: {
+    setGlobalAircraft: (state, action) => {
+      state.aircraft = action.payload;
+    },
     setSelectedAircraft: (state, action) => {
       state.selectedAircraft = action.payload;
     },
   },
 });
 
-export const { setSelectedAircraft } = aircraftSlice.actions;
+export const { setGlobalAircraft, setSelectedAircraft } = aircraftSlice.actions;
 
 export default aircraftSlice.reducer;

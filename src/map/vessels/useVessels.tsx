@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState, type JSX, useContext } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import VesselEntity from "./VesselEntity";
 import { type PlaybackState } from "@/store/slices/playbackSlice";
 import type { mapState } from "@/store/slices/mapSlice";
@@ -7,18 +7,18 @@ import { clock } from "@/map/simulationEngine";
 import type { AISVessel } from "@/store/services/api";
 import { CameraContext } from "@/map/types";
 import { getBounds } from "@/map/utils";
+import { setGlobalVessels } from "@/store/slices/vesselSlice";
 
 export interface IVesselState {
   vesselEntities: JSX.Element[];
   showVessels: boolean;
 }
 
-// const AIS_WS_URL = "ws://127.0.0.1:8000/api/vessels/ws/ais";
 const AIS_WS_URL = "https://sandbox-api-nifl.onrender.com/api/vessels/ws/ais";
 
 const useVessels = (): IVesselState => {
   const socketRef = useRef<WebSocket | null>(null);
-
+  const dispatch = useDispatch();
   const { selectedVessel } = useSelector((state: { vessels: any }) => state.vessels);
   const { dataLayer } = useSelector((state: { map: mapState }) => state.map);
   const { isPlaying, speed } = useSelector((state: { playback: PlaybackState }) => state.playback);
@@ -72,6 +72,7 @@ const useVessels = (): IVesselState => {
 
         if (Array.isArray(data)) {
           setVessels(data);
+          dispatch(setGlobalVessels(data));
         }
       } catch (err) {
         console.error("AIS parse error:", err);

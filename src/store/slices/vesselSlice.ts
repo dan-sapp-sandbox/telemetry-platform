@@ -1,35 +1,9 @@
 import { createSlice } from "@reduxjs/toolkit";
-
-export type RoutePoint = {
-  lat: number;
-  lon: number;
-};
-
-export type Route = {
-  id: string;
-  name: string;
-  points: RoutePoint[];
-};
-
-export type Vessel = {
-  id: string;
-  name: string;
-  type: "Cargo" | "Tanker" | "Fishing" | "Passenger";
-  lat: number;
-  lon: number;
-  heading: number;
-  speed: number;
-};
-
-export type RoutedVessel = {
-  id: string;
-  name: string;
-  routeName: string;
-};
+import type { AISVessel } from "../services/api";
 
 export interface vesselState {
-  vessels: RoutedVessel[];
-  selectedVessel: RoutedVessel | null;
+  vessels: AISVessel[];
+  selectedVessel: AISVessel | null;
 }
 
 const initialState: vesselState = {
@@ -45,12 +19,12 @@ const vesselSlice = createSlice({
     setSelectedVessel: (state, action) => {
       state.selectedVessel = action.payload;
     },
-    setVessels: (state, action) => {
+    setGlobalVessels: (state, action) => {
       state.vessels = action.payload;
     },
   },
 });
 
-export const { setSelectedVessel, setVessels } = vesselSlice.actions;
+export const { setSelectedVessel, setGlobalVessels } = vesselSlice.actions;
 
 export default vesselSlice.reducer;

@@ -23,10 +23,6 @@ const ContextMenu = () => {
         Download Screenshot
       </Button>
       <Separator />
-      <Button variant="ghost" onClick={() => takeScreenshot()}>
-        Screenshot to Report
-      </Button>
-      <Separator />
       <Button variant="ghost" onClick={hideContextMenu}>
         Cancel
       </Button>
