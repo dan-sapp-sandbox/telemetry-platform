@@ -19,7 +19,7 @@ const ContextMenu = () => {
         Add Marker
       </Button>
       <Separator />
-      <Button variant="ghost" onClick={() => takeScreenshot(true)}>
+      <Button variant="ghost" onClick={() => takeScreenshot()}>
         Download Screenshot
       </Button>
       <Separator />

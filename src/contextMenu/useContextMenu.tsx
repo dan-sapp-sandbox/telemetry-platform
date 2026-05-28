@@ -7,7 +7,6 @@ import { renderToStaticMarkup } from "react-dom/server";
 import { MapPin } from "lucide-react";
 import { CameraContext } from "@/map/types";
 import type { IWidgetState } from "@/store/slices/widgetSlice";
-import { addSectionToReport } from "@/store/slices/reportSlice";
 import { setActivePanel } from "@/store/slices/actionPalletSlice";
 
 const lucideToDataUrl = (icon: React.ReactElement) => {
@@ -24,7 +23,7 @@ interface IContextMenu {
   } | null;
   addMarker: () => void;
   hideContextMenu: () => void;
-  takeScreenshot: (isDownload?: boolean) => void;
+  takeScreenshot: () => void;
   menuRef: RefObject<HTMLDivElement | null>;
 }
 
@@ -127,7 +126,7 @@ const useContextMenu = (): IContextMenu => {
     hideContextMenu();
   };
 
-  const takeScreenshot = async (isDownload?: boolean) => {
+  const takeScreenshot = async () => {
     if (!containerRef.current) return;
 
     const viewers = [
