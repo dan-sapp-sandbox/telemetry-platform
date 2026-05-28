@@ -56,8 +56,7 @@ This project combines a FastAPI backend, websocket-based telemetry streaming, an
 
 ## Backend
 
-- FastAPI
-- Python
+- FastAPI (Python)
 - WebSockets
 - PostgreSQL
 - PostGIS
