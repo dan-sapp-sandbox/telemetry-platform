@@ -3,7 +3,7 @@ import { useSelector } from "react-redux";
 import type { mapState } from "@/store/slices/mapSlice";
 import type { drawState } from "@/store/slices/drawSlice";
 import type { vesselState } from "@/store/slices/vesselSlice";
-import type { aircraftState } from "@/store/slices/aircraftSlice";
+import type { AircraftState } from "@/store/slices/aircraftSlice";
 
 type TabId = "ai" | "details" | "playback" | "draw" | "about";
 
@@ -17,7 +17,7 @@ const useCenterPanel = (): ICenterPanel => {
   const { dataLayer } = useSelector((state: { map: mapState }) => state.map);
   const { selectedEntity } = useSelector((state: { draw: drawState }) => state.draw);
   const { selectedVessel } = useSelector((state: { vessels: vesselState }) => state.vessels);
-  const { selectedAircraft } = useSelector((state: { aircraft: aircraftState }) => state.aircraft);
+  const { selectedAircraft } = useSelector((state: { aircraft: AircraftState }) => state.aircraft);
 
   useEffect(() => {
     if (dataLayer === "aircraft" || dataLayer === "vessels") {

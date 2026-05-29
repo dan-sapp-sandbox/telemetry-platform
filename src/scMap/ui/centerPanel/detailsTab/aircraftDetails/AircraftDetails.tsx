@@ -5,7 +5,7 @@ import { Locate, X } from "lucide-react";
 
 const AircraftDetails = () => {
   const {
-    aircraft,
+    // aircraft,
     visibleAircraft,
     selectedAircraft,
     handleSetSelectedAircraft,
