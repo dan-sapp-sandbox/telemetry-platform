@@ -6,12 +6,12 @@ import useLocalStorage from "use-local-storage";
 import DrawController from "./DrawController";
 import { useDispatch, useSelector } from "react-redux";
 import { setSelectedVessel, type vesselState } from "@/store/slices/vesselSlice";
-import { type AircraftState } from "@/store/slices/aircraftSlice";
+import { setSelectedAircraft, type AircraftState } from "@/store/slices/aircraftSlice";
 import { setActivePanel } from "@/store/slices/actionPalletSlice";
 import { setSelectedEntity, type drawState } from "@/store/slices/drawSlice";
 import { defaultMainView } from "./useMapState";
 import type { mapState } from "@/store/slices/mapSlice";
-import type { AircraftMap, AISVessel } from "@/store/services/api";
+import type { Aircraft, AircraftMap, AISVessel } from "@/store/services/api";
 
 const RegisterMainViewer = () => {
   const { viewer } = useCesium();
@@ -44,9 +44,9 @@ const InitialCamera = () => {
     vesselsRef.current = vessels;
   }, [vessels]);
 
-  const aircraftRef = useRef<AircraftMap>(null);
+  const aircraftMapRef = useRef<AircraftMap>(null);
   useEffect(() => {
-    aircraftRef.current = aircraftMap;
+    aircraftMapRef.current = aircraftMap;
   }, [aircraftMap]);
 
   useEffect(() => {
@@ -134,14 +134,13 @@ const InitialCamera = () => {
         dispatch(setActivePanel("vessels"));
       }
       if (entityType === "aircraft") {
-        // const entityId = entity.properties.icao.getValue();
-        // const matchingAircraft = Object.entries(aircraftRef.current)?.find((a) => a.icao === entityId);
-        // console.log("aircraft", aircraftRef.current);
-        // console.log("entityId", aircraftRef.current);
-        // console.log("matchingAircraft", aircraftRef.current);
-        // if (!matchingAircraft) return;
-        // dispatch(setSelectedAircraft(matchingAircraft));
-        // dispatch(setActivePanel("aircraft"));
+        const entityId = entity.properties.icao.getValue();
+        const matchingAircraftSnapshots = aircraftMapRef.current?.[entityId];
+        if (!matchingAircraftSnapshots) return;
+        const matchingAircraft = matchingAircraftSnapshots[matchingAircraftSnapshots.length - 1];
+        if (!matchingAircraft) return;
+        dispatch(setSelectedAircraft(matchingAircraft as Aircraft));
+        dispatch(setActivePanel("aircraft"));
       }
       if (entityType === "draw") {
         const entityId = entity.properties.id.getValue();
