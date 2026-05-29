@@ -6,12 +6,12 @@ import useLocalStorage from "use-local-storage";
 import DrawController from "./DrawController";
 import { useDispatch, useSelector } from "react-redux";
 import { setSelectedVessel, type vesselState } from "@/store/slices/vesselSlice";
-import { setSelectedAircraft, type AircraftState } from "@/store/slices/aircraftSlice";
+import { type AircraftState } from "@/store/slices/aircraftSlice";
 import { setActivePanel } from "@/store/slices/actionPalletSlice";
 import { setSelectedEntity, type drawState } from "@/store/slices/drawSlice";
 import { defaultMainView } from "./useMapState";
 import type { mapState } from "@/store/slices/mapSlice";
-import type { Aircraft, AircraftMap, AISVessel } from "@/store/services/api";
+import type { AircraftMap, AISVessel } from "@/store/services/api";
 
 const RegisterMainViewer = () => {
   const { viewer } = useCesium();
