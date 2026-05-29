@@ -172,7 +172,7 @@ const MainMap = ({ children }: { children?: ReactNode | ReactNode[] }) => {
       animation={false}
       fullscreenButton={false}
       navigationHelpButton={false}
-      requestRenderMode={true}
+      requestRenderMode={false}
       maximumRenderTimeChange={Infinity}
       infoBox={false}
       selectionIndicator={false}

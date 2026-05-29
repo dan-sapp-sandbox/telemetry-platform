@@ -46,18 +46,21 @@ const AircraftDetails = () => {
       </div>
       <Separator orientation="vertical" />
       {selectedAircraft ? (
-        <div className="flex flex-col flex-1 p-4 text-sm md:text-base text-(--text)/80 gap-6">
-          <div className="flex flex-col gap-2">
+        <div className="flex flex-col flex-1 p-2 xl:p-4 text-sm md:text-base text-(--text)/80 gap-6">
+          <div className="flex flex-col xl:gap-2">
             <div className="flex justify-between">
-              <div className="underline">Selected</div>
+              <div className="text-base lg:text-lg font-bold">Selected Aircraft</div>
               <X className="size-4 md:size-6" onClick={() => handleSetSelectedAircraft(null)} />
             </div>
-            <div className="">{selectedAircraft.callsign}</div>
+            <div className="text-sm xl:text-base">Callsign: {selectedAircraft.callsign}</div>
+            <div className="text-sm xl:text-base">Country of Origin: {selectedAircraft.origin_country}</div>
+            <div className="text-sm xl:text-base">Speed: {selectedAircraft.velocity_mps}m/s</div>
+            <div className="text-sm xl:text-base">Altitude: {selectedAircraft.altitude_m}m</div>
             <div
-              className="flex items-center gap-2 cursor-pointer hover:text-(--text-hover)"
+              className="text-sm xl:text-base flex items-center gap-2 cursor-pointer hover:text-(--text-hover)"
               onClick={trackedEntityId === selectedAircraft.icao ? untrackSelectedAircraft : trackSelectedAircraft}
             >
-              <Locate className="size-4" />
+              <Locate className="size-3 xl:size-4" />
               {trackedEntityId === selectedAircraft.icao ? "Stop Tracking" : "Track"}
             </div>
           </div>

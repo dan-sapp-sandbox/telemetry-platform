@@ -33,7 +33,7 @@ const MiniMapInitializer = () => {
 
     // viewer.scene.morphTo2D(0);
     viewer.useDefaultRenderLoop = true;
-    viewer.scene.requestRenderMode = true;
+    viewer.scene.requestRenderMode = false;
     viewer.resolutionScale = 1.0;
     viewer.scene.backgroundColor = Color.BLACK;
     viewer.scene.globe.baseColor = Color.BLACK;

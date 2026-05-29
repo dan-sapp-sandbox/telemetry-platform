@@ -34,7 +34,7 @@ const OverviewInitializer = () => {
     controller.enableLook = false;
 
     viewer.useDefaultRenderLoop = true;
-    viewer.scene.requestRenderMode = true;
+    viewer.scene.requestRenderMode = false;
   }, [viewer, mainViewerRef]);
 
   return null;
