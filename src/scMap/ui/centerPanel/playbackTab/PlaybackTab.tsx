@@ -11,7 +11,7 @@ const PlaybackTab = () => {
         <button
           className={cn([
             "mt-8 text-xs md:text-sm",
-            speed === 1 ? "text-(--text)/40 border-(--text)/40" : "text-(--text)/80 border-emerald-400/60",
+            speed === 0.5 ? "text-(--text)/40 border-(--text)/40" : "text-(--text)/80 border-emerald-400/60",
           ])}
           onClick={handleDecreaseSpeed}
         >
@@ -29,7 +29,7 @@ const PlaybackTab = () => {
         <button
           className={cn([
             "mt-8 text-xs md:text-sm",
-            speed === 500 ? "text-(--text)/40 border-(--text)/40" : "text-(--text)/80 border-emerald-400/60",
+            speed === 3 ? "text-(--text)/40 border-(--text)/40" : "text-(--text)/80 border-emerald-400/60",
           ])}
           onClick={handleIncreaseSpeed}
         >

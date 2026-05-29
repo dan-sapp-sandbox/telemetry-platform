@@ -6,6 +6,7 @@ import { Locate, X } from "lucide-react";
 const AircraftDetails = () => {
   const {
     aircraft,
+    visibleAircraft,
     selectedAircraft,
     handleSetSelectedAircraft,
     trackedEntityId,
@@ -15,7 +16,7 @@ const AircraftDetails = () => {
   return (
     <div className="flex h-full">
       <div className="flex flex-col w-[45%] overflow-y-auto scrollbar-hide">
-        {aircraft.map((entry, index) => {
+        {visibleAircraft.map((entry, index) => {
           const getBackgroundStyles = () => {
             if (index % 2 === 0) {
               if (selectedAircraft?.icao === entry.icao) {

@@ -10,9 +10,11 @@ const Layers = () => {
   const { layer, dataLayer } = useSelector((state: { map: mapState }) => state.map);
 
   const { viewer } = useCesium();
+
   const satelliteRef = useRef<Promise<IonImageryProvider> | null>(null);
   const baseLayerRef = useRef<ImageryLayer | null>(null);
-  const populationLayerRef = useRef<ImageryLayer | null>(null);
+
+  const overlayLayerRef = useRef<ImageryLayer | null>(null);
 
   const providers = useMemo(
     () => ({
@@ -38,6 +40,11 @@ const Layers = () => {
 
       populationDensity: new UrlTemplateImageryProvider({
         url: `${TILE_BASE_URL}/population/{z}/{x}/{y}.png`,
+        minimumLevel: 0,
+        maximumLevel: 5,
+      }),
+      weather: new UrlTemplateImageryProvider({
+        url: `${TILE_BASE_URL}/weather/current/{z}/{x}/{y}.png`,
         minimumLevel: 0,
         maximumLevel: 5,
       }),
@@ -94,7 +101,6 @@ const Layers = () => {
       }
 
       const newLayer = layers.addImageryProvider(provider, 0);
-
       newLayer.alpha = 1.0;
 
       baseLayerRef.current = newLayer;
@@ -114,10 +120,10 @@ const Layers = () => {
 
     const layers = viewer.imageryLayers;
 
-    // remove old overlay
-    if (populationLayerRef.current) {
-      layers.remove(populationLayerRef.current);
-      populationLayerRef.current = null;
+    // remove existing overlay
+    if (overlayLayerRef.current) {
+      layers.remove(overlayLayerRef.current);
+      overlayLayerRef.current = null;
     }
 
     // reset base alpha
@@ -125,17 +131,26 @@ const Layers = () => {
       baseLayerRef.current.alpha = 1.0;
     }
 
-    // add overlay if enabled
+    if (dataLayer === "weather") {
+      if (baseLayerRef.current) {
+        baseLayerRef.current.alpha = 0.15;
+      }
+
+      const overlay = layers.addImageryProvider(providers.weather);
+
+      overlay.alpha = 1.0;
+      overlayLayerRef.current = overlay;
+    }
+
     if (dataLayer === "population-density") {
       if (baseLayerRef.current) {
-        baseLayerRef.current.alpha = 0.75;
+        baseLayerRef.current.alpha = 0.5;
       }
 
       const overlay = layers.addImageryProvider(providers.populationDensity);
 
-      overlay.alpha = 0.8;
-
-      populationLayerRef.current = overlay;
+      overlay.alpha = 0.1;
+      overlayLayerRef.current = overlay;
     }
 
     viewer.scene.requestRender();

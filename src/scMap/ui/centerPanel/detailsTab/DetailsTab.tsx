@@ -10,7 +10,7 @@ const DetailsTab = () => {
     case "aircraft":
       return <AircraftDetails />;
     default:
-      return null;
+      return <div className="p-8 text-(--text)/80">Select a Data Layer</div>;
   }
 };
 

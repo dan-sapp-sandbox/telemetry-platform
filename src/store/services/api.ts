@@ -9,21 +9,18 @@ export interface IBounds {
 
 export interface AISVessel {
   mmsi: number;
-
   ship_name: string | null;
-
   lon: number;
   lat: number;
-
   sog: number | null;
   cog: number | null;
   heading: number | null;
-
   nav_status: number | null;
   rot: number | null;
-
   timestamp_ms: number;
 }
+
+export type AircraftMap = Record<string, Aircraft[]>;
 
 export type Aircraft = {
   icao: string;
@@ -32,20 +29,11 @@ export type Aircraft = {
 
   lon: number;
   lat: number;
-
   altitude_m: number | null;
-  geo_altitude_m: number | null;
-
   velocity_mps: number | null;
   heading_deg: number | null;
   vertical_rate: number | null;
-
-  on_ground: boolean;
-  spi: boolean;
-  position_source: number;
-
   squawk: string | null;
-
   snapshot_time: number;
 };
 

@@ -1,4 +1,4 @@
-import { memo, useMemo, useRef, useEffect } from "react";
+import { memo, useMemo } from "react";
 import {
   VerticalOrigin,
   LabelStyle,
@@ -14,84 +14,101 @@ import {
 } from "cesium";
 import { Entity } from "resium";
 import { type Aircraft } from "@/store/services/api";
+import { clock } from "@/map/simulationEngine";
 
 interface Props {
   aircraft: Aircraft;
+  // NOTE: later we will replace this with full snapshot array
+  snapshots?: Aircraft[];
   isSelected: boolean;
 }
 
-const AircraftEntity = ({ aircraft, isSelected }: Props) => {
-  const stateRef = useRef(aircraft);
+function lerp(a: number, b: number, t: number) {
+  return a + (b - a) * t;
+}
 
-  useEffect(() => {
-    stateRef.current = aircraft;
-  }, [aircraft]);
+function interpolatePosition(prev: Aircraft, next: Aircraft, t: number) {
+  const lat = lerp(prev.lat, next.lat, t);
+  const lon = lerp(prev.lon, next.lon, t);
+  const alt = lerp(prev.altitude_m ?? 0, next.altitude_m ?? 0, t);
 
-  const lastUpdateRef = useRef(Date.now() / 1000);
+  return Cartesian3.fromDegrees(lon, lat, alt);
+}
 
-  const extrapolatedDtRef = useRef(0);
-
-  const previousSnapshotTimeRef = useRef<number | null>(null);
-
-  useEffect(() => {
-    const now = Date.now() / 1000;
-
-    const prevSnapshot = previousSnapshotTimeRef.current;
-
-    if (prevSnapshot != null) {
-      const snapshotDelta = aircraft.snapshot_time - prevSnapshot;
-
-      const receiveDelta = now - lastUpdateRef.current;
-
-      extrapolatedDtRef.current += receiveDelta - snapshotDelta;
-
-      if (extrapolatedDtRef.current < 0) {
-        extrapolatedDtRef.current = 0;
-      }
-    }
-
-    previousSnapshotTimeRef.current = aircraft.snapshot_time;
-    lastUpdateRef.current = now;
-  }, [aircraft.snapshot_time]);
-
+const AircraftEntity = ({ aircraft, snapshots, isSelected }: Props) => {
   const position = useMemo(() => {
     return new CallbackProperty(() => {
-      const s = stateRef.current;
+      const timeline = snapshots;
 
-      if (!s?.lon || !s?.lat) return undefined;
+      // fallback mode (pre-buffer state)
+      if (!timeline || timeline.length < 2) {
+        return Cartesian3.fromDegrees(aircraft.lon, aircraft.lat, aircraft.altitude_m ?? 0);
+      }
 
-      const now = Date.now() / 1000;
+      const time = clock.getTime();
 
-      const liveDt = now - lastUpdateRef.current;
+      // find surrounding snapshots
+      let prev = timeline[0];
+      let next = timeline[timeline.length - 1];
 
-      const dt = liveDt + extrapolatedDtRef.current;
+      for (let i = 0; i < timeline.length - 1; i++) {
+        if (timeline[i].snapshot_time <= time && timeline[i + 1].snapshot_time >= time) {
+          prev = timeline[i];
+          next = timeline[i + 1];
+          break;
+        }
+      }
 
-      const speed = s.velocity_mps ?? 0;
-      const heading = CesiumMath.toRadians(s.heading_deg ?? 0);
+      const span = next.snapshot_time - prev.snapshot_time;
+      const t = span === 0 ? 0 : (time - prev.snapshot_time) / span;
 
-      const distance = speed * dt;
+      const clampedT = Math.max(0, Math.min(1, t));
 
-      const metersPerDegLat = 111_320;
-      const metersPerDegLon = 111_320 * Math.cos(CesiumMath.toRadians(s.lat));
-
-      const dLat = (Math.cos(heading) * distance) / metersPerDegLat;
-      const dLon = (Math.sin(heading) * distance) / metersPerDegLon;
-
-      return Cartesian3.fromDegrees(s.lon + dLon, s.lat + dLat, s.altitude_m ?? 0);
+      return interpolatePosition(prev, next, clampedT);
     }, false);
-  }, []);
+  }, [aircraft, snapshots]);
 
   const orientation = useMemo(() => {
     return new CallbackProperty(() => {
-      const s = stateRef.current;
+      const timeline = snapshots;
 
-      const hpr = new HeadingPitchRoll(CesiumMath.toRadians((s.heading_deg ?? 0) - 90), 0, 0);
+      if (!timeline || timeline.length < 2) {
+        const hpr = new HeadingPitchRoll(CesiumMath.toRadians((aircraft.heading_deg ?? 0) - 90), 0, 0);
 
-      const pos = Cartesian3.fromDegrees(s.lon, s.lat, s.altitude_m ?? 0);
+        const pos = Cartesian3.fromDegrees(aircraft.lon, aircraft.lat, aircraft.altitude_m ?? 0);
+
+        return Transforms.headingPitchRollQuaternion(pos, hpr);
+      }
+
+      const time = clock.getTime();
+
+      let prev = timeline[0];
+      let next = timeline[timeline.length - 1];
+
+      for (let i = 0; i < timeline.length - 1; i++) {
+        if (timeline[i].snapshot_time <= time && timeline[i + 1].snapshot_time >= time) {
+          prev = timeline[i];
+          next = timeline[i + 1];
+          break;
+        }
+      }
+
+      const span = next.snapshot_time - prev.snapshot_time;
+      const t = span === 0 ? 0 : (time - prev.snapshot_time) / span;
+
+      const clampedT = Math.max(0, Math.min(1, t));
+
+      const lon = prev.lon + (next.lon - prev.lon) * clampedT;
+      const lat = prev.lat + (next.lat - prev.lat) * clampedT;
+      const alt = (prev.altitude_m ?? 0) + ((next.altitude_m ?? 0) - (prev.altitude_m ?? 0)) * clampedT;
+
+      const hpr = new HeadingPitchRoll(CesiumMath.toRadians((prev.heading_deg ?? 0) - 90), 0, 0);
+
+      const pos = Cartesian3.fromDegrees(lon, lat, alt);
 
       return Transforms.headingPitchRollQuaternion(pos, hpr);
     }, false);
-  }, []);
+  }, [aircraft, snapshots]);
 
   const label = useMemo(() => {
     if (!isSelected) return undefined;
@@ -123,7 +140,7 @@ const AircraftEntity = ({ aircraft, isSelected }: Props) => {
       model={{
         uri: "/Airplane.glb",
         scale: 2,
-        minimumPixelSize: 26,
+        minimumPixelSize: aircraft.velocity_mps || 0 > 1 ? 26 : 8,
         maximumScale: 80,
         silhouetteColor: isSelected ? Color.RED : undefined,
         silhouetteSize: isSelected ? 2 : undefined,

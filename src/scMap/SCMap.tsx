@@ -1,5 +1,5 @@
 import { useRef, useEffect } from "react";
-import Layers from "@/map/Layers";
+import Layers from "@/map/layers/Layers";
 import MainMap from "@/map/MainMap";
 import Vessels from "@/map/vessels/Vessels";
 import Aircraft from "@/map/aircraft/Aircraft";

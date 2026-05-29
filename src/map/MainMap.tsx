@@ -136,6 +136,9 @@ const InitialCamera = () => {
       if (entityType === "aircraft") {
         const entityId = entity.properties.icao.getValue();
         const matchingAircraft = aircraftRef.current?.find((a) => a.icao === entityId);
+        console.log("aircraft", aircraftRef.current);
+        console.log("entityId", aircraftRef.current);
+        console.log("matchingAircraft", aircraftRef.current);
         if (!matchingAircraft) return;
         dispatch(setSelectedAircraft(matchingAircraft));
         dispatch(setActivePanel("aircraft"));
@@ -170,7 +173,7 @@ const MainMap = ({ children }: { children?: ReactNode | ReactNode[] }) => {
       animation={false}
       fullscreenButton={false}
       navigationHelpButton={false}
-      requestRenderMode={false}
+      requestRenderMode={true}
       maximumRenderTimeChange={Infinity}
       infoBox={false}
       selectionIndicator={false}

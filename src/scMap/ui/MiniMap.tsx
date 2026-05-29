@@ -3,7 +3,7 @@ import { Viewer, useCesium } from "resium";
 import { Color } from "cesium";
 import { CameraContext } from "@/map/types";
 import MainViewRectangle from "@/map/widgets/MainViewRectangle";
-import Layers from "@/map/Layers";
+import Layers from "@/map/layers/Layers";
 
 const MiniMapInitializer = () => {
   const { viewer } = useCesium();
@@ -33,7 +33,7 @@ const MiniMapInitializer = () => {
 
     // viewer.scene.morphTo2D(0);
     viewer.useDefaultRenderLoop = true;
-    viewer.scene.requestRenderMode = false;
+    viewer.scene.requestRenderMode = true;
     viewer.resolutionScale = 1.0;
     viewer.scene.backgroundColor = Color.BLACK;
     viewer.scene.globe.baseColor = Color.BLACK;

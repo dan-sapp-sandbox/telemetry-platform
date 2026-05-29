@@ -1,13 +1,13 @@
-import { createSlice } from "@reduxjs/toolkit";
-import type { Aircraft } from "../services/api";
+import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
+import type { Aircraft, AircraftMap } from "../services/api";
 
-export interface aircraftState {
-  aircraft: Aircraft[];
+export interface AircraftState {
+  aircraftMap: AircraftMap;
   selectedAircraft: Aircraft | null;
 }
 
-const initialState: aircraftState = {
-  aircraft: [],
+const initialState: AircraftState = {
+  aircraftMap: {}, // ✅ NEVER null
   selectedAircraft: null,
 };
 
@@ -16,15 +16,28 @@ const aircraftSlice = createSlice({
   initialState,
 
   reducers: {
-    setGlobalAircraft: (state, action) => {
-      state.aircraft = action.payload;
+    setAircraftMap: (state, action: PayloadAction<AircraftMap>) => {
+      state.aircraftMap = action.payload;
     },
-    setSelectedAircraft: (state, action) => {
+
+    mergeAircraftMap: (state, action: PayloadAction<AircraftMap>) => {
+      const incoming = action.payload;
+
+      for (const icao in incoming) {
+        if (!state.aircraftMap[icao]) {
+          state.aircraftMap[icao] = [];
+        }
+
+        state.aircraftMap[icao].push(...incoming[icao]);
+      }
+    },
+
+    setSelectedAircraft: (state, action: PayloadAction<Aircraft | null>) => {
       state.selectedAircraft = action.payload;
     },
   },
 });
 
-export const { setGlobalAircraft, setSelectedAircraft } = aircraftSlice.actions;
+export const { setAircraftMap, mergeAircraftMap, setSelectedAircraft } = aircraftSlice.actions;
 
 export default aircraftSlice.reducer;

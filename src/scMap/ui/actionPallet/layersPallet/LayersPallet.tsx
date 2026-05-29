@@ -93,6 +93,19 @@ const LayersPallet = () => {
               Population
             </span>
           </div>
+          {/* <div className={wrapperStyles}>
+            <button
+              className={cn([
+                buttonStyles,
+                "bg-[url('/population-btn.png')]",
+                dataLayer === "weather" ? "text-emerald-400/80" : "",
+              ])}
+              onClick={() => handleChangeDataLayer("weather")}
+            ></button>
+            <span className={cn([buttonTextStyles, dataLayer === "weather" ? "text-emerald-400/80" : ""])}>
+              Weather
+            </span>
+          </div> */}
         </div>
       </div>
     </div>

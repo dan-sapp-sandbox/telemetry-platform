@@ -7,7 +7,7 @@ export interface PlaybackState {
 
 const initialState: PlaybackState = {
   isPlaying: true,
-  speed: 100,
+  speed: 1,
 };
 
 const playbackSlice = createSlice({

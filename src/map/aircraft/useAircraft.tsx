@@ -1,12 +1,11 @@
-import { useState, useContext, useEffect, useMemo, useRef, type JSX } from "react";
-
+import { useContext, useEffect, useMemo, useRef, type JSX } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import AircraftEntity from "./AircraftEntity";
-
 import { CameraContext } from "@/map/types";
+
 import { type mapState } from "@/store/slices/mapSlice";
-import { setGlobalAircraft, type aircraftState } from "@/store/slices/aircraftSlice";
+import { setAircraftMap, type AircraftState } from "@/store/slices/aircraftSlice";
 import { type PlaybackState } from "@/store/slices/playbackSlice";
 
 import { clock } from "@/map/simulationEngine";
@@ -18,14 +17,15 @@ export interface IAircraftState {
   showAircraft: boolean;
 }
 
+// const WS_URL = "ws://localhost:8000/api/aircraft/ws/aircraft";
 const WS_URL = "https://sandbox-api-nifl.onrender.com/api/aircraft/ws/aircraft";
 
 const useAircraft = (): IAircraftState => {
   const dispatch = useDispatch();
-  const [aircraft, setAircraft] = useState<Aircraft[]>([]);
   const socketRef = useRef<WebSocket | null>(null);
+  const clockStartedRef = useRef(false);
 
-  const { selectedAircraft } = useSelector((state: { aircraft: aircraftState }) => state.aircraft);
+  const { selectedAircraft, aircraftMap } = useSelector((state: { aircraft: AircraftState }) => state.aircraft);
 
   const { dataLayer } = useSelector((state: { map: mapState }) => state.map);
 
@@ -41,13 +41,6 @@ const useAircraft = (): IAircraftState => {
 
     clock.setSpeed(speed);
   }, [isPlaying, speed]);
-
-  useEffect(() => {
-    if (!showAircraft) {
-      setAircraft([]);
-      dispatch(setGlobalAircraft([]));
-    }
-  }, [showAircraft]);
 
   useEffect(() => {
     if (!showAircraft) return;
@@ -78,20 +71,36 @@ const useAircraft = (): IAircraftState => {
 
     socket.onmessage = (event) => {
       try {
-        const data = JSON.parse(event.data);
-        setAircraft(data);
-        dispatch(setGlobalAircraft(data));
+        const msg = JSON.parse(event.data);
+
+        if (msg.type !== "append") return;
+
+        const incoming: Aircraft[] = msg.aircraft;
+
+        if (incoming.length > 0 && !clockStartedRef.current) {
+          clock.setTime(incoming[0].snapshot_time);
+          clock.start();
+          clockStartedRef.current = true;
+        }
+
+        const updated = (() => {
+          const next = { ...(aircraftMap || {}) };
+
+          for (const a of incoming) {
+            if (!next[a.icao]) {
+              next[a.icao] = [];
+            }
+
+            next[a.icao].push(a);
+          }
+
+          return next;
+        })();
+
+        dispatch(setAircraftMap(updated));
       } catch (err) {
         console.error("WS parse error:", err);
       }
-    };
-
-    socket.onerror = (err) => {
-      console.error("Aircraft websocket error:", err);
-    };
-
-    socket.onclose = () => {
-      console.log("Aircraft websocket closed");
     };
 
     return () => {
@@ -100,52 +109,14 @@ const useAircraft = (): IAircraftState => {
     };
   }, [showAircraft, mainViewerRef]);
 
-  useEffect(() => {
-    if (!showAircraft) return;
-    if (!mainViewerRef.current) return;
-
-    const viewer = mainViewerRef.current;
-    const socket = socketRef.current;
-
-    if (!socket) return;
-
-    let timeout: number | null = null;
-
-    const sendBounds = () => {
-      if (socket.readyState !== WebSocket.OPEN) return;
-
-      const bounds = getBounds(viewer);
-      if (!bounds) return;
-
-      socket.send(JSON.stringify(bounds));
-    };
-
-    const debouncedSend = () => {
-      if (timeout) window.clearTimeout(timeout);
-
-      timeout = window.setTimeout(() => {
-        sendBounds();
-      }, 120);
-    };
-
-    viewer.camera.moveEnd.addEventListener(debouncedSend);
-    viewer.camera.changed.addEventListener(debouncedSend);
-
-    return () => {
-      viewer.camera.moveEnd.removeEventListener(debouncedSend);
-      viewer.camera.changed.removeEventListener(debouncedSend);
-
-      if (timeout) window.clearTimeout(timeout);
-    };
-  }, [showAircraft, mainViewerRef]);
-
   const aircraftEntities = useMemo(() => {
-    return aircraft.map((a) => {
-      const isSelected = selectedAircraft?.icao === a.icao;
+    return Object.entries(aircraftMap || {}).map(([icao, snapshots]) => {
+      const latest = snapshots[snapshots.length - 1];
+      const isSelected = selectedAircraft?.icao === icao;
 
-      return <AircraftEntity key={a.icao} aircraft={a} isSelected={isSelected} />;
+      return <AircraftEntity key={icao} aircraft={latest} snapshots={snapshots} isSelected={isSelected} />;
     });
-  }, [aircraft, selectedAircraft]);
+  }, [aircraftMap, selectedAircraft]);
 
   return {
     aircraftEntities,

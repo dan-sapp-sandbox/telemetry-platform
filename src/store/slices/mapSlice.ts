@@ -2,7 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 export type ILayer = "esriSat" | "osm" | "satellite" | "carto-light" | "carto-dark" | "carto-voyager";
 
-export type IDataLayer = "vessels" | "aircraft" | "population-density";
+export type IDataLayer = "vessels" | "aircraft" | "population-density" | "weather";
 
 export interface mapState {
   showOverviewMap: boolean;

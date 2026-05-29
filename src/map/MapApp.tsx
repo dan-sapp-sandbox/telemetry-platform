@@ -4,7 +4,7 @@ import MainMap from "./MainMap";
 import OverviewMap from "./widgets/OverviewMap";
 import PipViewRectangle from "./widgets/PipViewRectangle";
 import PipMap from "./widgets/PipMap";
-import Layers from "./Layers";
+import Layers from "./layers/Layers";
 import useMapState from "./useMapState";
 import { CameraContext } from "./types";
 import useWidgetLayout from "./useWidgetLayout";
