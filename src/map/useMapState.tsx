@@ -7,9 +7,9 @@ import { useSelector } from "react-redux";
 
 export const defaultMainView = {
   heading: 0,
-  height: 100_000,
+  height: 70_000,
   lat: 40.5,
-  lon: -73.75,
+  lon: -74,
   pitch: -Math.PI / 2,
   roll: 0,
 };
