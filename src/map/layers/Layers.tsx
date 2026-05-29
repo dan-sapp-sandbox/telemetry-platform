@@ -149,7 +149,7 @@ const Layers = () => {
 
       const overlay = layers.addImageryProvider(providers.populationDensity);
 
-      overlay.alpha = 0.1;
+      overlay.alpha = 0.5;
       overlayLayerRef.current = overlay;
     }
 
