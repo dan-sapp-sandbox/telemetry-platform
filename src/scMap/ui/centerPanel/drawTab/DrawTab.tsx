@@ -1,7 +1,7 @@
 import { Slash, Hexagon, Dot } from "lucide-react";
 import useDrawTab from "./useDrawTab";
 import { cn } from "@/lib/utils";
-import DrawDetails from "../detailsTab/drawDetails/DrawDetails";
+import DrawDetails from "./drawDetails/DrawDetails";
 import { Separator } from "@/components/ui/separator";
 
 export const wrapperStyles = cn(["group flex flex-col items-center justify-center gap-px", "w-14 md:w-18 xl:w-22 "]);
@@ -9,7 +9,7 @@ export const buttonStyles = cn([
   "flex justify-center items-center rounded-xl",
   // "border border-emerald-400/10 group-hover:border-emerald-400/40",
   "bg-slate-700/60 border border-emerald-400/10 hover:bg-slate-700/90 group-hover:border-emerald-400/40",
-  "w-8 h-8 md:w-12 md:h-12 xl:w-16 xl:h-16 p-0",
+  "w-8 h-8 md:w-10 md:h-10 xl:w-12 xl:h-12 p-0",
 ]);
 export const buttonTextStyles = "text-(--text)/70 text-xs md:text-sm group-hover:text-emerald-400/70";
 export const iconStyles = "text-(--text)/70 lg:size-6 xl:size-10 group-hover:text-emerald-400/70";
@@ -21,7 +21,7 @@ const DrawTab = () => {
       <DrawDetails />
       <Separator orientation="vertical" />
       <div className="flex flex-col gap-3 h-full">
-        <div className="w-full flex justify-center gap-1 md:gap-3">
+        <div className="w-full flex flex-col justify-center gap-1 md:gap-3">
           <div className={wrapperStyles}>
             <button
               className={cn([buttonStyles, drawMode === "point" ? "bg-emerald-400/35" : ""])}
@@ -50,7 +50,6 @@ const DrawTab = () => {
             <span className={buttonTextStyles}>Polygon</span>
           </div>
         </div>
-        <div className="self-end text-xs md:text-sm text-(--text)/70">(double click to finish)</div>
       </div>
     </div>
   );
