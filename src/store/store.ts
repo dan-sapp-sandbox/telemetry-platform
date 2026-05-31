@@ -7,7 +7,7 @@ import reportReducer from "./slices/reportSlice";
 import vesselReducer from "./slices/vesselSlice";
 import aircraftReducer from "./slices/aircraftSlice";
 import widgetReducer from "./slices/widgetSlice";
-import actionPalletReducer from "./slices/actionPalletSlice";
+import tabReducer from "./slices/tabSlice";
 import playbackReducer from "./slices/playbackSlice";
 
 export const store = configureStore({
@@ -18,7 +18,7 @@ export const store = configureStore({
     vessels: vesselReducer,
     aircraft: aircraftReducer,
     widget: widgetReducer,
-    actionPallet: actionPalletReducer,
+    tab: tabReducer,
     playback: playbackReducer,
     [api.reducerPath]: api.reducer,
   },

@@ -7,7 +7,7 @@ import DrawController from "./DrawController";
 import { useDispatch, useSelector } from "react-redux";
 import { setSelectedVessel, type vesselState } from "@/store/slices/vesselSlice";
 import { setSelectedAircraft, type AircraftState } from "@/store/slices/aircraftSlice";
-import { setActivePanel } from "@/store/slices/actionPalletSlice";
+import { setTab } from "@/store/slices/tabSlice";
 import { setSelectedEntity, type drawState } from "@/store/slices/drawSlice";
 import { defaultMainView } from "./useMapState";
 import type { mapState } from "@/store/slices/mapSlice";
@@ -131,7 +131,7 @@ const InitialCamera = () => {
         const matchingVessel = vesselsRef.current?.find((vessel) => vessel.mmsi === entityId);
         if (!matchingVessel) return;
         dispatch(setSelectedVessel(matchingVessel));
-        dispatch(setActivePanel("vessels"));
+        dispatch(setTab("vessels"));
       }
       if (entityType === "aircraft") {
         const entityId = entity.properties.icao.getValue();
@@ -140,14 +140,14 @@ const InitialCamera = () => {
         const matchingAircraft = matchingAircraftSnapshots[matchingAircraftSnapshots.length - 1];
         if (!matchingAircraft) return;
         dispatch(setSelectedAircraft(matchingAircraft as Aircraft));
-        dispatch(setActivePanel("aircraft"));
+        dispatch(setTab("aircraft"));
       }
       if (entityType === "draw") {
         const entityId = entity.properties.id.getValue();
         const matchingEntity = entities.find((vessel) => vessel.id === entityId);
         if (!matchingEntity) return;
         dispatch(setSelectedEntity(matchingEntity));
-        dispatch(setActivePanel("draw"));
+        dispatch(setTab("draw"));
       }
       // viewer.selectedEntity = entity;
     }, ScreenSpaceEventType.LEFT_CLICK);

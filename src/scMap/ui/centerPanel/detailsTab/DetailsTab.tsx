@@ -3,8 +3,8 @@ import VesselDetails from "./vesselDetails/VesselDetails";
 import AircraftDetails from "./aircraftDetails/AircraftDetails";
 
 const DetailsTab = () => {
-  const { activePanel } = useDetailsTab();
-  switch (activePanel) {
+  const { activeDetails } = useDetailsTab();
+  switch (activeDetails) {
     case "vessels":
       return <VesselDetails />;
     case "aircraft":

@@ -7,7 +7,7 @@ import { renderToStaticMarkup } from "react-dom/server";
 import { MapPin } from "lucide-react";
 import { CameraContext } from "@/map/types";
 import type { IWidgetState } from "@/store/slices/widgetSlice";
-import { setActivePanel } from "@/store/slices/actionPalletSlice";
+import { setTab } from "@/store/slices/tabSlice";
 
 const lucideToDataUrl = (icon: React.ReactElement) => {
   const svgString = renderToStaticMarkup(icon);
@@ -105,7 +105,7 @@ const useContextMenu = (): IContextMenu => {
 
   const handleAddEntitity = (newEntity: DrawEntity) => {
     dispatch(addEntity(newEntity));
-    dispatch(setActivePanel("draw"));
+    dispatch(setTab("draw"));
   };
 
   const serializePosition = (position: Cartesian3) => ({

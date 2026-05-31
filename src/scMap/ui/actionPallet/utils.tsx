@@ -1,7 +1,5 @@
 import { cn } from "@/lib/utils";
 
-export type actionPanel = "draw" | "vessels" | "aircraft" | "layers";
-
 export const palletWrapperStyles = cn([
   "flex flex-col justify-between bg-zinc-800/90 border-t-1 border-l-1 border-emerald-400/30 md:rounded-tl-3xl shadow-2xl backdrop-blur-md",
   "p-2 xl:p-4 h-42 w-1/2 md:w-80 md:h-55 lg:w-80 xl:h-75 xl:w-100",
