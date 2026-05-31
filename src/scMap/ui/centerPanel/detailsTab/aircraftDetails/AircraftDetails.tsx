@@ -1,7 +1,7 @@
 import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
 import useAircraftDetails from "./useAircraftDetails";
-import { Locate, X } from "lucide-react";
+import { Locate, X, LoaderCircle } from "lucide-react";
 
 const AircraftDetails = () => {
   const {
@@ -16,33 +16,39 @@ const AircraftDetails = () => {
   return (
     <div className="flex h-full">
       <div className="flex flex-col w-[45%] overflow-y-auto scrollbar-hide">
-        {visibleAircraft.map((entry, index) => {
-          const getBackgroundStyles = () => {
-            if (index % 2 === 0) {
-              if (selectedAircraft?.icao === entry.icao) {
-                return "bg-blue-400/20";
+        {visibleAircraft.length ? (
+          visibleAircraft.map((entry, index) => {
+            const getBackgroundStyles = () => {
+              if (index % 2 === 0) {
+                if (selectedAircraft?.icao === entry.icao) {
+                  return "bg-blue-400/20";
+                }
+                return "bg-zinc-800/50";
+              } else {
+                if (selectedAircraft?.icao === entry.icao) {
+                  return "bg-blue-400/20";
+                }
+                return "bg-zinc-700/50";
               }
-              return "bg-zinc-800/50";
-            } else {
-              if (selectedAircraft?.icao === entry.icao) {
-                return "bg-blue-400/20";
-              }
-              return "bg-zinc-700/50";
-            }
-          };
-          return (
-            <div
-              key={entry.icao}
-              className={cn([
-                "cursor-pointer px-4 py-1.5 md:py-1 transition-colors text-xs md:text-sm text-(--text)/80 hover:bg-blue-400/30",
-                getBackgroundStyles(),
-              ])}
-              onClick={() => handleSetSelectedAircraft(entry)}
-            >
-              {entry.callsign}
-            </div>
-          );
-        })}
+            };
+            return (
+              <div
+                key={entry.icao}
+                className={cn([
+                  "cursor-pointer px-4 py-1.5 md:py-1 transition-colors text-xs md:text-sm text-(--text)/80 hover:bg-blue-400/30",
+                  getBackgroundStyles(),
+                ])}
+                onClick={() => handleSetSelectedAircraft(entry)}
+              >
+                {entry.callsign}
+              </div>
+            );
+          })
+        ) : (
+          <div className="flex h-full justify-center items-center">
+            <LoaderCircle className="text-(--text)/80 h-10 md:h-10 w-12 md:w-16 animate-spin" />
+          </div>
+        )}
       </div>
       <Separator orientation="vertical" />
       {selectedAircraft ? (

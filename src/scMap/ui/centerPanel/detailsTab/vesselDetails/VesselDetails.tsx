@@ -1,7 +1,7 @@
 import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
 import useVesselDetails from "./useVesselDetails";
-import { Locate, X } from "lucide-react";
+import { LoaderCircle, Locate, X } from "lucide-react";
 
 const VesselDetails = () => {
   const {
@@ -15,33 +15,39 @@ const VesselDetails = () => {
   return (
     <div className="flex h-full">
       <div className="flex flex-col w-[45%] overflow-y-auto scrollbar-hide">
-        {vessels.map((vessel, index) => {
-          const getBackgroundStyles = () => {
-            if (index % 2 === 0) {
-              if (selectedVessel?.mmsi === vessel.mmsi) {
-                return "bg-blue-400/20";
+        {vessels.length ? (
+          vessels.map((vessel, index) => {
+            const getBackgroundStyles = () => {
+              if (index % 2 === 0) {
+                if (selectedVessel?.mmsi === vessel.mmsi) {
+                  return "bg-blue-400/20";
+                }
+                return "bg-zinc-800/50";
+              } else {
+                if (selectedVessel?.mmsi === vessel.mmsi) {
+                  return "bg-blue-400/20";
+                }
+                return "bg-zinc-700/50";
               }
-              return "bg-zinc-800/50";
-            } else {
-              if (selectedVessel?.mmsi === vessel.mmsi) {
-                return "bg-blue-400/20";
-              }
-              return "bg-zinc-700/50";
-            }
-          };
-          return (
-            <div
-              key={vessel.mmsi}
-              className={cn([
-                "cursor-pointer px-4 py-1.5 md:py-1 transition-colors text-xs md:text-sm text-(--text)/80 hover:bg-blue-400/30",
-                getBackgroundStyles(),
-              ])}
-              onClick={() => handleSetSelectedVessel(vessel)}
-            >
-              {vessel.ship_name}
-            </div>
-          );
-        })}
+            };
+            return (
+              <div
+                key={vessel.mmsi}
+                className={cn([
+                  "cursor-pointer px-4 py-1.5 md:py-1 transition-colors text-xs md:text-sm text-(--text)/80 hover:bg-blue-400/30",
+                  getBackgroundStyles(),
+                ])}
+                onClick={() => handleSetSelectedVessel(vessel)}
+              >
+                {vessel.ship_name}
+              </div>
+            );
+          })
+        ) : (
+          <div className="flex h-full justify-center items-center">
+            <LoaderCircle className="text-(--text)/80 h-10 md:h-10 w-12 md:w-16 animate-spin" />
+          </div>
+        )}
       </div>
       <Separator orientation="vertical" />
       {selectedVessel ? (

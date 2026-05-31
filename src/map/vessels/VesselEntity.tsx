@@ -140,8 +140,8 @@ const VesselEntity = ({ vessel, snapshots, isSelected }: Props) => {
       orientation={orientation}
       model={{
         uri: "/Container Ship.glb",
-        scale: 1000,
-        minimumPixelSize: 26,
+        scale: 100,
+        minimumPixelSize: 16,
         maximumScale: 100_000,
         silhouetteColor: isSelected ? Color.YELLOW : undefined,
         silhouetteSize: isSelected ? 2 : undefined,

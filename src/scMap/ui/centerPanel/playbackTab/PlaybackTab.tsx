@@ -17,7 +17,7 @@ const PlaybackTab = () => {
         >
           <Rewind />
         </button>
-        <div className="flex flex-col gap-2">
+        <div className="flex flex-col justify-between gap-2">
           <div className="text-center text-sm md:text-base text-(--text)/80">{speed}x</div>
           <button
             className="text-xs md:text-sm text-(--text)/80 border-emerald-400/60"
