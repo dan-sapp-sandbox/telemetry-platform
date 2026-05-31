@@ -11,8 +11,8 @@ export const buttonStyles = cn([
   "bg-slate-700/60 border border-emerald-400/10 hover:bg-slate-700/90 group-hover:border-emerald-400/40",
   "w-8 h-8 md:w-10 md:h-10 xl:w-12 xl:h-12 p-0",
 ]);
-export const buttonTextStyles = "text-(--text)/70 text-xs md:text-sm group-hover:text-emerald-400/70";
-export const iconStyles = "text-(--text)/70 lg:size-6 xl:size-10 group-hover:text-emerald-400/70";
+export const buttonTextStyles = "text-(--text)/70 text-xs group-hover:text-emerald-400/70";
+export const iconStyles = "text-(--text)/70 lg:size-4 xl:size-6 group-hover:text-emerald-400/70";
 const DrawTab = () => {
   const { handleChangeDrawMode, drawMode } = useDrawTab();
 
