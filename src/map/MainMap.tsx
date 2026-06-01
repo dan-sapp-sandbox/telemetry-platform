@@ -73,6 +73,7 @@ const InitialCamera = () => {
     viewer.scene.backgroundColor = Color.BLACK;
     viewer.scene.globe.baseColor = Color.BLACK;
     viewer.scene.screenSpaceCameraController.maximumZoomDistance = 9_000_000;
+    viewer.scene.screenSpaceCameraController.maximumTiltAngle = Math.PI / 4;
     viewer.cesiumWidget.screenSpaceEventHandler.removeInputAction(ScreenSpaceEventType.LEFT_DOUBLE_CLICK);
   }, [viewer]);
 

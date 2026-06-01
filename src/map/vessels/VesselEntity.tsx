@@ -147,7 +147,7 @@ const VesselEntity = ({ vessel, snapshots, isSelected }: Props) => {
         silhouetteSize: isSelected ? 2 : undefined,
       }}
       label={label}
-      viewFrom={new Cartesian3(0, -50000, 25000)}
+      viewFrom={new Cartesian3(0, -25000, 25000)}
       properties={{
         entityType: "vessel",
         mmsi: vessel.mmsi,

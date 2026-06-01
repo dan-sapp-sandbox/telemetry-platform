@@ -134,7 +134,7 @@ const AircraftEntity = ({ aircraft, snapshots, isSelected }: Props) => {
   return (
     <Entity
       id={aircraft.icao}
-      viewFrom={new Cartesian3(0, -35000, 50000)}
+      viewFrom={new Cartesian3(0, -25000, 25000)}
       position={position as any}
       orientation={orientation}
       model={{

@@ -60,10 +60,14 @@ const VesselDetails = () => {
             <div className="">{selectedVessel.ship_name}</div>
             <div
               className="flex items-center gap-2 cursor-pointer hover:text-(--text-hover)"
-              onClick={trackedEntityId === selectedVessel.mmsi.toString() ? untrackSelectedVessel : trackSelectedVessel}
+              onClick={
+                trackedEntityId?.toString() === selectedVessel.mmsi.toString()
+                  ? untrackSelectedVessel
+                  : trackSelectedVessel
+              }
             >
               <Locate className="size-4" />
-              {trackedEntityId === selectedVessel.mmsi.toString() ? "Stop Tracking" : "Track"}
+              {trackedEntityId?.toString() === selectedVessel.mmsi.toString() ? "Stop Tracking" : "Track"}
             </div>
           </div>
         </div>
