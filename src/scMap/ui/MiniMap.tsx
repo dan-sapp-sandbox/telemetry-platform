@@ -35,7 +35,7 @@ const MiniMapInitializer = () => {
     viewer.useDefaultRenderLoop = true;
     viewer.scene.requestRenderMode = false;
     viewer.resolutionScale = 1.0;
-    viewer.scene.screenSpaceCameraController.maximumZoomDistance = 9_000_000;
+    viewer.scene.screenSpaceCameraController.maximumZoomDistance = 7_000_000;
     viewer.scene.backgroundColor = Color.BLACK;
     viewer.scene.globe.baseColor = Color.BLACK;
   }, [viewer, mainViewerRef]);
