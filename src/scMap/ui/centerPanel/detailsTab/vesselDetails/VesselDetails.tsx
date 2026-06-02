@@ -54,10 +54,11 @@ const VesselDetails = () => {
         <div className="flex flex-col flex-1 p-4 text-sm md:text-base text-(--text)/80 gap-6">
           <div className="flex flex-col gap-2">
             <div className="flex justify-between">
-              <div className="underline">Selected</div>
+              <div className="text-base lg:text-lg font-bold">Selected Vessel</div>
               <X className="size-4 md:size-6" onClick={() => handleSetSelectedVessel(null)} />
             </div>
-            <div className="">{selectedVessel.ship_name}</div>
+            <div className="">Name: {selectedVessel.ship_name}</div>
+            <div className="">Speed Over Ground: {selectedVessel.sog || 0 * 0.514444} m/s</div>
             <div
               className="flex items-center gap-2 cursor-pointer hover:text-(--text-hover)"
               onClick={

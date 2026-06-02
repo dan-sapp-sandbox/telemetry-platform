@@ -62,7 +62,7 @@ const AircraftDetails = () => {
             <div className="text-sm xl:text-base">Country of Origin: {selectedAircraft.origin_country}</div>
             <div className="text-sm xl:text-base">Speed: {selectedAircraft.velocity_mps}m/s</div>
             {selectedAircraft.altitude_m && selectedAircraft.altitude_m > 0 && (
-              <div className="text-sm xl:text-base">Altitude: {selectedAircraft.altitude_m}</div>
+              <div className="text-sm xl:text-base">Altitude: {selectedAircraft.altitude_m}m</div>
             )}
             <div
               className="text-sm xl:text-base flex items-center gap-2 cursor-pointer hover:text-(--text-hover)"
