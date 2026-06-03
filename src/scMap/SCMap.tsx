@@ -18,7 +18,7 @@ const SCMap = () => {
   }, []);
   const containerRef = useRef<HTMLDivElement | null>(null);
   const { mainViewerRef, overviewViewerRef, pipViewerRef } = useMapState();
-  const mapWrapperStyles = "relative w-full h-[calc(100%-21rem)] md:h-[calc(100%-12rem)] xl:h-[calc(100%-17rem)]";
+  const mapWrapperStyles = "relative w-full h-[calc(100%-22.5rem)] md:h-[calc(100%-12rem)] xl:h-[calc(100%-17rem)]";
   return (
     <CameraContext.Provider value={{ containerRef, mainViewerRef, overviewViewerRef, pipViewerRef }}>
       <div className="relative h-full w-full cursor-pointer">

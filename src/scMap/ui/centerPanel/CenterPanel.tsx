@@ -33,7 +33,7 @@ const CenterPanel = () => {
   return (
     <div
       className={cn([
-        "absolute md:static bottom-42 flex w-full md:flex-1 h-42 md:h-48 xl:h-68 flex-col ",
+        "absolute md:static bottom-42 flex w-full md:flex-1 h-48 xl:h-68 flex-col ",
         "border-t border-emerald-400/30 bg-zinc-900/70 backdrop-blur-xl shadow-2xl overflow-hidden",
       ])}
     >
