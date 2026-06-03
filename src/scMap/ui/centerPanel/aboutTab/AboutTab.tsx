@@ -5,9 +5,9 @@ const AboutTab = () => {
   const { handleDownloadResume, handleOpenLinkedInLink, handleOpenGithubLink } = useAboutTab();
   return (
     <div className="flex h-full p-2">
-      <div className="flex flex-col gap-2 w-2/3">
+      <div className="flex flex-col md:gap-2 w-3/5">
         <div className="flex gap-2">
-          <span className="md:text-lg font-bold text-(--text)/80">Hi, I'm Dan Sapp.</span>
+          <span className="text-sm md:text-lg font-bold text-(--text)/80">Hi, I'm Dan Sapp.</span>
         </div>
         <span className="text-xs md:text-sm xl:text-base text-(--text)/80">
           I'm a Geospatial Software Engineer focused on real-time tracking systems, 3D globe visualization, and spatial
@@ -15,7 +15,7 @@ const AboutTab = () => {
           applications.
         </span>
       </div>
-      <div className="flex flex-col w-1/3 p-1 gap-3">
+      <div className="flex flex-col w-2/5 p-1 gap-3">
         <div
           className="flex justify-end items-center gap-2 text-(--text)/80 hover:text-(--text-hover) cursor-pointer"
           onClick={() => handleDownloadResume()}
