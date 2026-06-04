@@ -13,7 +13,7 @@ This project combines a FastAPI backend, websocket-based telemetry streaming, an
 - Websocket-based AIS and ADS-B streaming
 - Snapshot playback and time-based simulation
 - Server-side filtering and viewport-based queries
-- Smooth client-side extrapolation between updates
+- Smooth client-side interpolation between updates
 
 ## 3D Geospatial Visualization
 
@@ -28,7 +28,6 @@ This project combines a FastAPI backend, websocket-based telemetry streaming, an
 
 - Historical playback support
 - Adjustable playback speed
-- Dead-reckoning position extrapolation
 - Continuous motion smoothing between telemetry snapshots
 - Time-synchronized aircraft and vessel simulation
 
