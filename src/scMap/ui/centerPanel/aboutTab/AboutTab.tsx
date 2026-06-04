@@ -34,7 +34,7 @@ const AboutTab = () => {
           className="flex justify-end items-center gap-2 text-(--text)/80 hover:text-(--text-hover) cursor-pointer"
           onClick={() => handleOpenGithubLink()}
         >
-          <span className="text-xs md:text-base">GitHub Repo</span>
+          <span className="text-xs md:text-base">GitHub</span>
           <ExternalLink className="size-3 md:size-4" />
         </div>
       </div>
