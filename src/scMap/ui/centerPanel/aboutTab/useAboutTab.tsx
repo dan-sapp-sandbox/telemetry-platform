@@ -5,7 +5,7 @@ interface IAboutTab {
 }
 
 const useAboutTab = (): IAboutTab => {
-  const githubURL = "https://github.com/dan-sapp-sandbox/sandbox";
+  const githubURL = "https://github.com/dan-sapp-sandbox";
   const linkedInURL = "https://www.linkedin.com/in/dan-sapp-744145b6/";
   const handleOpenGithubLink = () => {
     window.open(githubURL, "_blank", "noopener,noreferrer");
