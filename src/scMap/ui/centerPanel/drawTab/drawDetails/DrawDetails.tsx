@@ -1,11 +1,18 @@
-import { Edit2, Locate, Trash2, X } from "lucide-react";
+import { Locate, Trash2, X } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
 import useDrawDetails from "./useDrawDetails";
+import { useState, useEffect } from "react";
 
 const DrawDetails = () => {
-  const { handleRenameEntity, handleDeleteEntity, flyToDrawEntity, entities, selectedEntity, handleSetSelectedEntity } =
+  const { handleEditEntity, handleDeleteEntity, flyToDrawEntity, entities, selectedEntity, handleSetSelectedEntity } =
     useDrawDetails();
+  const [name, setName] = useState(selectedEntity?.name ?? "");
+
+  useEffect(() => {
+    setName(selectedEntity?.name ?? "");
+  }, [selectedEntity?.id]);
+
   return (
     <div className="flex h-full flex-1">
       <div className="flex flex-col w-1/3 overflow-y-auto scrollbar-hide">
@@ -40,25 +47,39 @@ const DrawDetails = () => {
       </div>
       <Separator orientation="vertical" />
       {selectedEntity ? (
-        <div className="flex flex-col flex-1 pl-2 text-(--text)/80 overflow-y-auto">
+        <div className="flex flex-col flex-1 p-2 xl:p-4 text-(--text)/80 overflow-y-auto">
           <div className="flex justify-between">
-            <div className="underline">Selected</div>
+            <div className="text-base lg:text-lg font-bold capitalize">Selected {selectedEntity.type}</div>
             <X className="size-4 md:size-6" onClick={() => handleSetSelectedEntity(null)} />
           </div>
-          <div className="bg-slate-800/50 py-0.5 flex items-center gap-2">
-            Name: {selectedEntity.name || "none"}
-            <Edit2 className="size-4" onClick={() => handleRenameEntity(selectedEntity, "new name")} />
+          <div className="bg-slate-800/50 p-1 flex items-center gap-2">
+            {/* <input
+              className="flex-1 rounded-lg bg-zinc-800/60 border border-white/10 outline-none text-xl md:text-sm text-(--text)/80"
+              placeholder="Name"
+              value={selectedEntity.name}
+              onBlur={(e) => handleEditEntity({ ...selectedEntity, name: e.target.value })}
+            /> */}
+            <input
+              className="flex-1 rounded-lg bg-zinc-800/60 border border-white/10 outline-none text-xl md:text-sm text-(--text)/80"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              onBlur={() =>
+                handleEditEntity({
+                  ...selectedEntity,
+                  name,
+                })
+              }
+            />
           </div>
-          <div className="bg-slate-700/50 py-0.5 capitalize">Type: {selectedEntity.type}</div>
           <div
-            className="flex items-center gap-2 cursor-pointer py-0.5 bg-slate-800/50 hover-bg-blue-800/50 hover:text-blue-300/80"
+            className="flex items-center gap-2 cursor-pointer p-1 bg-slate-800/50 hover-bg-blue-800/50 hover:text-blue-300/80"
             onClick={() => flyToDrawEntity(selectedEntity)}
           >
             <Locate className="size-4" />
             <div className="">Center Map on Entity</div>
           </div>
           <div
-            className="flex items-center gap-2 cursor-pointer py-0.5 bg-slate-800/50 hover-bg-blue-800/50 hover:text-blue-300/80"
+            className="flex items-center gap-2 cursor-pointer p-1 bg-slate-800/50 hover-bg-blue-800/50 hover:text-blue-300/80"
             onClick={() => handleDeleteEntity(selectedEntity)}
           >
             <Trash2 className="size-4" />

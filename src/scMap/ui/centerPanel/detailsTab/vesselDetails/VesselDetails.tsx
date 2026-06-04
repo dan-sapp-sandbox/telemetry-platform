@@ -51,7 +51,7 @@ const VesselDetails = () => {
       </div>
       <Separator orientation="vertical" />
       {selectedVessel ? (
-        <div className="flex flex-col flex-1 p-4 text-sm md:text-base text-(--text)/80 gap-6">
+        <div className="flex flex-col flex-1 p-2 xl:p-4 text-sm md:text-base text-(--text)/80 gap-4 xl:gap-6">
           <div className="flex flex-col gap-2">
             <div className="flex justify-between">
               <div className="text-base lg:text-lg font-bold">Selected Vessel</div>

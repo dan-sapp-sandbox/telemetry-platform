@@ -126,7 +126,7 @@ const InitialCamera = () => {
         return;
       }
 
-      const entityType = entity.properties.entityType.getValue();
+      const entityType = entity.properties?.entityType.getValue();
       if (entityType === "vessel") {
         const entityId = entity.properties.mmsi.getValue();
         const matchingVessel = vesselsRef.current?.find((vessel) => vessel.mmsi === entityId);

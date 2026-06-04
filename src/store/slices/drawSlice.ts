@@ -43,14 +43,11 @@ const drawSlice = createSlice({
       state.entities = [...state.entities, action.payload];
       state.selectedEntity = action.payload;
     },
-    renameEntity: (state, action) => {
-      const { id, newName } = action.payload;
+    editEntity: (state, action) => {
+      const { id } = action.payload;
       state.entities = state.entities.map((entity) => {
         if (entity.id === id) {
-          return {
-            ...entity,
-            name: newName,
-          };
+          return action.payload;
         }
         return entity;
       });
@@ -65,6 +62,6 @@ const drawSlice = createSlice({
   },
 });
 
-export const { setSelectedEntity, setDrawMode, addEntity, renameEntity, deleteEntity, setEntites } = drawSlice.actions;
+export const { setSelectedEntity, setDrawMode, addEntity, editEntity, deleteEntity, setEntites } = drawSlice.actions;
 
 export default drawSlice.reducer;

@@ -1,12 +1,12 @@
 import { useContext } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { renameEntity, deleteEntity, setSelectedEntity } from "@/store/slices/drawSlice";
+import { editEntity, deleteEntity, setSelectedEntity } from "@/store/slices/drawSlice";
 import type { DrawEntity, drawState, Position } from "@/store/slices/drawSlice";
 import { CameraContext } from "@/map/types";
 import { BoundingSphere, Cartesian3, Cartographic } from "cesium";
 
 interface IDrawDetails {
-  handleRenameEntity: (entity: DrawEntity, newName: string) => void;
+  handleEditEntity: (updatedEntity: DrawEntity) => void;
   handleDeleteEntity: (entity: DrawEntity) => void;
   entities: DrawEntity[];
   flyToDrawEntity: (entity: DrawEntity) => void;
@@ -58,11 +58,9 @@ const useDrawDetails = (): IDrawDetails => {
     dispatch(setSelectedEntity(entity));
   };
 
-  const handleRenameEntity = (entity: DrawEntity, newName: string) => {
-    if (selectedEntity) {
-      dispatch(renameEntity({ id: entity.id, newName }));
-      setSelectedEntity({ ...selectedEntity, name: newName });
-    }
+  const handleEditEntity = (updatedEntity: DrawEntity) => {
+    dispatch(editEntity(updatedEntity));
+    dispatch(setSelectedEntity(updatedEntity));
   };
   const handleDeleteEntity = (entity: DrawEntity) => {
     dispatch(deleteEntity({ id: entity.id }));
@@ -70,7 +68,7 @@ const useDrawDetails = (): IDrawDetails => {
   };
 
   return {
-    handleRenameEntity,
+    handleEditEntity,
     handleDeleteEntity,
     flyToDrawEntity,
     entities,
