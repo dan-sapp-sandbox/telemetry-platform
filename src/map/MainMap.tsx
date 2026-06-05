@@ -11,7 +11,7 @@ import { setTab } from "@/store/slices/tabSlice";
 import { setSelectedEntity, type drawState } from "@/store/slices/drawSlice";
 import { defaultMainView } from "./useMapState";
 import type { mapState } from "@/store/slices/mapSlice";
-import type { Aircraft, AircraftMap, AISVessel } from "@/store/services/api";
+import type { Aircraft, AISVessel } from "@/store/services/api";
 
 const RegisterMainViewer = () => {
   const { viewer } = useCesium();
@@ -28,7 +28,7 @@ const RegisterMainViewer = () => {
 const InitialCamera = () => {
   const dispatch = useDispatch();
   const { trackedEntityId } = useSelector((state: { map: mapState }) => state.map);
-  const { aircraftMap } = useSelector((state: { aircraft: AircraftState }) => state.aircraft);
+  const { aircraft } = useSelector((state: { aircraft: AircraftState }) => state.aircraft);
   const { vessels } = useSelector((state: { vessels: vesselState }) => state.vessels);
   const { entities } = useSelector((state: { draw: drawState }) => state.draw);
   const [init] = useLocalStorage("main-cam-init", defaultMainView);
@@ -44,10 +44,10 @@ const InitialCamera = () => {
     vesselsRef.current = vessels;
   }, [vessels]);
 
-  const aircraftMapRef = useRef<AircraftMap>(null);
+  const aircraftMapRef = useRef<Aircraft[]>(null);
   useEffect(() => {
-    aircraftMapRef.current = aircraftMap;
-  }, [aircraftMap]);
+    aircraftMapRef.current = aircraft;
+  }, [aircraft]);
 
   useEffect(() => {
     if (!viewer) return;
@@ -136,9 +136,7 @@ const InitialCamera = () => {
       }
       if (entityType === "aircraft") {
         const entityId = entity.properties.icao.getValue();
-        const matchingAircraftSnapshots = aircraftMapRef.current?.[entityId];
-        if (!matchingAircraftSnapshots) return;
-        const matchingAircraft = matchingAircraftSnapshots[matchingAircraftSnapshots.length - 1];
+        const matchingAircraft = aircraftMapRef.current?.find((aircraft) => aircraft.icao === entityId);
         if (!matchingAircraft) return;
         dispatch(setSelectedAircraft(matchingAircraft as Aircraft));
         dispatch(setTab("aircraft"));

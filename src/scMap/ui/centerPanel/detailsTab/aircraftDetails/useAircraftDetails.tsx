@@ -62,17 +62,7 @@ const useAircraftDetails = (): IAircraftDetails => {
 
   const { trackedEntityId } = useSelector((state: { map: mapState }) => state.map);
 
-  const { aircraftMap, selectedAircraft } = useSelector((state: { aircraft: AircraftState }) => state.aircraft);
-
-  const time = clock.getTime();
-
-  const aircraft = useMemo(() => {
-    const map = aircraftMap ?? {};
-
-    return Object.values(map)
-      .map((timeline) => getSnapshotAtTime(timeline, time))
-      .filter((a): a is Aircraft => a !== null);
-  }, [aircraftMap, time]);
+  const { aircraft, selectedAircraft } = useSelector((state: { aircraft: AircraftState }) => state.aircraft);
 
   const bounds = getBounds(mainViewerRef.current);
 

@@ -1,6 +1,5 @@
 import { useEffect, useMemo, useRef, useState, type JSX, useContext } from "react";
 import { useDispatch, useSelector } from "react-redux";
-
 import VesselEntity from "./VesselEntity";
 import { clearTimeRange, setEndTime, setTimeRange, type PlaybackState } from "@/store/slices/playbackSlice";
 import type { mapState } from "@/store/slices/mapSlice";
