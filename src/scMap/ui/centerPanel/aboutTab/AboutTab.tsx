@@ -10,9 +10,8 @@ const AboutTab = () => {
           <span className="text-sm md:text-lg font-bold text-(--text)/80">Hi, I'm Dan Sapp.</span>
         </div>
         <span className="text-xs md:text-sm xl:text-base text-(--text)/80">
-          I'm a Senior Software Engineer focused on real-time tracking systems, 3D globe visualization, and spatial
-          analytics. My work combines TypeScript, React, Cesium, FastAPI, and PostGIS to build interactive geospatial
-          applications.
+          I'm a Software Engineer focused on real-time tracking systems, 3D globe visualization, and spatial analytics.
+          My work combines TypeScript, React, Cesium, FastAPI, and PostGIS to build interactive geospatial applications.
         </span>
       </div>
       <div className="flex flex-col w-2/5 p-1 gap-3">

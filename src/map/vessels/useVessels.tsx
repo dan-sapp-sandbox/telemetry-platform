@@ -2,7 +2,7 @@ import { useEffect, useMemo, useRef, useState, type JSX, useContext } from "reac
 import { useDispatch, useSelector } from "react-redux";
 
 import VesselEntity from "./VesselEntity";
-import { type PlaybackState } from "@/store/slices/playbackSlice";
+import { clearTimeRange, setEndTime, setTimeRange, type PlaybackState } from "@/store/slices/playbackSlice";
 import type { mapState } from "@/store/slices/mapSlice";
 import { clock } from "@/map/simulationEngine";
 import type { AISVessel } from "@/store/services/api";
@@ -106,6 +106,16 @@ const useVessels = (): IVesselState => {
           .filter(Boolean);
 
         dispatch(setGlobalVessels(flat));
+
+        if (msg.type === "init") {
+          const currentTime = Date.now();
+          const diff = msg.end_time - msg.start_time;
+          dispatch(setTimeRange({ startTime: currentTime - diff, endTime: currentTime }));
+        }
+        if (msg.type === "append") {
+          const diff = msg.end_time - msg.start_time;
+          dispatch(setEndTime(diff));
+        }
       } catch (err) {
         console.error("[AIS parse error]", err);
       }
@@ -117,6 +127,8 @@ const useVessels = (): IVesselState => {
 
     socket.onclose = () => {
       console.log("[AIS websocket closed]");
+      clock.setTime(0);
+      dispatch(clearTimeRange());
     };
 
     return () => {

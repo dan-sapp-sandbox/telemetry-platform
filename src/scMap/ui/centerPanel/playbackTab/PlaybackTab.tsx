@@ -3,10 +3,22 @@ import usePlaybackTab from "./usePlaybackTab";
 import { cn } from "@/lib/utils";
 
 const PlaybackTab = () => {
-  const { isPlaying, speed, handlePlay, handlePause, handleIncreaseSpeed, handleDecreaseSpeed } = usePlaybackTab();
+  const {
+    isPlaying,
+    speed,
+    startTime,
+    endTime,
+    currentTime,
+    handlePlay,
+    handlePause,
+    handleIncreaseSpeed,
+    handleDecreaseSpeed,
+    handleSeek,
+    formatTimestamp,
+  } = usePlaybackTab();
 
   return (
-    <div className="flex justify-center items-center h-full gap-3 p-3">
+    <div className="flex flex-col justify-center items-center h-full gap-3 lg:gap-6 p-3">
       <div className="flex gap-2">
         <button
           className={cn([
@@ -15,15 +27,15 @@ const PlaybackTab = () => {
           ])}
           onClick={handleDecreaseSpeed}
         >
-          <Rewind />
+          <Rewind className="size-3 lg:size-5" />
         </button>
-        <div className="flex flex-col justify-between gap-2">
-          <div className="text-center text-sm md:text-base text-(--text)/80">{speed}x</div>
+        <div className="flex flex-col justify-between lg:gap-2">
+          <div className="text-center text-xs md:text-sm text-(--text)/80">{speed}x</div>
           <button
             className="text-xs md:text-sm text-(--text)/80 border-emerald-400/60"
             onClick={() => (isPlaying ? handlePause() : handlePlay())}
           >
-            {isPlaying ? <Pause /> : <Play />}
+            {isPlaying ? <Pause className="size-3 lg:size-5" /> : <Play className="size-3 lg:size-5" />}
           </button>
         </div>
         <button
@@ -33,8 +45,23 @@ const PlaybackTab = () => {
           ])}
           onClick={handleIncreaseSpeed}
         >
-          <FastForward />
+          <FastForward className="size-3 lg:size-5" />
         </button>
+      </div>
+      <div className="flex flex-col items-center">
+        <span className="text-xs lg:text-sm text-(--text)/80">{formatTimestamp(currentTime)}</span>
+        <div className="flex items-center gap-2">
+          <span className="text-xs lg:text-sm text-(--text)/80">{formatTimestamp(startTime)}</span>
+          <input
+            className="accent-emerald-400"
+            type="range"
+            min={startTime ?? 0}
+            max={endTime ?? 0}
+            value={currentTime}
+            onChange={handleSeek}
+          />
+          <span className="text-xs lg:text-sm text-(--text)/80">{formatTimestamp(endTime)}</span>
+        </div>
       </div>
     </div>
   );
