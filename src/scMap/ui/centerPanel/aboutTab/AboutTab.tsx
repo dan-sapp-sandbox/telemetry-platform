@@ -14,23 +14,23 @@ const AboutTab = () => {
           My work combines TypeScript, React, Cesium, FastAPI, and PostGIS to build interactive geospatial applications.
         </span>
       </div>
-      <div className="flex flex-col w-2/5 p-1 gap-3">
+      <div className="flex flex-col items-end w-2/5 p-1 gap-3">
         <div
-          className="flex justify-end items-center gap-2 text-(--text)/80 hover:text-(--text-hover) cursor-pointer"
+          className="w-fit flex justify-end items-center gap-2 text-(--text)/80 hover:text-(--text-hover) cursor-pointer"
           onClick={() => handleDownloadResume()}
         >
-          <span className="text-xs md:text-base">Download Resume</span>
+          <span className="text-xs md:text-base">Resume</span>
           <Download className="size-3 md:size-4" />
         </div>
         <div
-          className="flex justify-end items-center gap-2 text-(--text)/80 hover:text-(--text-hover) cursor-pointer"
+          className="w-fit flex justify-end items-center gap-2 text-(--text)/80 hover:text-(--text-hover) cursor-pointer"
           onClick={() => handleOpenLinkedInLink()}
         >
           <span className="text-xs md:text-base">LinkedIn</span>
           <ExternalLink className="size-3 md:size-4" />
         </div>
         <div
-          className="flex justify-end items-center gap-2 text-(--text)/80 hover:text-(--text-hover) cursor-pointer"
+          className="w-fit flex justify-end items-center gap-2 text-(--text)/80 hover:text-(--text-hover) cursor-pointer"
           onClick={() => handleOpenGithubLink()}
         >
           <span className="text-xs md:text-base">GitHub</span>
