@@ -110,12 +110,12 @@ const useAircraft = (): IAircraftState => {
 
         if (msg.type === "init") {
           const currentTime = Date.now();
-          const diff = msg.end_time - msg.start_time;
+          const diff = (msg.end_time - msg.start_time) * 1000;
           dispatch(setTimeRange({ startTime: currentTime - diff, endTime: currentTime }));
         }
         if (msg.type === "append") {
           const diff = msg.end_time - msg.start_time;
-          dispatch(setEndTime(diff));
+          dispatch(setEndTime(diff * 1000));
         }
       } catch (err) {
         console.error("[AIRCRAFT parse error]", err);

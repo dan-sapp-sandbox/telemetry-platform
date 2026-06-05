@@ -54,13 +54,6 @@ const usePlaybackTab = () => {
     });
   };
 
-  console.log("currentTime", currentTime);
-  console.log("formatTimestamp(currentTime)", formatTimestamp(currentTime));
-  console.log("startTime", startTime);
-  console.log("formatTimestamp(startTime)", formatTimestamp(startTime));
-  console.log("endTime", endTime);
-  console.log("formatTimestamp(endTime)", formatTimestamp(endTime));
-
   return {
     isPlaying,
     speed,
