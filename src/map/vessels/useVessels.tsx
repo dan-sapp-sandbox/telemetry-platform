@@ -33,6 +33,8 @@ const useVessels = (): IVesselState => {
 
   const [vesselMap, setVesselMap] = useState<VesselTrajectoryMap>({});
 
+  const lastBoundsRef = useRef<string | null>(null);
+
   useEffect(() => {
     if (isPlaying) clock.play();
     else clock.pause();
@@ -53,19 +55,40 @@ const useVessels = (): IVesselState => {
     const socket = new WebSocket(AIS_WS_URL);
     socketRef.current = socket;
 
-    socket.onopen = () => {
-      console.log("[AIS] connected");
+    const viewer = mainViewerRef.current;
 
-      const sendBounds = () => {
-        const viewer = mainViewerRef.current;
-        if (!viewer) return;
+    const sendBounds = () => {
+      if (!viewer) return;
 
-        const bounds = getBounds(viewer);
-        if (bounds && socket.readyState === WebSocket.OPEN) {
-          socket.send(JSON.stringify(bounds));
-        }
+      const bounds = getBounds(viewer);
+      if (!bounds) return;
+
+      const serialized = JSON.stringify(bounds);
+
+      if (serialized === lastBoundsRef.current) return;
+      lastBoundsRef.current = serialized;
+
+      if (socket.readyState === WebSocket.OPEN) {
+        socket.send(serialized);
+      }
+    };
+
+    let removeMoveEnd: (() => void) | undefined;
+
+    if (viewer) {
+      const onMoveEnd = () => {
+        sendBounds();
       };
 
+      viewer.camera.moveEnd.addEventListener(onMoveEnd);
+
+      removeMoveEnd = () => {
+        viewer.camera.moveEnd.removeEventListener(onMoveEnd);
+      };
+    }
+
+    socket.onopen = () => {
+      console.log("[AIS] connected");
       sendBounds();
     };
 
@@ -131,47 +154,11 @@ const useVessels = (): IVesselState => {
     };
 
     return () => {
+      removeMoveEnd?.();
       socket.close();
       socketRef.current = null;
     };
-  }, [showVessels, mainViewerRef]);
-
-  useEffect(() => {
-    if (!showVessels) return;
-    if (!mainViewerRef.current) return;
-
-    const viewer = mainViewerRef.current;
-    const socket = socketRef.current;
-
-    if (!socket) return;
-
-    let timeout: number | null = null;
-
-    const sendBounds = () => {
-      if (socket.readyState !== WebSocket.OPEN) return;
-
-      const bounds = getBounds(viewer);
-      if (!bounds) return;
-
-      socket.send(JSON.stringify(bounds));
-    };
-
-    const debounced = () => {
-      if (timeout) window.clearTimeout(timeout);
-
-      timeout = window.setTimeout(sendBounds, 150);
-    };
-
-    viewer.camera.moveEnd.addEventListener(debounced);
-    viewer.camera.changed.addEventListener(debounced);
-
-    return () => {
-      viewer.camera.moveEnd.removeEventListener(debounced);
-      viewer.camera.changed.removeEventListener(debounced);
-
-      if (timeout) window.clearTimeout(timeout);
-    };
-  }, [showVessels, mainViewerRef]);
+  }, [showVessels, mainViewerRef, dispatch]);
 
   const vesselEntities = useMemo(() => {
     return Object.entries(vesselMap)
