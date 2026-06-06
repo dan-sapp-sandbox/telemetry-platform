@@ -21,12 +21,12 @@ const useCenterPanel = (): ICenterPanel => {
   const { selectedVessel } = useSelector((state: { vessels: vesselState }) => state.vessels);
   const { selectedAircraft } = useSelector((state: { aircraft: AircraftState }) => state.aircraft);
 
-  useEffect(() => {
-    if (dataLayer === "aircraft" || dataLayer === "vessels") {
-      setActiveTab("details");
-      setTab("details");
-    }
-  }, [dataLayer]);
+  // useEffect(() => {
+  //   if (dataLayer === "aircraft" || dataLayer === "vessels") {
+  //     setActiveTab("details");
+  //     setTab("details");
+  //   }
+  // }, [dataLayer]);
   useEffect(() => {
     if (selectedEntity) {
       setActiveTab("draw");

@@ -2,8 +2,11 @@ import { useContext, useState } from "react";
 import { useSendCommandPromptMutation } from "@/store/services/api";
 import { CameraContext } from "@/map/types";
 import { Cartesian3 } from "cesium";
+import { setDataLayer } from "@/store/slices/mapSlice";
+import { useDispatch } from "react-redux";
 
 const useAITab = () => {
+  const dispatch = useDispatch();
   const { mainViewerRef } = useContext(CameraContext);
   const [toolActions, setToolActions] = useState<string[]>([]);
   const [prompt, setPrompt] = useState<string>("");
@@ -16,14 +19,23 @@ const useAITab = () => {
       prompt,
     }).unwrap();
     setPrompt("");
-    let toolArray = [];
-    if (result.action === "center_map") {
-      toolArray.push(`Center Map at ${result.args.query} (${result.args.lon}, ${result.args.lat})`);
-      if (!viewer) return;
-      viewer.camera.flyTo({
-        destination: Cartesian3.fromDegrees(result.args.lon, result.args.lat, result.args.camera_altitude_m),
-      });
-    }
+    const toolArray = result.actions.reduce<string[]>((acc, action) => {
+      if (action.action === "center_map") {
+        if (!viewer) return acc;
+        viewer.camera.flyTo({
+          destination: Cartesian3.fromDegrees(action.args.lon, action.args.lat, action.args.camera_altitude_m),
+        });
+        return [...acc, `Center Map at ${action.args.query} (${action.args.lon}, ${action.args.lat})`];
+      }
+      if (action.action === "show_vessel_layer") {
+        dispatch(setDataLayer("vessels"));
+        return [...acc, `Activate Vessel Data Layer`];
+      } else if (action.action === "show_aircraft_layer") {
+        dispatch(setDataLayer("aircraft"));
+        return [...acc, `Activate Aircraft Data Layer`];
+      }
+      return acc;
+    }, []);
     setToolActions(toolArray);
   };
 

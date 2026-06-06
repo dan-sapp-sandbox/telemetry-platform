@@ -2,22 +2,27 @@ import { setSpeed, play, pause, type PlaybackState } from "@/store/slices/playba
 import { useSelector, useDispatch } from "react-redux";
 import { clock } from "@/map/simulationEngine";
 import { useState, useEffect, type ChangeEvent } from "react";
+import type { mapState } from "@/store/slices/mapSlice";
 
 const usePlaybackTab = () => {
   const dispatch = useDispatch();
   const { isPlaying, speed, startTime, endTime } = useSelector((state: { playback: PlaybackState }) => state.playback);
+  const { dataLayer } = useSelector((state: { map: mapState }) => state.map);
+  const showVessels = dataLayer === "vessels";
+  const showAircraft = dataLayer === "aircraft";
 
   const speeds = [0.5, 1, 1.5, 2, 3];
   const currentIndex = speeds.indexOf(speed);
-  const [currentTime, setCurrentTime] = useState(clock.getTime() * 1000 + (startTime || 0));
+  const [currentTime, setCurrentTime] = useState(clock.getTime() * 1000 + (startTime || Date.now()));
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentTime(clock.getTime() * 1000 + (startTime || 0));
-    }, 100);
-
-    return () => clearInterval(interval);
-  }, []);
+    if (showVessels || showAircraft) {
+      const interval = setInterval(() => {
+        setCurrentTime(clock.getTime() * 1000 + (startTime || 0));
+      }, 100);
+      return () => clearInterval(interval);
+    }
+  }, [showVessels, showAircraft]);
 
   const handlePlay = () => {
     dispatch(play());

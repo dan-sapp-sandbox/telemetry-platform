@@ -33,6 +33,8 @@ const useAircraft = (): IAircraftState => {
 
   const [aircraftMap, setAircraftMap] = useState<AircraftTrajectoryMap>({});
 
+  const lastBoundsRef = useRef<string | null>(null);
+
   useEffect(() => {
     if (isPlaying) clock.play();
     else clock.pause();
@@ -45,7 +47,7 @@ const useAircraft = (): IAircraftState => {
       setAircraftMap({});
       dispatch(setGlobalAircraft([]));
     }
-  }, [showAircraft]);
+  }, [showAircraft, dispatch]);
 
   useEffect(() => {
     if (!showAircraft) return;
@@ -53,19 +55,40 @@ const useAircraft = (): IAircraftState => {
     const socket = new WebSocket(WS_URL);
     socketRef.current = socket;
 
-    socket.onopen = () => {
-      console.log("[AIRCRAFT] connected");
+    const viewer = mainViewerRef.current;
 
-      const sendBounds = () => {
-        const viewer = mainViewerRef.current;
-        if (!viewer) return;
+    const sendBounds = () => {
+      if (!viewer) return;
 
-        const bounds = getBounds(viewer);
-        if (bounds && socket.readyState === WebSocket.OPEN) {
-          socket.send(JSON.stringify(bounds));
-        }
+      const bounds = getBounds(viewer);
+      if (!bounds) return;
+
+      const serialized = JSON.stringify(bounds);
+
+      if (serialized === lastBoundsRef.current) return;
+      lastBoundsRef.current = serialized;
+
+      if (socket.readyState === WebSocket.OPEN) {
+        socket.send(serialized);
+      }
+    };
+
+    let removeMoveEnd: (() => void) | undefined;
+
+    if (viewer) {
+      const onMoveEnd = () => {
+        sendBounds();
       };
 
+      viewer.camera.moveEnd.addEventListener(onMoveEnd);
+
+      removeMoveEnd = () => {
+        viewer.camera.moveEnd.removeEventListener(onMoveEnd);
+      };
+    }
+
+    socket.onopen = () => {
+      console.log("[AIRCRAFT] connected");
       sendBounds();
     };
 
@@ -113,6 +136,7 @@ const useAircraft = (): IAircraftState => {
           const diff = (msg.end_time - msg.start_time) * 1000;
           dispatch(setTimeRange({ startTime: currentTime - diff, endTime: currentTime }));
         }
+
         if (msg.type === "append") {
           const diff = msg.end_time - msg.start_time;
           dispatch(setEndTime(diff * 1000));
@@ -133,6 +157,7 @@ const useAircraft = (): IAircraftState => {
     };
 
     return () => {
+      removeMoveEnd?.();
       socket.close();
       socketRef.current = null;
     };

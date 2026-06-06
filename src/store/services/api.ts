@@ -38,8 +38,10 @@ export type Aircraft = {
 };
 
 export interface CommandResponse {
-  action: string | null;
-  args: Record<string, any>;
+  actions: {
+    action: string | null;
+    args: Record<string, any>;
+  }[];
 }
 
 export interface CommandRequest {
