@@ -1,5 +1,6 @@
 import { useSelector, useDispatch } from "react-redux";
 import { setLayer, setDataLayer, type IDataLayer, type ILayer, type mapState } from "@/store/slices/mapSlice";
+import { setTab } from "@/store/slices/tabSlice";
 
 export interface ILayersPallet {
   layer: ILayer;
@@ -17,6 +18,9 @@ const useLayersPallet = (): ILayersPallet => {
   };
   const handleChangeDataLayer = (newDataLayer: IDataLayer) => {
     dispatch(setDataLayer(dataLayer === newDataLayer ? null : newDataLayer));
+    if (newDataLayer === "vessels" || newDataLayer === "aircraft") {
+      dispatch(setTab("details"));
+    }
   };
 
   return {

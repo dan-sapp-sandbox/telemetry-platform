@@ -16,17 +16,13 @@ export interface ICenterPanel {
 const useCenterPanel = (): ICenterPanel => {
   const { tab } = useSelector((state: { tab: TabState }) => state.tab);
   const [activeTab, setActiveTab] = useState<TabId>(tab);
-  // const { dataLayer } = useSelector((state: { map: mapState }) => state.map);
   const { selectedEntity } = useSelector((state: { draw: drawState }) => state.draw);
   const { selectedVessel } = useSelector((state: { vessels: vesselState }) => state.vessels);
   const { selectedAircraft } = useSelector((state: { aircraft: AircraftState }) => state.aircraft);
 
-  // useEffect(() => {
-  //   if (dataLayer === "aircraft" || dataLayer === "vessels") {
-  //     setActiveTab("details");
-  //     setTab("details");
-  //   }
-  // }, [dataLayer]);
+  useEffect(() => {
+    setActiveTab(tab);
+  }, [tab]);
   useEffect(() => {
     if (selectedEntity) {
       setActiveTab("draw");
