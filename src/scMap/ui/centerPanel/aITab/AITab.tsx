@@ -22,7 +22,7 @@ const AITab = () => {
       <div className="w-full flex gap-2">
         <input
           className="flex-1 h-8 md:h-10 px-3 rounded-lg bg-zinc-800/60 border border-white/10 outline-none text-sm md:text-base text-(--text)"
-          placeholder="show me aircraft over tokyo"
+          placeholder="show me aircraft over Chicago"
           value={prompt}
           onChange={(e) => setPrompt(e.target.value)}
           onKeyDown={onKeyDown}
