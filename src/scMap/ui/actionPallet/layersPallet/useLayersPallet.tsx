@@ -17,9 +17,13 @@ const useLayersPallet = (): ILayersPallet => {
     dispatch(setLayer(newLayer));
   };
   const handleChangeDataLayer = (newDataLayer: IDataLayer) => {
-    dispatch(setDataLayer(dataLayer === newDataLayer ? null : newDataLayer));
-    if (newDataLayer === "vessels" || newDataLayer === "aircraft") {
-      dispatch(setTab("details"));
+    if (dataLayer === newDataLayer) {
+      dispatch(setDataLayer(null));
+    } else {
+      dispatch(setDataLayer(newDataLayer));
+      if (newDataLayer === "vessels" || newDataLayer === "aircraft") {
+        dispatch(setTab("details"));
+      }
     }
   };
 
