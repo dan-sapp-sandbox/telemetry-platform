@@ -6,7 +6,7 @@ export interface TabState {
 }
 
 const initialState: TabState = {
-  tab: "about",
+  tab: "ai",
 };
 
 const tabSlice = createSlice({
