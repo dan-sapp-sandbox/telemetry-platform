@@ -14,7 +14,7 @@ import {
 } from "cesium";
 import { Entity } from "resium";
 import type { AISVessel } from "@/store/services/api";
-import { clock } from "@/map/simulationEngine";
+import { clock } from "@/scMap/simulationEngine";
 
 interface Props {
   vessel: AISVessel;

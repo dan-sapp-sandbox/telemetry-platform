@@ -1,12 +1,9 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-
 import { Cartesian2, Cartesian3, Color, ScreenSpaceEventHandler, ScreenSpaceEventType, CallbackProperty } from "cesium";
 import PolygonEntity from "./entities/PolygonEntity";
 import PolylineEntity from "./entities/PolylineEntity";
 import PointEntity from "./entities/PointEntity";
-
 import { Entity, useCesium } from "resium";
-
 import { useSelector, useDispatch } from "react-redux";
 import { setDrawMode, addEntity, type drawState, type DrawEntity } from "@/store/slices/drawSlice";
 

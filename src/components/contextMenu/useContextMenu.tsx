@@ -5,7 +5,7 @@ import { addEntity, type drawState, type DrawEntity } from "@/store/slices/drawS
 import { Cartesian2, Cartesian3, ScreenSpaceEventHandler, ScreenSpaceEventType } from "cesium";
 import { renderToStaticMarkup } from "react-dom/server";
 import { MapPin } from "lucide-react";
-import { CameraContext } from "@/map/types";
+import { CameraContext } from "@/scMap/types";
 import type { IWidgetState } from "@/store/slices/widgetSlice";
 import { setTab } from "@/store/slices/tabSlice";
 

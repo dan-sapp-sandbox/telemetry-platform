@@ -1,6 +1,6 @@
 import { useContext, useState } from "react";
 import { useSendCommandPromptMutation } from "@/store/services/api";
-import { CameraContext } from "@/map/types";
+import { CameraContext } from "@/scMap/types";
 import { Cartesian3 } from "cesium";
 import { setDataLayer } from "@/store/slices/mapSlice";
 import { useDispatch } from "react-redux";

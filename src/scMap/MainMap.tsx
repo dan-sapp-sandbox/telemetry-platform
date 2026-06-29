@@ -1,15 +1,15 @@
 import { useContext, useEffect, useMemo, useRef, type ReactNode } from "react";
 import { Viewer, useCesium } from "resium";
-import { CameraContext } from "./types";
+import { CameraContext } from "@/scMap/types";
 import { Viewer as CesiumViewer, Cartesian3, ScreenSpaceEventType, Color, SunLight } from "cesium";
 import useLocalStorage from "use-local-storage";
-import DrawController from "./DrawController";
+import DrawController from "@/scMap/DrawController";
 import { useDispatch, useSelector } from "react-redux";
 import { setSelectedVessel, type vesselState } from "@/store/slices/vesselSlice";
 import { setSelectedAircraft, type AircraftState } from "@/store/slices/aircraftSlice";
 import { setTab } from "@/store/slices/tabSlice";
 import { setSelectedEntity, type drawState } from "@/store/slices/drawSlice";
-import { defaultMainView } from "./useMapState";
+import { defaultMainView } from "@/scMap/useMapState";
 import type { mapState } from "@/store/slices/mapSlice";
 import type { Aircraft, AISVessel } from "@/store/services/api";
 

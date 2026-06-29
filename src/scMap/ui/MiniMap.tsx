@@ -1,9 +1,9 @@
 import { useContext, useEffect, useMemo, type ReactNode } from "react";
 import { Viewer, useCesium } from "resium";
 import { Color } from "cesium";
-import { CameraContext } from "@/map/types";
-import MainViewRectangle from "@/map/widgets/MainViewRectangle";
-import Layers from "@/map/layers/Layers";
+import { CameraContext } from "@/scMap/types";
+import MainViewRectangle from "@/scMap/widgets/MainViewRectangle";
+import Layers from "@/scMap/layers/Layers";
 
 const MiniMapInitializer = () => {
   const { viewer } = useCesium();

@@ -1,6 +1,6 @@
 import { setSpeed, play, pause, type PlaybackState } from "@/store/slices/playbackSlice";
 import { useSelector, useDispatch } from "react-redux";
-import { clock } from "@/map/simulationEngine";
+import { clock } from "@/scMap/simulationEngine";
 import { useState, useEffect, type ChangeEvent } from "react";
 import type { mapState } from "@/store/slices/mapSlice";
 

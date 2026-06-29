@@ -5,8 +5,8 @@ import { type AircraftState, setSelectedAircraft } from "@/store/slices/aircraft
 import { setTrackedEntityId, type mapState } from "@/store/slices/mapSlice";
 
 import type { Aircraft } from "@/store/services/api";
-import { getBounds } from "@/map/utils";
-import { CameraContext } from "@/map/types";
+import { getBounds } from "@/scMap/utils";
+import { CameraContext } from "@/scMap/types";
 
 function isInBounds(a: Aircraft, bounds: any): boolean {
   if (!bounds) return true;

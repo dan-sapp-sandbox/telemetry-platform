@@ -1,12 +1,12 @@
 import { useContext, useEffect, useMemo, useRef, useState, type JSX } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import AircraftEntity from "./AircraftEntity";
-import { CameraContext } from "@/map/types";
+import { CameraContext } from "@/scMap/types";
 import { type mapState } from "@/store/slices/mapSlice";
 import { setGlobalAircraft, type AircraftState } from "@/store/slices/aircraftSlice";
 import { type PlaybackState, clearTimeRange, setTimeRange, setEndTime } from "@/store/slices/playbackSlice";
-import { clock } from "@/map/simulationEngine";
-import { getBounds } from "@/map/utils";
+import { clock } from "@/scMap/simulationEngine";
+import { getBounds } from "@/scMap/utils";
 import type { Aircraft } from "@/store/services/api";
 
 export interface IAircraftState {

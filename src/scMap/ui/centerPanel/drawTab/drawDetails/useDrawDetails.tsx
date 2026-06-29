@@ -2,7 +2,7 @@ import { useContext } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { editEntity, deleteEntity, setSelectedEntity } from "@/store/slices/drawSlice";
 import type { DrawEntity, drawState, Position } from "@/store/slices/drawSlice";
-import { CameraContext } from "@/map/types";
+import { CameraContext } from "@/scMap/types";
 import { BoundingSphere, Cartesian3, Cartographic } from "cesium";
 
 interface IDrawDetails {

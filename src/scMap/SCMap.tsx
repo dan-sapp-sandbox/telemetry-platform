@@ -1,13 +1,13 @@
 import { useRef, useEffect } from "react";
-import Layers from "@/map/layers/Layers";
-import MainMap from "@/map/MainMap";
-import Vessels from "@/map/vessels/Vessels";
-import Aircraft from "@/map/aircraft/Aircraft";
-import useMapState from "@/map/useMapState";
-import { CameraContext } from "@/map/types";
-import ContextMenu from "@/contextMenu/ContextMenu";
+import Layers from "@/scMap/layers/Layers";
+import MainMap from "@/scMap/MainMap";
+import Vessels from "@/scMap/vessels/Vessels";
+import Aircraft from "@/scMap/aircraft/Aircraft";
+import useMapState from "@/scMap/useMapState";
+import { CameraContext } from "@/scMap/types";
+import ContextMenu from "@/components/contextMenu/ContextMenu";
 import Overlay from "./ui/Overlay";
-import { clock } from "@/map/simulationEngine";
+import { clock } from "@/scMap/simulationEngine";
 
 const SCMap = () => {
   useEffect(() => {

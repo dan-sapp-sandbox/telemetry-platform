@@ -3,10 +3,10 @@ import { useDispatch, useSelector } from "react-redux";
 import VesselEntity from "./VesselEntity";
 import { clearTimeRange, setEndTime, setTimeRange, type PlaybackState } from "@/store/slices/playbackSlice";
 import type { mapState } from "@/store/slices/mapSlice";
-import { clock } from "@/map/simulationEngine";
+import { clock } from "@/scMap/simulationEngine";
 import type { AISVessel } from "@/store/services/api";
-import { CameraContext } from "@/map/types";
-import { getBounds } from "@/map/utils";
+import { CameraContext } from "@/scMap/types";
+import { getBounds } from "@/scMap/utils";
 import { setGlobalVessels, type vesselState } from "@/store/slices/vesselSlice";
 
 export interface IVesselState {
