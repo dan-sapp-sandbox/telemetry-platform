@@ -85,13 +85,24 @@ const LayersPallet = () => {
               className={cn([
                 buttonStyles,
                 "bg-[url('/population-btn.png')]",
-                dataLayer === "population-density" ? "text-emerald-400/80" : "",
+                dataLayer === "population-density" ? "border-emerald-400/80" : "",
               ])}
               onClick={() => handleChangeDataLayer("population-density")}
             ></button>
             <span className={cn([buttonTextStyles, dataLayer === "population-density" ? "text-emerald-400/80" : ""])}>
               Population
             </span>
+          </div>
+          <div className={wrapperStyles}>
+            <button
+              className={cn([
+                buttonStyles,
+                "bg-[url('/ocean-btn.png')]",
+                dataLayer === "ocean" ? "border-emerald-400/80" : "",
+              ])}
+              onClick={() => handleChangeDataLayer("ocean")}
+            ></button>
+            <span className={cn([buttonTextStyles, dataLayer === "ocean" ? "text-emerald-400/80" : ""])}>Ocean</span>
           </div>
           {/* <div className={wrapperStyles}>
             <button

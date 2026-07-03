@@ -8,6 +8,7 @@ import { CameraContext } from "@/scMap/types";
 import ContextMenu from "@/components/contextMenu/ContextMenu";
 import Overlay from "./ui/Overlay";
 import { clock } from "@/scMap/simulationEngine";
+import OceanLayer from "./ocean/OceanLayer";
 
 const SCMap = () => {
   useEffect(() => {
@@ -28,6 +29,7 @@ const SCMap = () => {
             <Aircraft />
             <ContextMenu />
             <Layers />
+            <OceanLayer />
           </MainMap>
         </div>
         <Overlay />
