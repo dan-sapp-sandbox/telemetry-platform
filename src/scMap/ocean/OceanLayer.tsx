@@ -103,7 +103,7 @@ const OceanLayer = () => {
       return tile;
     };
 
-    const renderTile = (tile: any, z: number) => {
+    const renderTile = (tile: any) => {
       const size = tile.resolution;
 
       const stride = 1;
@@ -168,7 +168,7 @@ const OceanLayer = () => {
           const tile = await fetchTile(t.z, t.x, t.y);
           if (cancelled) return;
 
-          const entities = renderTile(tile, Z);
+          const entities = renderTile(tile);
           tileEntitiesRef.current.set(k, entities);
         }
 
