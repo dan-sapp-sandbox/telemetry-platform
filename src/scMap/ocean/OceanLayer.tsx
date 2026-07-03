@@ -34,10 +34,10 @@ const getColorFromMagnitude = (length: number) => {
 };
 
 const getScaleFromZoom = (z: number) => {
-  if (z <= 1) return 6;
-  if (z <= 2) return 5;
-  if (z <= 3) return 4;
-  if (z <= 4) return 3;
+  if (z <= 1) return 5;
+  if (z <= 2) return 4;
+  if (z <= 3) return 3;
+  if (z <= 4) return 2;
   return 2;
 };
 
