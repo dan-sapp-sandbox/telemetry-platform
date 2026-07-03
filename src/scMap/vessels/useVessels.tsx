@@ -29,7 +29,29 @@ const useVessels = (): IVesselState => {
 
   const { mainViewerRef } = useContext(CameraContext);
 
-  const showVessels = dataLayer === "vessels";
+  const [showVesselsByZoom, setShowVesselsByZoom] = useState(false);
+
+  useEffect(() => {
+    const viewer = mainViewerRef.current;
+    if (!viewer) return;
+
+    const update = () => {
+      const height = viewer.camera.positionCartographic.height;
+
+      // meters above ellipsoid
+      setShowVesselsByZoom(height < 100_000);
+    };
+
+    update();
+
+    viewer.camera.changed.addEventListener(update);
+
+    return () => {
+      viewer.camera.changed.removeEventListener(update);
+    };
+  }, [mainViewerRef]);
+
+  const showVessels = dataLayer === "vessels" && showVesselsByZoom;
 
   const [vesselMap, setVesselMap] = useState<VesselTrajectoryMap>({});
 

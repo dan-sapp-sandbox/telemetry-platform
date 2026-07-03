@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from "react-redux";
-import { useContext, useMemo } from "react";
+import { useContext, useMemo, useState, useEffect } from "react";
 
 import { type AircraftState, setSelectedAircraft } from "@/store/slices/aircraftSlice";
 import { setTrackedEntityId, type mapState } from "@/store/slices/mapSlice";
@@ -18,18 +18,39 @@ export interface IAircraftDetails {
   aircraft: Aircraft[];
   visibleAircraft: Aircraft[];
   selectedAircraft: Aircraft | null;
-
   handleSetSelectedAircraft: (aircraft: Aircraft | null) => void;
   trackSelectedAircraft: () => void;
   untrackSelectedAircraft: () => void;
-
   trackedEntityId: string | null;
+  showAircraftByZoom: boolean;
 }
 
 const useAircraftDetails = (): IAircraftDetails => {
   const dispatch = useDispatch();
 
   const { mainViewerRef } = useContext(CameraContext);
+
+  const [showAircraftByZoom, setShowAircraftByZoom] = useState(false);
+
+  useEffect(() => {
+    const viewer = mainViewerRef.current;
+    if (!viewer) return;
+
+    const update = () => {
+      const height = viewer.camera.positionCartographic.height;
+
+      // meters above ellipsoid
+      setShowAircraftByZoom(height < 200_000);
+    };
+
+    update();
+
+    viewer.camera.changed.addEventListener(update);
+
+    return () => {
+      viewer.camera.changed.removeEventListener(update);
+    };
+  }, [mainViewerRef]);
 
   const { trackedEntityId } = useSelector((state: { map: mapState }) => state.map);
 
@@ -63,6 +84,7 @@ const useAircraftDetails = (): IAircraftDetails => {
     trackedEntityId,
     trackSelectedAircraft,
     untrackSelectedAircraft,
+    showAircraftByZoom,
   };
 };
 

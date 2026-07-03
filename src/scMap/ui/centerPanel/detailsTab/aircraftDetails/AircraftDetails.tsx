@@ -12,6 +12,7 @@ const AircraftDetails = () => {
     trackedEntityId,
     trackSelectedAircraft,
     untrackSelectedAircraft,
+    showAircraftByZoom,
   } = useAircraftDetails();
   return (
     <div className="flex h-full">
@@ -46,7 +47,11 @@ const AircraftDetails = () => {
           })
         ) : (
           <div className="flex h-full justify-center items-center">
-            <LoaderCircle className="text-(--text)/80 h-10 md:h-10 w-12 md:w-16 animate-spin" />
+            {showAircraftByZoom ? (
+              <LoaderCircle className="text-(--text)/80 h-10 md:h-10 w-12 md:w-16 animate-spin" />
+            ) : (
+              <span className="text-(--text)/80">Please zoom in</span>
+            )}
           </div>
         )}
       </div>

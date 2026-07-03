@@ -1,8 +1,8 @@
-# Real-time 3D AIS & ADS-B Telemetry Platform
+# Real-time 3D Geospatial Telemetry & Ocean Visualization Platform
 
-A real-time geospatial visualization platform for streaming, replaying, and analyzing maritime AIS and aviation ADS-B telemetry in a 3D globe environment.
+A real-time geospatial visualization platform for streaming, replaying, and analyzing maritime AIS, aviation ADS-B, and global ocean surface current data in a 3D globe environment.
 
-This project combines a FastAPI backend, websocket-based telemetry streaming, and a Cesium-powered frontend to simulate live vessel and aircraft movement with smooth dead-reckoning extrapolation and interactive geospatial controls.
+The platform combines a FastAPI backend, websocket-based telemetry streaming, Cesium-powered visualization, and tile rendering to simulate live vessel and aircraft movement while displaying global ocean circulation through animated vector fields.
 
 ---
 
@@ -14,6 +14,14 @@ This project combines a FastAPI backend, websocket-based telemetry streaming, an
 - Snapshot playback and time-based simulation
 - Server-side filtering and viewport-based queries
 - Smooth client-side interpolation between updates
+
+## Ocean Surface Current Visualization
+
+- Global ocean surface current vector field
+- Tile pipeline for efficient rendering
+- Colorized velocity magnitude gradients
+- Viewport-based tile loading
+- Supports large-scale oceanographic datasets
 
 ## 3D Geospatial Visualization
 
@@ -73,6 +81,10 @@ AIS (Automatic Identification System) vessel telemetry is sourced from public AI
 ## ADS-B Aviation Data
 
 ADS-B (Automatic Dependent Surveillance–Broadcast) aircraft telemetry is sourced from public aviation tracking feeds and historical ADS-B datasets.
+
+## Ocean Surface Currents
+
+Global ocean surface current vectors are generated from NOAA OSCAR (Ocean Surface Current Analyses Real-time) datasets and converted into tiles for efficient visualization and interactive exploration.
 
 ## Cesium Ion
 

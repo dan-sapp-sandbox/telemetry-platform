@@ -29,7 +29,29 @@ const useAircraft = (): IAircraftState => {
 
   const { mainViewerRef } = useContext(CameraContext);
 
-  const showAircraft = dataLayer === "aircraft";
+  const [showAircraftByZoom, setShowAircraftByZoom] = useState(false);
+
+  useEffect(() => {
+    const viewer = mainViewerRef.current;
+    if (!viewer) return;
+
+    const update = () => {
+      const height = viewer.camera.positionCartographic.height;
+
+      // meters above ellipsoid
+      setShowAircraftByZoom(height < 200_000);
+    };
+
+    update();
+
+    viewer.camera.changed.addEventListener(update);
+
+    return () => {
+      viewer.camera.changed.removeEventListener(update);
+    };
+  }, [mainViewerRef]);
+
+  const showAircraft = dataLayer === "aircraft" && showAircraftByZoom;
 
   const [aircraftMap, setAircraftMap] = useState<AircraftTrajectoryMap>({});
 
@@ -174,7 +196,7 @@ const useAircraft = (): IAircraftState => {
         return <AircraftEntity key={icao} aircraft={latest} snapshots={snapshots} isSelected={isSelected} />;
       })
       .filter(Boolean) as JSX.Element[];
-  }, [aircraftMap, selectedAircraft]);
+  }, [aircraftMap, selectedAircraft, showAircraft]);
 
   return {
     aircraftEntities,
