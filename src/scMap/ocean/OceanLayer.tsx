@@ -8,14 +8,6 @@ const TILE_BASE_URL = "https://vtumnamsiwcnmoysyqzi.supabase.co/storage/v1/objec
 
 const key = (z: number, x: number, y: number) => `${z}/${x}/${y}`;
 
-const getStrideFromZoom = (z: number) => {
-  if (z <= 1) return 1;
-  if (z <= 2) return 1;
-  if (z <= 3) return 1;
-  if (z <= 4) return 1;
-  return 1;
-};
-
 const getColorFromMagnitude = (length: number) => {
   if (length <= 0.1) return Color.RED;
   if (length <= 0.2) return Color.ORANGERED;
@@ -27,14 +19,6 @@ const getColorFromMagnitude = (length: number) => {
   if (length <= 0.9) return Color.BLUE;
   if (length <= 1.1) return Color.BLUEVIOLET;
   return Color.VIOLET;
-};
-
-const getScaleFromZoom = (z: number) => {
-  if (z <= 1) return 3;
-  if (z <= 2) return 3;
-  if (z <= 3) return 2;
-  if (z <= 4) return 2;
-  return 2;
 };
 
 const lonToTileX = (lon: number, z: number) => {
@@ -122,8 +106,7 @@ const OceanLayer = () => {
     const renderTile = (tile: any, z: number) => {
       const size = tile.resolution;
 
-      const stride = getStrideFromZoom(z);
-      const scale = getScaleFromZoom(z);
+      const stride = 1;
 
       const entities: any[] = [];
 
@@ -136,8 +119,8 @@ const OceanLayer = () => {
 
           const lat = tile.north - ((i + 0.5) / size) * (tile.north - tile.south);
 
-          const endLon = lon + u * scale;
-          const endLat = lat + v * scale;
+          const endLon = lon + u / 2;
+          const endLat = lat + v / 2;
 
           const start = Cartesian3.fromDegrees(lon, lat);
           const end = Cartesian3.fromDegrees(endLon, endLat);
