@@ -8,10 +8,6 @@ const TILE_BASE_URL = "https://vtumnamsiwcnmoysyqzi.supabase.co/storage/v1/objec
 
 const key = (z: number, x: number, y: number) => `${z}/${x}/${y}`;
 
-// ---------------------------
-// LOD CONFIG
-// ---------------------------
-
 const getStrideFromZoom = (z: number) => {
   if (z <= 1) return 1;
   if (z <= 2) return 1;
@@ -34,9 +30,9 @@ const getColorFromMagnitude = (length: number) => {
 };
 
 const getScaleFromZoom = (z: number) => {
-  if (z <= 1) return 5;
-  if (z <= 2) return 4;
-  if (z <= 3) return 3;
+  if (z <= 1) return 3;
+  if (z <= 2) return 3;
+  if (z <= 3) return 2;
   if (z <= 4) return 2;
   return 2;
 };
@@ -151,7 +147,7 @@ const OceanLayer = () => {
           const entity = viewer.entities.add({
             polyline: {
               positions: [start, end],
-              width: 4,
+              width: 6,
               material: new PolylineArrowMaterialProperty(entityColor),
             },
           });
@@ -168,11 +164,9 @@ const OceanLayer = () => {
 
       const now = performance.now();
 
-      // debounce (VERY important)
       if (now - lastUpdateRef.current < 150) return;
       lastUpdateRef.current = now;
 
-      // lock prevents overlap
       if (updateLockRef.current) return;
       updateLockRef.current = true;
 
@@ -195,7 +189,6 @@ const OceanLayer = () => {
           tileEntitiesRef.current.set(k, entities);
         }
 
-        // remove old tiles
         for (const oldKey of activeTilesRef.current) {
           if (!newActive.has(oldKey)) {
             const ents = tileEntitiesRef.current.get(oldKey);
